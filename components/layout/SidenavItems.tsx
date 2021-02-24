@@ -16,7 +16,7 @@ const SidenavItems: React.FC = () => (
       </ListItemIcon>
       <ListItemText primary="Home" />
     </ListItem>
-    <ListItem button>
+    <ListItem button component={Link} href="/browse" color="inherit">
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>

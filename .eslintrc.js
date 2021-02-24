@@ -15,6 +15,7 @@ module.exports = {
     jest: true,
   },
   rules: {
+    indent: 0,
     'no-debugger': 0,
     'no-alert': 0,
     'no-await-in-loop': 0,
@@ -67,13 +68,8 @@ module.exports = {
     ],
     'react/jsx-props-no-spreading': 0,
     radix: 0,
-    'no-shadow': [
-      2,
-      {
-        hoist: 'all',
-        allow: ['resolve', 'reject', 'done', 'next', 'err', 'error'],
-      },
-    ],
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': ['error'],
     quotes: [
       2,
       'single',

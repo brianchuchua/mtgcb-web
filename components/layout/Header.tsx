@@ -13,6 +13,7 @@ import HeaderTitle from './HeaderTitle';
 import Sidenav from './Sidenav';
 import SidenavHeader from './SidenavHeader';
 import SidenavItems from './SidenavItems';
+import { SearchForm } from '../../features/browse/forms';
 
 const Header: React.FC = () => {
   const [isSidenavOpen, setSidenavOpen] = useState(false);
@@ -58,6 +59,9 @@ const Header: React.FC = () => {
           <SidenavItems />
         </List>
         <Divider />
+        <List>
+          <SearchForm />
+        </List>
       </Sidenav>
     </>
   );
