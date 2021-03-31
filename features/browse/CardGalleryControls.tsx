@@ -1,9 +1,9 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
-import { forceCheck } from 'react-lazyload';
+import { forceCheck as forceImagesToCheckIfTheyShouldLoad } from 'react-lazyload';
 import Pagination from '../../components/Pagination';
 import { NumberOfCardsSelect } from './forms';
 
@@ -45,6 +45,10 @@ const CardGalleryControls: React.FC<CardGalleryControlsProps> = ({
   const endOfRange = cards.length < first ? skip + cards.length : skip + first;
 
   const atLeastOneCardToShow = totalResults > 0;
+
+  useEffect(() => {
+    forceImagesToCheckIfTheyShouldLoad();
+  }, [cards, first, skip, page, totalResults]);
 
   return (
     atLeastOneCardToShow && (
@@ -94,12 +98,12 @@ const CardGalleryControls: React.FC<CardGalleryControlsProps> = ({
 
 const handleGalleryWidthChange = (value, setGalleryWidth) => {
   setGalleryWidth(value);
-  forceCheck();
+  forceImagesToCheckIfTheyShouldLoad();
 };
 
 const handleCardsPerRowChange = (value, setCardsPerRow) => {
   setCardsPerRow(value);
-  forceCheck();
+  forceImagesToCheckIfTheyShouldLoad();
 };
 
 const CenteredGrid = styled(Grid)({

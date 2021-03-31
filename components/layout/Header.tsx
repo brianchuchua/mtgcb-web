@@ -16,7 +16,7 @@ import SidenavItems from './SidenavItems';
 import { SearchForm } from '../../features/browse/forms';
 
 const Header: React.FC = () => {
-  const [isSidenavOpen, setSidenavOpen] = useState(false);
+  const [isSidenavOpen, setSidenavOpen] = useState(true);
   const handleSidenavOpen = () => {
     setSidenavOpen(true);
   };

@@ -1,20 +1,12 @@
 import { allCards as allCardsQuery } from '../../queries';
 import { api } from '../../index';
-
-enum SortByOptions {
-  nameAsc = 'name_ASC',
-  nameDesc = 'name_DESC',
-}
-
-interface SearchOptions {
-  first?: number;
-  skip?: number;
-  sortBy?: SortByOptions;
-  name?: string;
-}
+import buildBrowseFilter from './buildBrowseFilter';
+import { SearchOptions } from './commonTypes';
 
 const getAllCards = async (searchOptions: SearchOptions) => {
-  const { first, skip, sortBy, name } = searchOptions;
+  const { first, skip, sortBy, name, cardTypes } = searchOptions;
+
+  const where = buildBrowseFilter({ cardTypes });
 
   try {
     const response = await api.post('', {
@@ -24,6 +16,7 @@ const getAllCards = async (searchOptions: SearchOptions) => {
         skip,
         sortBy,
         name,
+        where,
       },
     });
     return response;

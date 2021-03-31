@@ -13,13 +13,14 @@ import CardGallery from './CardGallery';
 import { useDebouncedEffect } from '../../util';
 
 export const Browse: React.FC = () => {
-  const { searchQuery } = useSelector((state: RootState) => state.browse);
+  const { searchQuery, cardTypes } = useSelector((state: RootState) => state.browse);
   const [cards, setCards] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
   const [skip, setSkip] = useState(0);
   const [first, setFirst] = useState(50);
   const [page, setPage] = useState(1);
   const [previousQuery, setPreviousQuery] = useState('');
+  const [previousCardTypes, setPreviousCardTypes] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -33,23 +34,25 @@ export const Browse: React.FC = () => {
   useDebouncedEffect(
     async () => {
       async function fetchCards() {
-        const allCardsResponse = await getAllCards({ name: searchQuery, first, skip });
-        const allCards = allCardsResponse?.data?.data?.allCards;
-        setCards(allCards);
-
-        const allCardsMetaResponse = await getAllCardsMeta({ name: searchQuery, first, skip });
-        const count = allCardsMetaResponse?.data?.data?._allCardsMeta?.count || 0;
-        setTotalResults(count);
-
-        const currentPage = previousQuery !== searchQuery ? 1 : page;
+        const cardFilterChanged = previousQuery !== searchQuery || previousCardTypes !== cardTypes;
+        const currentPage = cardFilterChanged ? 1 : page;
         setPage(currentPage);
         setSkip((currentPage - 1) * first);
         setPreviousQuery(searchQuery);
+        setPreviousCardTypes(cardTypes);
+
+        const allCardsResponse = await getAllCards({ name: searchQuery, first, skip, cardTypes });
+        const allCards = allCardsResponse?.data?.data?.allCards;
+        setCards(allCards);
+
+        const allCardsMetaResponse = await getAllCardsMeta({ name: searchQuery, first, skip, cardTypes });
+        const count = allCardsMetaResponse?.data?.data?._allCardsMeta?.count || 0;
+        setTotalResults(count);
       }
       fetchCards();
     },
     400,
-    [searchQuery, skip, first]
+    [searchQuery, cardTypes, skip, first]
   );
 
   // TODO: Make better Breadcrumbs component
@@ -63,9 +66,6 @@ export const Browse: React.FC = () => {
           Browse
         </Link>
       </Breadcrumbs>
-      <Typography component="h1" variant="h5">
-        Browse
-      </Typography>
       <ContentWrapper>
         <CardGallery
           cards={cards}
@@ -83,5 +83,5 @@ export const Browse: React.FC = () => {
 };
 
 const ContentWrapper = styled.div(({ theme }) => ({
-  marginTop: theme.spacing(5),
+  marginTop: theme.spacing(0),
 }));
