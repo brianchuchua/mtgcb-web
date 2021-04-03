@@ -1,4 +1,4 @@
-import { CardType } from '../../../features/browse/browseSlice';
+import { CardColors, CardType } from '../../../features/browse/browseSlice';
 
 enum SortByOptions {
   nameAsc = 'name_ASC',
@@ -11,4 +11,5 @@ export interface SearchOptions {
   sortBy?: SortByOptions;
   name?: string;
   cardTypes?: CardType[];
+  cardColors: CardColors;
 }

@@ -1,33 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface CardType {
-  categoryLabel: string;
-  cardType: string;
-  exclude: boolean;
-}
-interface BrowseState {
-  isFormVisible: boolean;
-  searchQuery: string;
-  cardTypes: CardType[];
-}
-
-export interface CardTypes {
-  cardTypes: CardType[];
-}
-
 const initialState: BrowseState = {
   isFormVisible: false,
   searchQuery: '',
   cardTypes: [],
+  cardColors: {
+    white: false,
+    blue: false,
+    black: false,
+    red: false,
+    green: false,
+    colorless: false,
+    type: 'at-least-these-colors',
+  },
 };
-
-interface FormVisibility {
-  isFormVisibile: boolean;
-}
-
-interface SearchQuery {
-  searchQuery: string;
-}
 
 const browseSlice = createSlice({
   name: 'browse',
@@ -45,9 +31,53 @@ const browseSlice = createSlice({
       const { cardTypes } = action.payload;
       state.cardTypes = cardTypes;
     },
+    setCardColors(state, action: PayloadAction<string>) {
+      const color = action.payload;
+      state.cardColors[color] = !state.cardColors[color];
+    },
+    setColorType(state, action: PayloadAction<ColorTypes>) {
+      const type = action.payload;
+      state.cardColors.type = type;
+    },
   },
 });
 
-export const { setFormVisibility, setSearchQuery, setCardTypes } = browseSlice.actions;
+export const { setFormVisibility, setSearchQuery, setCardTypes, setCardColors, setColorType } = browseSlice.actions;
+
+interface BrowseState {
+  isFormVisible: boolean;
+  searchQuery: string;
+  cardTypes: CardType[];
+  cardColors: CardColors;
+}
+
+export interface CardType {
+  categoryLabel: string;
+  cardType: string;
+  exclude: boolean;
+}
+
+export interface CardColors {
+  white: boolean;
+  blue: boolean;
+  black: boolean;
+  red: boolean;
+  green: boolean;
+  colorless: boolean;
+  type: ColorTypes;
+}
+
+export type ColorTypes = 'at-least-these-colors' | 'only-these-colors' | 'at-most-these-colors';
+
+export interface CardTypes {
+  cardTypes: CardType[];
+}
+interface FormVisibility {
+  isFormVisibile: boolean;
+}
+
+interface SearchQuery {
+  searchQuery: string;
+}
 
 export default browseSlice.reducer;

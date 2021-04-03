@@ -11,6 +11,13 @@ const darkTheme = createMuiTheme({
     },
     secondary: indigo,
   },
+  overrides: {
+    MuiPaper: {
+      outlined: {
+        borderColor: 'rgba(255, 255, 255, 0.23)',
+      },
+    },
+  },
 });
 
 export default darkTheme;

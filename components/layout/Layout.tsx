@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 import styled from 'styled-components';
 import Header from './Header';
 
@@ -20,6 +21,9 @@ const ToolbarSpacer = styled.div(({ theme }) => ({
 
 const Layout: React.FC = ({ children }) => (
   <OuterWrapper>
+    <Head>
+      <link href="//cdn.jsdelivr.net/npm/mana-font@latest/css/mana.css" rel="stylesheet" type="text/css" />
+    </Head>
     <Header />
     <ContentWrapper>
       <ToolbarSpacer />

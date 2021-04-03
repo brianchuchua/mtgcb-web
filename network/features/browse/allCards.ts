@@ -4,9 +4,9 @@ import buildBrowseFilter from './buildBrowseFilter';
 import { SearchOptions } from './commonTypes';
 
 const getAllCards = async (searchOptions: SearchOptions) => {
-  const { first, skip, sortBy, name, cardTypes } = searchOptions;
+  const { first, skip, sortBy, name, cardTypes, cardColors } = searchOptions;
 
-  const where = buildBrowseFilter({ cardTypes });
+  const where = buildBrowseFilter({ cardTypes, cardColors });
 
   try {
     const response = await api.post('', {
