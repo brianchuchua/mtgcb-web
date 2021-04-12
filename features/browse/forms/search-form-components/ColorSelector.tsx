@@ -29,7 +29,7 @@ const ColorSelector: React.FC = () => {
 
   return (
     <ColorSelectorWrapper variant="outlined">
-      <ColorSelect style={{ display: 'flex', justifyContent: 'center' }}>
+      <ColorSelect>
         <WhiteManaButton toggled={cardColors.white} handleClick={() => handleManaButtonClick('white')} />
         <BlueManaButton toggled={cardColors.blue} handleClick={() => handleManaButtonClick('blue')} />
         <BlackManaButton toggled={cardColors.black} handleClick={() => handleManaButtonClick('black')} />

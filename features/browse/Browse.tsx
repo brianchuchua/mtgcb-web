@@ -13,7 +13,7 @@ import CardGallery from './CardGallery';
 import { useDebouncedEffect } from '../../util';
 
 export const Browse: React.FC = () => {
-  const { searchQuery, cardTypes, cardColors } = useSelector((state: RootState) => state.browse);
+  const { searchQuery, cardTypes, cardColors, showAllPrintings } = useSelector((state: RootState) => state.browse);
   const [cards, setCards] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
   const [skip, setSkip] = useState(0);
@@ -41,18 +41,18 @@ export const Browse: React.FC = () => {
         setPreviousQuery(searchQuery);
         setPreviousCardTypes(cardTypes);
 
-        const allCardsResponse = await getAllCards({ name: searchQuery, first, skip, cardTypes, cardColors });
+        const allCardsResponse = await getAllCards({ name: searchQuery, first, skip, cardTypes, cardColors, showAllPrintings });
         const allCards = allCardsResponse?.data?.data?.allCards;
         setCards(allCards);
 
-        const allCardsMetaResponse = await getAllCardsMeta({ name: searchQuery, first, skip, cardTypes, cardColors });
+        const allCardsMetaResponse = await getAllCardsMeta({ name: searchQuery, first, skip, cardTypes, cardColors, showAllPrintings });
         const count = allCardsMetaResponse?.data?.data?._allCardsMeta?.count || 0;
         setTotalResults(count);
       }
       fetchCards();
     },
     400,
-    [searchQuery, cardTypes, cardColors, skip, first]
+    [searchQuery, cardTypes, cardColors, showAllPrintings, skip, first]
   );
 
   // TODO: Make better Breadcrumbs component

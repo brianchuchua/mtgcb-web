@@ -4,9 +4,10 @@ import buildBrowseFilter from './buildBrowseFilter';
 import { SearchOptions } from './commonTypes';
 
 const getAllCardsMeta = async (searchOptions: SearchOptions) => {
-  const { name, cardTypes, cardColors } = searchOptions;
+  const { name, cardTypes, cardColors, showAllPrintings } = searchOptions;
 
   const where = buildBrowseFilter({ cardTypes, cardColors });
+  const distinct = showAllPrintings ? '' : 'name';
 
   try {
     const response = await api.post('', {
@@ -14,6 +15,7 @@ const getAllCardsMeta = async (searchOptions: SearchOptions) => {
       variables: {
         name,
         where,
+        distinct,
       },
     });
     return response;

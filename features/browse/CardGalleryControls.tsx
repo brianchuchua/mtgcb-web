@@ -86,7 +86,7 @@ const CardGalleryControls: React.FC<CardGalleryControlsProps> = ({
               step={1}
               marks
               min={1}
-              max={8}
+              max={9}
               onChange={(e, value: number) => handleCardsPerRowChange(value, setCardsPerRow)}
             />
           </Grid>

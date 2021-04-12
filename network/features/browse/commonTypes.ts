@@ -12,4 +12,5 @@ export interface SearchOptions {
   name?: string;
   cardTypes?: CardType[];
   cardColors: CardColors;
+  showAllPrintings: boolean;
 }

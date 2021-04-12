@@ -13,6 +13,7 @@ const initialState: BrowseState = {
     colorless: false,
     type: 'at-least-these-colors',
   },
+  showAllPrintings: true,
 };
 
 const browseSlice = createSlice({
@@ -39,16 +40,21 @@ const browseSlice = createSlice({
       const type = action.payload;
       state.cardColors.type = type;
     },
+    setShowAllPrintings(state, action: PayloadAction<boolean>) {
+      const showAllPrintings = action.payload;
+      state.showAllPrintings = showAllPrintings;
+    },
   },
 });
 
-export const { setFormVisibility, setSearchQuery, setCardTypes, setCardColors, setColorType } = browseSlice.actions;
+export const { setFormVisibility, setSearchQuery, setCardTypes, setCardColors, setColorType, setShowAllPrintings } = browseSlice.actions;
 
 interface BrowseState {
   isFormVisible: boolean;
   searchQuery: string;
   cardTypes: CardType[];
   cardColors: CardColors;
+  showAllPrintings: boolean;
 }
 
 export interface CardType {
