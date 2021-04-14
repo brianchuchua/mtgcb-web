@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
 import styled from 'styled-components';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
 import Link from '../../components/Link';
 import { RootState } from '../../redux/rootReducer';
 import { setFormVisibility } from './browseSlice';

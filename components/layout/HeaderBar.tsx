@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import AppBar from '@material-ui/core/AppBar';
 import { drawerWidth } from './constants';
 
-const HeaderBar = styled(AppBar)(({ theme, open }) => {
+const HeaderBar = styled(AppBar)<HeaderBarProps>(({ theme, open }) => {
   if (open) {
     return {
       marginLeft: drawerWidth,
@@ -22,5 +22,10 @@ const HeaderBar = styled(AppBar)(({ theme, open }) => {
     }),
   };
 });
+
+interface HeaderBarProps {
+  theme: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  open: boolean;
+}
 
 export default HeaderBar;

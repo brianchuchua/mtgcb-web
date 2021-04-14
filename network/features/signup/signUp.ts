@@ -1,7 +1,12 @@
 import { signUp as signUpMutation } from '../../mutations';
 import { api } from '../../index';
 
-const signUp = async (username: string, email: string, password: string, passwordConfirmation: string) => {
+interface SignUpFunction {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (username: string, email: string, password: string, passwordConfirmation: string): any;
+}
+
+const signUp: SignUpFunction = async (username, email, password, passwordConfirmation) => {
   try {
     const response = await api.post('', {
       query: signUpMutation,

@@ -1,6 +1,11 @@
 import { CardColors } from '../../../../features/browse/browseSlice';
 
-const addCardColorFilter = (cardColors: CardColors, where: { AND: any[] }) => {
+interface AddCardColorFilterFunction {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (cardTypes: CardColors, where: { AND: any[] }): any;
+}
+
+const addCardColorFilter: AddCardColorFilterFunction = (cardColors: CardColors, where) => {
   if (cardColors.type === 'at-least-these-colors') {
     const atLeastTheseColors = { AND: [] };
     if (cardColors.white) {
@@ -56,7 +61,7 @@ const addCardColorFilter = (cardColors: CardColors, where: { AND: any[] }) => {
     }
     where.AND.push(onlyTheseColors);
   } else if (cardColors.type === 'at-most-these-colors') {
-    const atMostTheseColors = {};
+    const atMostTheseColors: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
     if (cardColors.colorless) {
       atMostTheseColors.AND = [];
       atMostTheseColors.AND.push({ colors_not_contains: `W` });

@@ -1,5 +1,5 @@
-import ManaSymbol from './ManaSymbol';
+import ManaSymbol, { ManaSymbolProps } from './ManaSymbol';
 
-const BlackMana = ({ size = 3 }) => <ManaSymbol size={size} color="b" />;
+const BlackMana: React.FC<ManaSymbolProps> = ({ size = 3 }) => <ManaSymbol size={size} color="b" />;
 
 export default BlackMana;

@@ -23,7 +23,7 @@ export const Account: React.FC = () => {
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+  const handleChange = (event: React.ChangeEvent<unknown>, newValue: number) => {
     setActiveTabIndex(newValue);
   };
   if (isCheckingAuth) {

@@ -1,4 +1,26 @@
-const mapCardTypes = (cardTypesFromApi) => {
+interface MapCardTypesFunction {
+  (cardTypesFromApi: CardTypes): MappedCardTypes[];
+}
+
+interface CardTypes {
+  cardTypes: string[];
+  superTypes: string[];
+  artifactTypes: string[];
+  enchantmentTypes: string[];
+  landTypes: string[];
+  spellTypes: string[];
+  creatureTypes: string[];
+  planarTypes: string[];
+  planeswalkerTypes: string[];
+}
+
+interface MappedCardTypes {
+  categoryLabel: string;
+  cardType: string;
+  exclude: boolean;
+}
+
+const mapCardTypes: MapCardTypesFunction = (cardTypesFromApi) => {
   let allCardTypesMapped = [];
 
   allCardTypesMapped = allCardTypesMapped.concat(

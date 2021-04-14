@@ -1,6 +1,10 @@
 import { api } from '../../index';
 
-const logOut = async () => {
+interface LogOutFunction {
+  (): any; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+
+const logOut: LogOutFunction = async () => {
   try {
     const response = await api.post('', {
       query: `mutation {

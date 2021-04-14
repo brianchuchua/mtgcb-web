@@ -1,6 +1,10 @@
 import { useEffect, useCallback } from 'react';
 
-const useDebouncedEffect = (effect, delay, deps) => {
+interface UseDebouncedEffectFunction {
+  (effect: () => void, delay: number, deps: Array<unknown>): void;
+}
+
+const useDebouncedEffect: UseDebouncedEffectFunction = (effect, delay, deps): void => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const callback = useCallback(effect, deps);
 

@@ -1,4 +1,3 @@
-import { processEnv } from 'next/dist/lib/load-env-config';
 import { authenticateUserWithPassword } from '../../network/mutations';
 
 Cypress.Commands.add('login', (username, password) => {

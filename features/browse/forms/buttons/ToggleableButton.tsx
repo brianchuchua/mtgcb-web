@@ -1,8 +1,13 @@
-import { useState } from 'react';
-import styled from 'styled-components';
+import StyledComponents from 'styled-components';
 import IconButton from '@material-ui/core/IconButton';
 
-const ToggleableButton = ({ size, children, toggled, handleClick }) => (
+export interface ToggleButtonProps {
+  size?: 'small' | 'medium';
+  toggled?: boolean;
+  handleClick?: () => void;
+}
+
+const ToggleableButton: React.FC<ToggleButtonProps> = ({ size, children, toggled, handleClick }) => (
   <StyledIconButton size={size} styled={{ toggled }} onClick={() => handleClick()}>
     {children}
   </StyledIconButton>
@@ -10,6 +15,10 @@ const ToggleableButton = ({ size, children, toggled, handleClick }) => (
 
 export default ToggleableButton;
 
-const StyledIconButton = styled(IconButton)(({ styled }) => ({
+interface StyledIconButtonProps {
+  styled: { toggled: boolean };
+}
+
+const StyledIconButton = StyledComponents(IconButton)<StyledIconButtonProps>(({ styled }) => ({
   opacity: styled.toggled ? '1' : '0.3',
 }));

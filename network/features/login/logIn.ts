@@ -1,7 +1,11 @@
 import { authenticateUserWithPassword } from '../../mutations';
 import { api } from '../../index';
 
-const logIn = async (username: string, password: string) => {
+interface LogInFunction {
+  (username: string, password: string): any; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+
+const logIn: LogInFunction = async (username, password) => {
   try {
     const response = await api.post('', {
       query: authenticateUserWithPassword,

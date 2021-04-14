@@ -3,7 +3,11 @@ import { api } from '../../index';
 import buildBrowseFilter from './buildBrowseFilter';
 import { SearchOptions } from './commonTypes';
 
-const getAllCards = async (searchOptions: SearchOptions) => {
+interface GetAllCardsFunction {
+  (searchOptions: SearchOptions): any; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+
+const getAllCards: GetAllCardsFunction = async (searchOptions) => {
   const { first, skip, sortBy, name, cardTypes, cardColors, showAllPrintings } = searchOptions;
 
   const where = buildBrowseFilter({ cardTypes, cardColors });

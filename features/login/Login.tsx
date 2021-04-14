@@ -41,7 +41,11 @@ const LoginSchema = Yup.object().shape({
   password: Yup.string().required('Password is required'),
 });
 
-export const logIntoMtgCb = async (username, password) => {
+interface LogIntoMtgCbFunction {
+  (username: string, password: string): any; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+
+export const logIntoMtgCb: LogIntoMtgCbFunction = async (username, password) => {
   const response = {
     data: null,
     error: null,
@@ -71,7 +75,8 @@ export const logIntoMtgCb = async (username, password) => {
   return response;
 };
 
-export const convertQueryToString = (query) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const convertQueryToString = (query: string | string[]): string => {
   if (Array.isArray(query)) {
     return JSON.stringify(query);
   }

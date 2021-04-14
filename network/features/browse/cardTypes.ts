@@ -1,7 +1,11 @@
 import { cardTypes as cardTypesQuery } from '../../queries';
 import { api } from '../../index';
 
-const getCardTypes = async () => {
+interface GetCardTypesFunction {
+  (): any; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+
+const getCardTypes: GetCardTypesFunction = async () => {
   try {
     const response = await api.post('', {
       query: cardTypesQuery,

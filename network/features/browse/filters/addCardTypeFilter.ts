@@ -1,6 +1,11 @@
 import { CardType } from '../../../../features/browse/browseSlice';
 
-const addCardTypeFilter = (cardTypes: CardType[], where: { AND: any[] }) => {
+interface AddCardTypeFilterFunction {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (cardTypes: CardType[], where: { AND: any[] }): any;
+}
+
+const addCardTypeFilter: AddCardTypeFilterFunction = (cardTypes, where) => {
   // The _contains with a trailing space and _not_ends_with pattern forces Keystone to find exact matches instead of partial.
   // (The string being searched either has a space after it or is the last string in the type line.)
   for (const cardTypeSelection of cardTypes) {

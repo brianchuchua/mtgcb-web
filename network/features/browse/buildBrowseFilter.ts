@@ -6,7 +6,11 @@ interface BuildBrowseFilterSettings {
   cardColors: CardColors;
 }
 
-const buildBrowseFilter = ({ cardTypes, cardColors }: BuildBrowseFilterSettings) => {
+interface BuildBrowseFilterFunction {
+  (filterSettings: BuildBrowseFilterSettings): any; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+
+const buildBrowseFilter: BuildBrowseFilterFunction = ({ cardTypes, cardColors }) => {
   const where = { AND: [] };
 
   addCardTypeFilter(cardTypes, where);

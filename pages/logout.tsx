@@ -41,7 +41,7 @@ const LogoutPage: React.FC = () => {
       }
     }
     triggerLogOut();
-  }, [isAuthenticated, isCheckingAuth]);
+  }, [isAuthenticated, isCheckingAuth, router, setUser]);
 
   return <></>;
 };
