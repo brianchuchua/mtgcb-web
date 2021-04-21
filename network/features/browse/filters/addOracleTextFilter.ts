@@ -15,7 +15,6 @@ const addOracleTextFilter: AddOracleTextFilterFunction = (oracleTextSearchQuery,
       graphqlFilters.AND.push({ oracleText_contains_i: oracleTextQueryWithWrappingQuotesRemoved });
     }
     where.AND.push(graphqlFilters);
-    console.log(graphqlFilters);
   }
 };
 
