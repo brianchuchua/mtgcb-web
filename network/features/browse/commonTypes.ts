@@ -10,6 +10,7 @@ export interface SearchOptions {
   skip?: number;
   sortBy?: SortByOptions;
   name?: string;
+  oracleTextQuery?: string;
   cardTypes?: CardType[];
   cardColors: CardColors;
   showAllPrintings: boolean;

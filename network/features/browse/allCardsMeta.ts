@@ -8,9 +8,9 @@ interface GetAllCardsMetaFunction {
 }
 
 const getAllCardsMeta: GetAllCardsMetaFunction = async (searchOptions) => {
-  const { name, cardTypes, cardColors, showAllPrintings } = searchOptions;
+  const { name, oracleTextQuery, cardTypes, cardColors, showAllPrintings } = searchOptions;
 
-  const where = buildBrowseFilter({ cardTypes, cardColors });
+  const where = buildBrowseFilter({ cardTypes, cardColors, oracleTextQuery });
   const distinct = showAllPrintings ? '' : 'name';
 
   try {

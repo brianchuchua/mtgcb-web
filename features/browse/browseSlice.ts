@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 const initialState: BrowseState = {
   isFormVisible: false,
   searchQuery: '',
+  oracleTextQuery: '',
   cardTypes: [],
   cardColors: {
     white: false,
@@ -28,6 +29,10 @@ const browseSlice = createSlice({
       const { searchQuery } = action.payload;
       state.searchQuery = searchQuery;
     },
+    setOracleTextQuery(state, action: PayloadAction<OracleTextQuery>) {
+      const { oracleTextQuery } = action.payload;
+      state.oracleTextQuery = oracleTextQuery;
+    },
     setCardTypes(state, action: PayloadAction<CardTypes>) {
       const { cardTypes } = action.payload;
       state.cardTypes = cardTypes;
@@ -47,11 +52,20 @@ const browseSlice = createSlice({
   },
 });
 
-export const { setFormVisibility, setSearchQuery, setCardTypes, setCardColors, setColorType, setShowAllPrintings } = browseSlice.actions;
+export const {
+  setFormVisibility,
+  setSearchQuery,
+  setOracleTextQuery,
+  setCardTypes,
+  setCardColors,
+  setColorType,
+  setShowAllPrintings,
+} = browseSlice.actions;
 
 interface BrowseState {
   isFormVisible: boolean;
   searchQuery: string;
+  oracleTextQuery: string;
   cardTypes: CardType[];
   cardColors: CardColors;
   showAllPrintings: boolean;
@@ -84,6 +98,10 @@ interface FormVisibility {
 
 interface SearchQuery {
   searchQuery: string;
+}
+
+interface OracleTextQuery {
+  oracleTextQuery: string;
 }
 
 export default browseSlice.reducer;

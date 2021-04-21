@@ -12,6 +12,13 @@ const darkTheme = createMuiTheme({
     secondary: indigo,
   },
   overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        '.input-label-fix.MuiInputLabel-outlined.MuiInputLabel-shrink': {
+          transform: 'translate(21px, -6px) scale(0.75)', // Fix for Material UI bug with labels on outlined inputs
+        },
+      },
+    },
     MuiPaper: {
       outlined: {
         borderColor: 'rgba(255, 255, 255, 0.23)',

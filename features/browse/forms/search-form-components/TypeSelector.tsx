@@ -42,7 +42,7 @@ const TypeSelector: React.FC = () => {
           groupBy={(type) => type.categoryLabel}
           getOptionLabel={(type) => type.cardType}
           getOptionSelected={(option, value) => option.cardType === value.cardType}
-          renderInput={(params) => <TextField {...params} label="Types" variant="outlined" />}
+          renderInput={(params) => <TextField {...params} label="Card Types" variant="outlined" />}
           onChange={(e, newSelectedTypes) => {
             setSelectedTypes(newSelectedTypes);
             updateCardTypes(newSelectedTypes);

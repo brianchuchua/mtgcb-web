@@ -8,9 +8,9 @@ interface GetAllCardsFunction {
 }
 
 const getAllCards: GetAllCardsFunction = async (searchOptions) => {
-  const { first, skip, sortBy, name, cardTypes, cardColors, showAllPrintings } = searchOptions;
+  const { first, skip, sortBy, name, oracleTextQuery, cardTypes, cardColors, showAllPrintings } = searchOptions;
 
-  const where = buildBrowseFilter({ cardTypes, cardColors });
+  const where = buildBrowseFilter({ cardTypes, cardColors, oracleTextQuery });
   const distinct = showAllPrintings ? '' : 'name';
 
   try {
