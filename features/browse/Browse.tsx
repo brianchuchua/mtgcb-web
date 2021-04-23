@@ -18,7 +18,10 @@ export const Browse: React.FC = () => {
   const [first, setFirst] = useState(50);
   const [page, setPage] = useState(1);
   const [previousQuery, setPreviousQuery] = useState('');
+  const [previousOracleTextQuery, setPreviousOracleTextQuery] = useState('');
   const [previousCardTypes, setPreviousCardTypes] = useState([]);
+  const [previousColors, setPreviousColors] = useState({});
+  const [previousShowAllPrintings, setPreviousShowAllPrintings] = useState(true);
 
   const dispatch = useDispatch();
 
@@ -32,12 +35,21 @@ export const Browse: React.FC = () => {
   useDebouncedEffect(
     async () => {
       async function fetchCards() {
-        const cardFilterChanged = previousQuery !== searchQuery || previousCardTypes !== cardTypes;
+        const cardFilterChanged =
+          previousQuery !== searchQuery ||
+          previousCardTypes !== cardTypes ||
+          previousOracleTextQuery !== oracleTextQuery ||
+          previousColors !== cardColors ||
+          previousShowAllPrintings !== showAllPrintings;
+
         const currentPage = cardFilterChanged ? 1 : page;
         setPage(currentPage);
         setSkip((currentPage - 1) * first);
         setPreviousQuery(searchQuery);
+        setPreviousOracleTextQuery(oracleTextQuery);
         setPreviousCardTypes(cardTypes);
+        setPreviousColors(cardColors);
+        setPreviousShowAllPrintings(showAllPrintings);
 
         const allCardsResponse = await getAllCards({
           name: searchQuery,
