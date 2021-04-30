@@ -14,7 +14,7 @@ const CardBox: React.FC<CardBoxProps> = ({ card }) => {
           <CardImage alt={card.name} title={card.name} src={imageUrl} />
         </LazyLoad>
         <CardName title={card.name}>{card.name}</CardName>
-        <CardSet title={card.set.name}>{card.set.name}</CardSet>
+        <CardSet title={card.set?.name}>{card.set?.name}</CardSet>
       </CardAttributes>
     </CardWrapper>
   );

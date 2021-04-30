@@ -72,8 +72,9 @@ interface BrowseState {
 }
 
 export interface CardType {
-  categoryLabel: string;
-  cardType: string;
+  category: string;
+  label: string;
+  value: string;
   exclude: boolean;
 }
 
@@ -92,6 +93,7 @@ export type ColorTypes = 'at-least-these-colors' | 'only-these-colors' | 'at-mos
 export interface CardTypes {
   cardTypes: CardType[];
 }
+
 interface FormVisibility {
   isFormVisibile: boolean;
 }
