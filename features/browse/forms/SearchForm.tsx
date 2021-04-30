@@ -1,6 +1,13 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/rootReducer';
-import { CardNameSearch, OracleTextSearch, TypeSelector, ColorSelector, ShowAllPrintingsToggle } from './search-form-components';
+import {
+  CardNameSearch,
+  OracleTextSearch,
+  TypeSelector,
+  SetSelector,
+  ColorSelector,
+  ShowAllPrintingsToggle,
+} from './search-form-components';
 
 const SearchForm: React.FC = () => {
   const { isFormVisible } = useSelector((state: RootState) => state.browse);
@@ -13,6 +20,7 @@ const SearchForm: React.FC = () => {
           <OracleTextSearch />
           <TypeSelector />
           <ColorSelector />
+          <SetSelector />
           <ShowAllPrintingsToggle />
         </>
       )}

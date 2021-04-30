@@ -11,7 +11,9 @@ import CardGallery from './CardGallery';
 import { useDebouncedEffect } from '../../util';
 
 export const Browse: React.FC = () => {
-  const { searchQuery, oracleTextQuery, cardTypes, cardColors, showAllPrintings } = useSelector((state: RootState) => state.browse);
+  const { searchQuery, oracleTextQuery, cardTypes, cardSets, cardColors, showAllPrintings } = useSelector(
+    (state: RootState) => state.browse
+  );
   const [cards, setCards] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
   const [skip, setSkip] = useState(0);
@@ -20,6 +22,7 @@ export const Browse: React.FC = () => {
   const [previousQuery, setPreviousQuery] = useState('');
   const [previousOracleTextQuery, setPreviousOracleTextQuery] = useState('');
   const [previousCardTypes, setPreviousCardTypes] = useState([]);
+  const [previousCardSets, setPreviousCardSets] = useState([]);
   const [previousColors, setPreviousColors] = useState({});
   const [previousShowAllPrintings, setPreviousShowAllPrintings] = useState(true);
 
@@ -38,6 +41,7 @@ export const Browse: React.FC = () => {
         const cardFilterChanged =
           previousQuery !== searchQuery ||
           previousCardTypes !== cardTypes ||
+          previousCardSets !== cardSets ||
           previousOracleTextQuery !== oracleTextQuery ||
           previousColors !== cardColors ||
           previousShowAllPrintings !== showAllPrintings;
@@ -48,6 +52,7 @@ export const Browse: React.FC = () => {
         setPreviousQuery(searchQuery);
         setPreviousOracleTextQuery(oracleTextQuery);
         setPreviousCardTypes(cardTypes);
+        setPreviousCardSets(cardSets);
         setPreviousColors(cardColors);
         setPreviousShowAllPrintings(showAllPrintings);
 
@@ -57,6 +62,7 @@ export const Browse: React.FC = () => {
           first,
           skip,
           cardTypes,
+          cardSets,
           cardColors,
           showAllPrintings,
         });
@@ -69,6 +75,7 @@ export const Browse: React.FC = () => {
           first,
           skip,
           cardTypes,
+          cardSets,
           cardColors,
           showAllPrintings,
         });
@@ -78,7 +85,7 @@ export const Browse: React.FC = () => {
       fetchCards();
     },
     400,
-    [searchQuery, oracleTextQuery, cardTypes, cardColors, showAllPrintings, skip, first]
+    [searchQuery, oracleTextQuery, cardTypes, cardSets, cardColors, showAllPrintings, skip, first]
   );
 
   // TODO: Make better Breadcrumbs component

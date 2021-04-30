@@ -5,6 +5,7 @@ const initialState: BrowseState = {
   searchQuery: '',
   oracleTextQuery: '',
   cardTypes: [],
+  cardSets: [],
   cardColors: {
     white: false,
     blue: false,
@@ -37,6 +38,10 @@ const browseSlice = createSlice({
       const { cardTypes } = action.payload;
       state.cardTypes = cardTypes;
     },
+    setCardSets(state, action: PayloadAction<CardSets>) {
+      const { cardSets } = action.payload;
+      state.cardSets = cardSets;
+    },
     setCardColors(state, action: PayloadAction<string>) {
       const color = action.payload;
       state.cardColors[color] = !state.cardColors[color];
@@ -57,6 +62,7 @@ export const {
   setSearchQuery,
   setOracleTextQuery,
   setCardTypes,
+  setCardSets,
   setCardColors,
   setColorType,
   setShowAllPrintings,
@@ -67,11 +73,19 @@ interface BrowseState {
   searchQuery: string;
   oracleTextQuery: string;
   cardTypes: CardType[];
+  cardSets: CardSet[];
   cardColors: CardColors;
   showAllPrintings: boolean;
 }
 
 export interface CardType {
+  category: string;
+  label: string;
+  value: string;
+  exclude: boolean;
+}
+
+export interface CardSet {
   category: string;
   label: string;
   value: string;
@@ -92,6 +106,10 @@ export type ColorTypes = 'at-least-these-colors' | 'only-these-colors' | 'at-mos
 
 export interface CardTypes {
   cardTypes: CardType[];
+}
+
+export interface CardSets {
+  cardSets: CardSet[];
 }
 
 interface FormVisibility {

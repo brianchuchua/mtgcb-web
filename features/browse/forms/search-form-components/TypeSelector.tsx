@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { setCardTypes, CardType } from '../../browseSlice';
 import { getCardTypes } from '../../../../network/features/browse';
-import mapCardTypes from '../mappers/mapCardTypes';
+import { mapCardTypes } from '../mappers';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
 
 const TypeSelector: React.FC = () => {
