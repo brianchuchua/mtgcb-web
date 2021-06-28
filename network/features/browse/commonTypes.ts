@@ -1,4 +1,4 @@
-import { CardColors, CardType, CardSet } from '../../../features/browse/browseSlice';
+import { CardColors, CardType, CardSet, CardStatSearch } from '../../../features/browse/browseSlice';
 
 enum SortByOptions {
   nameAsc = 'name_ASC',
@@ -15,4 +15,5 @@ export interface SearchOptions {
   cardSets?: CardSet[];
   cardColors: CardColors;
   showAllPrintings: boolean;
+  cardStatSearches: CardStatSearch[];
 }

@@ -42,7 +42,8 @@ const CardGalleryControls: React.FC<CardGalleryControlsProps> = ({
   setGalleryWidth,
 }) => {
   const startOfRange = 1 + skip;
-  const endOfRange = cards.length < first ? skip + cards.length : skip + first;
+  const numberOfCards = cards?.length ?? 0;
+  const endOfRange = numberOfCards < first ? skip + numberOfCards : skip + first;
 
   const atLeastOneCardToShow = totalResults > 0;
 

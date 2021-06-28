@@ -4,5 +4,6 @@ import ColorSelector from './ColorSelector';
 import ShowAllPrintingsToggle from './ShowAllPrintingsToggle';
 import SetSelector from './SetSelector';
 import TypeSelector from './TypeSelector';
+import CardStatSearch from './CardStatSearch';
 
-export { CardNameSearch, OracleTextSearch, ColorSelector, ShowAllPrintingsToggle, SetSelector, TypeSelector };
+export { CardNameSearch, OracleTextSearch, ColorSelector, ShowAllPrintingsToggle, SetSelector, TypeSelector, CardStatSearch };

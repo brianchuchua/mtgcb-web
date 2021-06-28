@@ -16,6 +16,7 @@ const initialState: BrowseState = {
     type: 'at-least-these-colors',
   },
   showAllPrintings: true,
+  cardStatSearches: [{ searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' }],
 };
 
 const browseSlice = createSlice({
@@ -54,6 +55,26 @@ const browseSlice = createSlice({
       const showAllPrintings = action.payload;
       state.showAllPrintings = showAllPrintings;
     },
+    setSearchAttribute(state, action: PayloadAction<SearchAttributeChangePayload>) {
+      const { searchAttribute, index } = action.payload;
+      state.cardStatSearches[index].searchAttribute = searchAttribute;
+    },
+    setComparator(state, action: PayloadAction<SearchComparatorPayload>) {
+      const { comparator, index } = action.payload;
+      state.cardStatSearches[index].comparator = comparator;
+    },
+    setCardStatSearches(state, action: PayloadAction<SearchValuePayload>) {
+      const { value, index } = action.payload;
+      state.cardStatSearches[index].value = value;
+    },
+    addCardStatSearch(state) {
+      state.cardStatSearches.push({ searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' });
+    },
+    removeCardStatSearch(state) {
+      if (state.cardStatSearches.length > 1) {
+        state.cardStatSearches.pop();
+      }
+    },
   },
 });
 
@@ -66,7 +87,19 @@ export const {
   setCardColors,
   setColorType,
   setShowAllPrintings,
+  setSearchAttribute,
+  setComparator,
+  setCardStatSearches,
+  addCardStatSearch,
+  removeCardStatSearch,
 } = browseSlice.actions;
+
+export const searchAttributeOptions = [
+  { value: 'convertedManaCost', label: 'CMC' },
+  { value: 'powerNumeric', label: 'Power' },
+  { value: 'toughnessNumeric', label: 'Toughness' },
+  { value: 'loyaltyNumeric', label: 'Loyalty' },
+];
 
 interface BrowseState {
   isFormVisible: boolean;
@@ -76,6 +109,7 @@ interface BrowseState {
   cardSets: CardSet[];
   cardColors: CardColors;
   showAllPrintings: boolean;
+  cardStatSearches: CardStatSearch[];
 }
 
 export interface CardType {
@@ -102,6 +136,20 @@ export interface CardColors {
   type: ColorTypes;
 }
 
+export interface CardStatSearch {
+  searchAttribute: SearchAttribute;
+  comparator: SearchComparators;
+  value?: string;
+}
+
+export interface SearchAttributeOption {
+  value: SearchAttribute;
+  label: string;
+}
+
+export type SearchComparators = 'gt' | 'gte' | 'lt' | 'lte' | 'eq' | 'not';
+export type SearchAttribute = 'convertedManaCost' | 'powerNumeric' | 'toughnessNumeric' | 'loyaltyNumeric';
+
 export type ColorTypes = 'at-least-these-colors' | 'only-these-colors' | 'at-most-these-colors';
 
 export interface CardTypes {
@@ -122,6 +170,21 @@ interface SearchQuery {
 
 interface OracleTextQuery {
   oracleTextQuery: string;
+}
+
+interface SearchAttributeChangePayload {
+  searchAttribute: SearchAttribute;
+  index: number;
+}
+
+interface SearchComparatorPayload {
+  comparator: SearchComparators;
+  index: number;
+}
+
+interface SearchValuePayload {
+  value: string;
+  index: number;
 }
 
 export default browseSlice.reducer;

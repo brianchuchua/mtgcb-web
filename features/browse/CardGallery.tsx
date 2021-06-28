@@ -39,9 +39,7 @@ const CardGallery: React.FC<CardGalleryProps> = ({ cards, first, skip, page, tot
       />
 
       <CardGalleryWrapper cardsPerRow={cardsPerRow} galleryWidth={galleryWidth}>
-        {cards.map((card) => (
-          <CardBox key={card.id} card={card} />
-        ))}
+        {cards && cards.map((card) => <CardBox key={card.id} card={card} />)}
       </CardGalleryWrapper>
     </>
   ) : (
