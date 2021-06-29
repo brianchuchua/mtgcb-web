@@ -12,8 +12,12 @@ const addCardStatFilter: AddCardStatFilterFunction = (cardStatSearches, where) =
       const { searchAttribute, comparator, value } = cardStatSearch;
       if (value !== '') {
         if (comparator === 'eq') {
+          let equalitySearchAttribute = searchAttribute as string;
+          if (valueIsNotNumeric(value)) {
+            equalitySearchAttribute = searchAttribute.replace('Numeric', '');
+          }
           cardStatSearchConditions.AND.push({
-            [searchAttribute]: value,
+            [equalitySearchAttribute]: value,
           });
         } else {
           cardStatSearchConditions.AND.push({
@@ -27,6 +31,11 @@ const addCardStatFilter: AddCardStatFilterFunction = (cardStatSearches, where) =
       where.AND.push(cardStatSearchConditions);
     }
   }
+};
+
+const valueIsNotNumeric = (value) => {
+  const possiblyNumericValue = Number(value);
+  return Number.isNaN(possiblyNumericValue);
 };
 
 export default addCardStatFilter;
