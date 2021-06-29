@@ -98,14 +98,17 @@ const CardStatSearch: React.FC = () => {
           </CardStatValue>
         </div>
       ))}
-      <ButtonGroup style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <CardStatAttributeAdderButtonGroup>
+        <CardStatAttributeAdderInstructions size="small" variant="text" disabled>
+          <em>Add or remove card attributes:</em>
+        </CardStatAttributeAdderInstructions>
         <Button size="small" onClick={handleRemoveCardStatSearch}>
           <RemoveIcon />
         </Button>
         <Button size="small" onClick={handleAddCardStatSearch}>
           <AddCircleIcon />
         </Button>
-      </ButtonGroup>
+      </CardStatAttributeAdderButtonGroup>
     </CardStatSearchGroup>
   );
 };
@@ -130,6 +133,16 @@ const CardStatAttributeSelect = styled(Select)(() => ({
 
 const CardStatComparatorSelect = styled(Select)(() => ({
   width: '25%',
+}));
+
+const CardStatAttributeAdderButtonGroup = styled(ButtonGroup)(() => ({
+  display: 'flex',
+  justifyContent: 'flex-end',
+}));
+
+const CardStatAttributeAdderInstructions = styled(Button)(() => ({
+  textTransform: 'none',
+  flex: '1',
 }));
 
 export default CardStatSearch;
