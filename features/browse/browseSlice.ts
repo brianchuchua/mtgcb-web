@@ -17,6 +17,8 @@ const initialState: BrowseState = {
   },
   showAllPrintings: true,
   cardStatSearches: [{ searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' }],
+  sortBy: 'name',
+  sortByDirection: 'ASC',
 };
 
 const browseSlice = createSlice({
@@ -75,6 +77,14 @@ const browseSlice = createSlice({
         state.cardStatSearches.pop();
       }
     },
+    setCardSort(state, action: PayloadAction<string>) {
+      const sortBy = action.payload;
+      state.sortBy = sortBy;
+    },
+    setCardSortDirection(state, action: PayloadAction<'ASC' | 'DESC'>) {
+      const sortByDirection = action.payload;
+      state.sortByDirection = sortByDirection;
+    },
   },
 });
 
@@ -92,9 +102,22 @@ export const {
   setCardStatSearches,
   addCardStatSearch,
   removeCardStatSearch,
+  setCardSort,
+  setCardSortDirection,
 } = browseSlice.actions;
 
 export const searchAttributeOptions = [
+  { value: 'convertedManaCost', label: 'CMC' },
+  { value: 'powerNumeric', label: 'Power' },
+  { value: 'toughnessNumeric', label: 'Toughness' },
+  { value: 'loyaltyNumeric', label: 'Loyalty' },
+];
+
+export const sortByOptions = [
+  { value: 'name', label: 'Name' },
+  { value: 'releasedAt', label: 'Release Date' },
+  { value: 'collectorNumber', label: 'Card Number' },
+  { value: 'rarityNumeric', label: 'Rarity' },
   { value: 'convertedManaCost', label: 'CMC' },
   { value: 'powerNumeric', label: 'Power' },
   { value: 'toughnessNumeric', label: 'Toughness' },
@@ -110,6 +133,8 @@ interface BrowseState {
   cardColors: CardColors;
   showAllPrintings: boolean;
   cardStatSearches: CardStatSearch[];
+  sortBy: string;
+  sortByDirection: 'ASC' | 'DESC';
 }
 
 export interface CardType {

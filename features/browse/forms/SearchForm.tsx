@@ -8,6 +8,7 @@ import {
   ColorSelector,
   ShowAllPrintingsToggle,
   CardStatSearch,
+  SortSelector,
 } from './search-form-components';
 
 const SearchForm: React.FC = () => {
@@ -23,6 +24,7 @@ const SearchForm: React.FC = () => {
           <ColorSelector />
           <SetSelector />
           <CardStatSearch />
+          <SortSelector />
           <ShowAllPrintingsToggle />
         </>
       )}

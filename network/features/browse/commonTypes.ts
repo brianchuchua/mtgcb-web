@@ -1,14 +1,10 @@
 import { CardColors, CardType, CardSet, CardStatSearch } from '../../../features/browse/browseSlice';
 
-enum SortByOptions {
-  nameAsc = 'name_ASC',
-  nameDesc = 'name_DESC',
-}
-
 export interface SearchOptions {
   first?: number;
   skip?: number;
-  sortBy?: SortByOptions;
+  sortBy?: string[];
+  sortByDirection?: 'ASC' | 'DESC';
   name?: string;
   oracleTextQuery?: string;
   cardTypes?: CardType[];

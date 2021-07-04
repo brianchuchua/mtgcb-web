@@ -9,11 +9,20 @@ import { setFormVisibility } from './browseSlice';
 import { getAllCards, getAllCardsMeta } from '../../network/features/browse';
 import CardGallery from './CardGallery';
 import { useDebouncedEffect } from '../../util';
+import { determineSortFilter } from '../../network/features/browse/filters';
 
 export const Browse: React.FC = () => {
-  const { searchQuery, oracleTextQuery, cardTypes, cardSets, cardColors, showAllPrintings, cardStatSearches } = useSelector(
-    (state: RootState) => state.browse
-  );
+  const {
+    searchQuery,
+    oracleTextQuery,
+    cardTypes,
+    cardSets,
+    cardColors,
+    showAllPrintings,
+    cardStatSearches,
+    sortBy,
+    sortByDirection,
+  } = useSelector((state: RootState) => state.browse);
   const [cards, setCards] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
   const [skip, setSkip] = useState(0);
@@ -26,6 +35,8 @@ export const Browse: React.FC = () => {
   const [previousColors, setPreviousColors] = useState({});
   const [previousShowAllPrintings, setPreviousShowAllPrintings] = useState(true);
   const [previousCardStatSearches, setPreviousCardStatSearches] = useState([]);
+  const [previousSortBy, setPreviousSortBy] = useState('name');
+  const [previousSortByDirection, setPreviousSortByDirection] = useState('ASC');
 
   const dispatch = useDispatch();
 
@@ -46,8 +57,11 @@ export const Browse: React.FC = () => {
           previousOracleTextQuery !== oracleTextQuery ||
           previousColors !== cardColors ||
           previousShowAllPrintings !== showAllPrintings ||
-          previousCardStatSearches !== cardStatSearches;
+          previousCardStatSearches !== cardStatSearches ||
+          previousSortBy !== sortBy ||
+          previousSortByDirection !== sortByDirection;
 
+        console.log('cardFilterchanged', cardFilterChanged);
         const currentPage = cardFilterChanged ? 1 : page;
         setPage(currentPage);
         setSkip((currentPage - 1) * first);
@@ -59,6 +73,8 @@ export const Browse: React.FC = () => {
         setPreviousColors(cardColors);
         setPreviousShowAllPrintings(showAllPrintings);
         setPreviousCardStatSearches(cardStatSearches);
+        setPreviousSortBy(sortBy);
+        setPreviousSortByDirection(sortByDirection);
 
         const allCardsResponse = await getAllCards({
           name: searchQuery,
@@ -70,6 +86,7 @@ export const Browse: React.FC = () => {
           cardColors,
           showAllPrintings,
           cardStatSearches,
+          sortBy: determineSortFilter(sortBy, sortByDirection),
         });
         const allCards = allCardsResponse?.data?.data?.allCards;
         setCards(allCards);
@@ -91,7 +108,19 @@ export const Browse: React.FC = () => {
       fetchCards();
     },
     400,
-    [searchQuery, oracleTextQuery, cardTypes, cardSets, cardColors, showAllPrintings, cardStatSearches, skip, first]
+    [
+      searchQuery,
+      oracleTextQuery,
+      cardTypes,
+      cardSets,
+      cardColors,
+      showAllPrintings,
+      cardStatSearches,
+      skip,
+      first,
+      sortBy,
+      sortByDirection,
+    ]
   );
 
   // TODO: Make better Breadcrumbs component

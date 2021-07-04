@@ -26,7 +26,6 @@ const addCardStatFilter: AddCardStatFilterFunction = (cardStatSearches, where) =
         }
       }
     }
-    console.log(cardStatSearchConditions);
     if (cardStatSearchConditions.AND.length > 0) {
       where.AND.push(cardStatSearchConditions);
     }
