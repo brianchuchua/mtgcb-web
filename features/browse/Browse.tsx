@@ -61,7 +61,6 @@ export const Browse: React.FC = () => {
           previousSortBy !== sortBy ||
           previousSortByDirection !== sortByDirection;
 
-        console.log('cardFilterchanged', cardFilterChanged);
         const currentPage = cardFilterChanged ? 1 : page;
         setPage(currentPage);
         setSkip((currentPage - 1) * first);
@@ -101,6 +100,7 @@ export const Browse: React.FC = () => {
           cardColors,
           showAllPrintings,
           cardStatSearches,
+          sortBy: determineSortFilter(sortBy, sortByDirection),
         });
         const count = allCardsMetaResponse?.data?.data?._allCardsMeta?.count || 0;
         setTotalResults(count);

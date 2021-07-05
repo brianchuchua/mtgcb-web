@@ -140,9 +140,9 @@ const CardStatAttributeAdderButtonGroup = styled(ButtonGroup)(() => ({
   justifyContent: 'flex-end',
 }));
 
-const CardStatAttributeAdderInstructions = styled(Button)(() => ({
+const CardStatAttributeAdderInstructions = styled(Button)({
   textTransform: 'none',
   flex: '1',
-}));
+});
 
 export default CardStatSearch;
