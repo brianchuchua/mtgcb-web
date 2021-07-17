@@ -6,5 +6,16 @@ import SetSelector from './SetSelector';
 import TypeSelector from './TypeSelector';
 import CardStatSearch from './CardStatSearch';
 import SortSelector from './SortSelector';
+import RaritySelector from './RaritySelector';
 
-export { CardNameSearch, OracleTextSearch, ColorSelector, ShowAllPrintingsToggle, SetSelector, TypeSelector, CardStatSearch, SortSelector };
+export {
+  CardNameSearch,
+  OracleTextSearch,
+  ColorSelector,
+  ShowAllPrintingsToggle,
+  SetSelector,
+  TypeSelector,
+  CardStatSearch,
+  SortSelector,
+  RaritySelector,
+};

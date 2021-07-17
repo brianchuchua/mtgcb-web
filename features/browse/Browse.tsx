@@ -17,6 +17,7 @@ export const Browse: React.FC = () => {
     oracleTextQuery,
     cardTypes,
     cardSets,
+    cardRarities,
     cardColors,
     showAllPrintings,
     cardStatSearches,
@@ -32,6 +33,7 @@ export const Browse: React.FC = () => {
   const [previousOracleTextQuery, setPreviousOracleTextQuery] = useState('');
   const [previousCardTypes, setPreviousCardTypes] = useState([]);
   const [previousCardSets, setPreviousCardSets] = useState([]);
+  const [previousCardRarities, setPreviousCardRarities] = useState([]);
   const [previousColors, setPreviousColors] = useState({});
   const [previousShowAllPrintings, setPreviousShowAllPrintings] = useState(true);
   const [previousCardStatSearches, setPreviousCardStatSearches] = useState([]);
@@ -54,6 +56,7 @@ export const Browse: React.FC = () => {
           previousQuery !== searchQuery ||
           previousCardTypes !== cardTypes ||
           previousCardSets !== cardSets ||
+          previousCardRarities !== cardRarities ||
           previousOracleTextQuery !== oracleTextQuery ||
           previousColors !== cardColors ||
           previousShowAllPrintings !== showAllPrintings ||
@@ -69,6 +72,7 @@ export const Browse: React.FC = () => {
         setPreviousOracleTextQuery(oracleTextQuery);
         setPreviousCardTypes(cardTypes);
         setPreviousCardSets(cardSets);
+        setPreviousCardRarities(cardRarities);
         setPreviousColors(cardColors);
         setPreviousShowAllPrintings(showAllPrintings);
         setPreviousCardStatSearches(cardStatSearches);
@@ -82,6 +86,7 @@ export const Browse: React.FC = () => {
           skip,
           cardTypes,
           cardSets,
+          cardRarities,
           cardColors,
           showAllPrintings,
           cardStatSearches,
@@ -97,6 +102,7 @@ export const Browse: React.FC = () => {
           skip,
           cardTypes,
           cardSets,
+          cardRarities,
           cardColors,
           showAllPrintings,
           cardStatSearches,
@@ -113,6 +119,7 @@ export const Browse: React.FC = () => {
       oracleTextQuery,
       cardTypes,
       cardSets,
+      cardRarities,
       cardColors,
       showAllPrintings,
       cardStatSearches,

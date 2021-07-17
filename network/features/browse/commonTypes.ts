@@ -1,4 +1,4 @@
-import { CardColors, CardType, CardSet, CardStatSearch } from '../../../features/browse/browseSlice';
+import { CardColors, CardType, CardSet, CardRarity, CardStatSearch } from '../../../features/browse/browseSlice';
 
 export interface SearchOptions {
   first?: number;
@@ -9,6 +9,7 @@ export interface SearchOptions {
   oracleTextQuery?: string;
   cardTypes?: CardType[];
   cardSets?: CardSet[];
+  cardRarities?: CardRarity[];
   cardColors: CardColors;
   showAllPrintings: boolean;
   cardStatSearches: CardStatSearch[];

@@ -6,6 +6,7 @@ const initialState: BrowseState = {
   oracleTextQuery: '',
   cardTypes: [],
   cardSets: [],
+  cardRarities: [],
   cardColors: {
     white: false,
     blue: false,
@@ -44,6 +45,10 @@ const browseSlice = createSlice({
     setCardSets(state, action: PayloadAction<CardSets>) {
       const { cardSets } = action.payload;
       state.cardSets = cardSets;
+    },
+    setCardRarities(state, action: PayloadAction<CardRarities>) {
+      const { cardRarities } = action.payload;
+      state.cardRarities = cardRarities;
     },
     setCardColors(state, action: PayloadAction<string>) {
       const color = action.payload;
@@ -94,6 +99,7 @@ export const {
   setOracleTextQuery,
   setCardTypes,
   setCardSets,
+  setCardRarities,
   setCardColors,
   setColorType,
   setShowAllPrintings,
@@ -124,12 +130,22 @@ export const sortByOptions = [
   { value: 'loyaltyNumeric', label: 'Loyalty' },
 ];
 
+export const rarityOptions = [
+  { category: 'Rarities', value: 'common', label: 'Common', exclude: false },
+  { category: 'Rarities', value: 'uncommon', label: 'Uncommon', exclude: false },
+  { category: 'Rarities', value: 'rare', label: 'Rare', exclude: false },
+  { category: 'Rarities', value: 'mythic', label: 'Mythic', exclude: false },
+  { category: 'Rarities', value: 'special', label: 'Special', exclude: false },
+  { category: 'Rarities', value: 'none', label: 'None', exclude: false },
+];
+
 interface BrowseState {
   isFormVisible: boolean;
   searchQuery: string;
   oracleTextQuery: string;
   cardTypes: CardType[];
   cardSets: CardSet[];
+  cardRarities: CardRarity[];
   cardColors: CardColors;
   showAllPrintings: boolean;
   cardStatSearches: CardStatSearch[];
@@ -148,6 +164,13 @@ export interface CardSet {
   category: string;
   label: string;
   value: string;
+  exclude: boolean;
+}
+
+export interface CardRarity {
+  category: string;
+  label: string;
+  value: 'common' | 'uncommon' | 'rare' | 'mythic' | 'special' | 'none';
   exclude: boolean;
 }
 
@@ -183,6 +206,10 @@ export interface CardTypes {
 
 export interface CardSets {
   cardSets: CardSet[];
+}
+
+export interface CardRarities {
+  cardRarities: CardRarity[];
 }
 
 interface FormVisibility {

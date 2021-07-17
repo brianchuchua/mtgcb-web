@@ -9,9 +9,19 @@ interface GetAllCardsMetaFunction {
 }
 
 const getAllCardsMeta: GetAllCardsMetaFunction = async (searchOptions) => {
-  const { name, oracleTextQuery, cardSets, cardTypes, cardColors, showAllPrintings, cardStatSearches, sortBy } = searchOptions;
+  const {
+    name,
+    oracleTextQuery,
+    cardSets,
+    cardRarities,
+    cardTypes,
+    cardColors,
+    showAllPrintings,
+    cardStatSearches,
+    sortBy,
+  } = searchOptions;
 
-  const where = buildBrowseFilter({ cardSets, cardTypes, cardColors, oracleTextQuery, cardStatSearches });
+  const where = buildBrowseFilter({ cardSets, cardRarities, cardTypes, cardColors, oracleTextQuery, cardStatSearches });
   const distinct = determineDistinctClause(showAllPrintings, sortBy);
 
   try {

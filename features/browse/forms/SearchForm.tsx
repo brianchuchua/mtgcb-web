@@ -9,6 +9,7 @@ import {
   ShowAllPrintingsToggle,
   CardStatSearch,
   SortSelector,
+  RaritySelector,
 } from './search-form-components';
 
 const SearchForm: React.FC = () => {
@@ -22,6 +23,7 @@ const SearchForm: React.FC = () => {
           <OracleTextSearch />
           <TypeSelector />
           <ColorSelector />
+          <RaritySelector />
           <SetSelector />
           <CardStatSearch />
           <SortSelector />
