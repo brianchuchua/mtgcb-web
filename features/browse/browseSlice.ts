@@ -20,6 +20,7 @@ const initialState: BrowseState = {
   cardStatSearches: [{ searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' }],
   sortBy: 'name',
   sortByDirection: 'ASC',
+  viewMode: 'images',
 };
 
 const browseSlice = createSlice({
@@ -90,6 +91,10 @@ const browseSlice = createSlice({
       const sortByDirection = action.payload;
       state.sortByDirection = sortByDirection;
     },
+    setViewMode(state, action: PayloadAction<'images' | 'table'>) {
+      const viewMode = action.payload;
+      state.viewMode = viewMode;
+    },
   },
 });
 
@@ -110,6 +115,7 @@ export const {
   removeCardStatSearch,
   setCardSort,
   setCardSortDirection,
+  setViewMode,
 } = browseSlice.actions;
 
 export const searchAttributeOptions = [
@@ -122,7 +128,7 @@ export const searchAttributeOptions = [
 export const sortByOptions = [
   { value: 'name', label: 'Name' },
   { value: 'releasedAt', label: 'Release Date' },
-  { value: 'collectorNumber', label: 'Card Number' },
+  { value: 'collectorNumber', label: 'Collector Number' },
   { value: 'rarityNumeric', label: 'Rarity' },
   { value: 'convertedManaCost', label: 'CMC' },
   { value: 'powerNumeric', label: 'Power' },
@@ -151,6 +157,7 @@ interface BrowseState {
   cardStatSearches: CardStatSearch[];
   sortBy: string;
   sortByDirection: 'ASC' | 'DESC';
+  viewMode: 'images' | 'table';
 }
 
 export interface CardType {

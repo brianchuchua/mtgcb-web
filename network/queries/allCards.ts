@@ -5,6 +5,11 @@ const allCards = `query allCards($first: Int = 50, $skip: Int = 0, $sortBy: [Sor
     set:setId {
       name
     }
+    rarity
+    manaCost
+    convertedManaCost
+    oracleTypeLine
+    collectorNumber
   }
 }
 `;

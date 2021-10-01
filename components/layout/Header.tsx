@@ -1,19 +1,19 @@
-import { useState } from 'react';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import MenuIcon from '@material-ui/icons/Menu';
+import { useState } from 'react';
+import { SearchForm } from '../../features/browse/forms';
 import AccountMenu from './AccountMenu';
 import HeaderBar from './HeaderBar';
-import HeaderToolbar from './HeaderToolbar';
 import HeaderSidenavButton from './HeaderSidenavButton';
 import HeaderTitle from './HeaderTitle';
+import HeaderToolbar from './HeaderToolbar';
 import Sidenav from './Sidenav';
 import SidenavHeader from './SidenavHeader';
 import SidenavItems from './SidenavItems';
-import { SearchForm } from '../../features/browse/forms';
 
 const Header: React.FC = () => {
   const [isSidenavOpen, setSidenavOpen] = useState(true);

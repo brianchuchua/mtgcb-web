@@ -1,9 +1,9 @@
-import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { RootState } from '../../../../redux/rootReducer';
 import { setShowAllPrintings } from '../../browseSlice';
 

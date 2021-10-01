@@ -1,7 +1,11 @@
-const ManaSymbol: React.FC<ManaSymbolProps> = ({ size = 3, color = 'c' }) => <i className={`ms ms-${color} ms-cost ms-${size}x`} />;
+const ManaSymbol: React.FC<ManaSymbolProps> = ({ size = 3, symbol = 'c', margin = 0, half = false }) => (
+  <i className={`ms ms-${symbol} ${half ? 'ms-half' : ''} ms-cost ms-${size}x`} style={{ margin: `0 ${margin}px 0 ${margin}px` }} />
+);
 export interface ManaSymbolProps {
   size: number;
-  color?: 'w' | 'u' | 'b' | 'r' | 'g' | 'c';
+  margin?: number;
+  half?: boolean;
+  symbol?: string;
 }
 
 export default ManaSymbol;

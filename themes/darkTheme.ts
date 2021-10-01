@@ -1,5 +1,5 @@
-import { createMuiTheme } from '@material-ui/core/styles';
 import { indigo } from '@material-ui/core/colors';
+import { createMuiTheme } from '@material-ui/core/styles';
 
 const darkTheme = createMuiTheme({
   palette: {
@@ -16,6 +16,22 @@ const darkTheme = createMuiTheme({
       '@global': {
         '.input-label-fix.MuiInputLabel-outlined.MuiInputLabel-shrink': {
           transform: 'translate(22px, -6px) scale(0.75)', // Fix for Material UI bug with labels on outlined inputs
+        },
+        '*': {
+          'scrollbar-width': '10px',
+          'scrollbar-color': 'rgba(255,255,255,0.25)',
+        },
+        '*::-webkit-scrollbar': {
+          width: '10px',
+        },
+
+        '*::-webkit-scrollbar-track': {
+          'background-color': 'rgba(255,255,255,0.25)',
+        },
+
+        '*::-webkit-scrollbar-thumb': {
+          'background-color': 'rgba(255,255,255,0.25)',
+          'border-radius': '10px',
         },
       },
     },

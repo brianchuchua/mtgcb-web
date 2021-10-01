@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import AppBar from '@material-ui/core/AppBar';
+import styled from 'styled-components';
 import { drawerWidth } from './constants';
 
 const HeaderBar = styled(AppBar)<HeaderBarProps>(({ theme, open }) => {
@@ -11,6 +11,7 @@ const HeaderBar = styled(AppBar)<HeaderBarProps>(({ theme, open }) => {
         easing: theme.transitions.easing.sharp,
         duration: '500ms',
       }),
+      zIndex: theme.zIndex.drawer + 1,
     };
   }
 

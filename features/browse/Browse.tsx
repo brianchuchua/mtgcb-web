@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Container from '@material-ui/core/Container';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import Link from '../../components/Link';
-import { RootState } from '../../redux/rootReducer';
-import { setFormVisibility } from './browseSlice';
 import { getAllCards, getAllCardsMeta } from '../../network/features/browse';
-import CardGallery from './CardGallery';
-import { useDebouncedEffect } from '../../util';
 import { determineSortFilter } from '../../network/features/browse/filters';
+import { RootState } from '../../redux/rootReducer';
+import { useDebouncedEffect } from '../../util';
+import { setFormVisibility } from './browseSlice';
+import CardGallery from './CardGallery';
+import CardTable from './CardTable';
 
 export const Browse: React.FC = () => {
   const {
@@ -23,6 +24,7 @@ export const Browse: React.FC = () => {
     cardStatSearches,
     sortBy,
     sortByDirection,
+    viewMode,
   } = useSelector((state: RootState) => state.browse);
   const [cards, setCards] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
@@ -39,6 +41,7 @@ export const Browse: React.FC = () => {
   const [previousCardStatSearches, setPreviousCardStatSearches] = useState([]);
   const [previousSortBy, setPreviousSortBy] = useState('name');
   const [previousSortByDirection, setPreviousSortByDirection] = useState('ASC');
+  const [previousSetFirst, setPreviousSetFirst] = useState(50);
 
   const dispatch = useDispatch();
 
@@ -62,7 +65,8 @@ export const Browse: React.FC = () => {
           previousShowAllPrintings !== showAllPrintings ||
           previousCardStatSearches !== cardStatSearches ||
           previousSortBy !== sortBy ||
-          previousSortByDirection !== sortByDirection;
+          previousSortByDirection !== sortByDirection ||
+          previousSetFirst !== first;
 
         const currentPage = cardFilterChanged ? 1 : page;
         setPage(currentPage);
@@ -78,6 +82,7 @@ export const Browse: React.FC = () => {
         setPreviousCardStatSearches(cardStatSearches);
         setPreviousSortBy(sortBy);
         setPreviousSortByDirection(sortByDirection);
+        setPreviousSetFirst(first);
 
         const allCardsResponse = await getAllCards({
           name: searchQuery,
@@ -142,16 +147,30 @@ export const Browse: React.FC = () => {
         </Link>
       </Breadcrumbs>
       <ContentWrapper>
-        <CardGallery
-          cards={cards}
-          totalResults={totalResults}
-          first={first}
-          skip={skip}
-          page={page}
-          setSkip={setSkip}
-          setFirst={setFirst}
-          setPage={setPage}
-        />
+        {viewMode === 'images' && (
+          <CardGallery
+            cards={cards}
+            totalResults={totalResults}
+            first={first}
+            skip={skip}
+            page={page}
+            setSkip={setSkip}
+            setFirst={setFirst}
+            setPage={setPage}
+          />
+        )}
+        {viewMode === 'table' && (
+          <CardTable
+            cards={cards}
+            totalResults={totalResults}
+            first={first}
+            skip={skip}
+            page={page}
+            setSkip={setSkip}
+            setFirst={setFirst}
+            setPage={setPage}
+          />
+        )}
       </ContentWrapper>
     </Container>
   );

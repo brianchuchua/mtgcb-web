@@ -33,6 +33,7 @@ const CardWrapper = styled.div({
   fontSize: 'clamp(12px, 1.0vw, 22px)',
   height: 'auto',
   minHeight: '50px',
+  lineHeight: 1.43,
 });
 
 const CardAttributes = styled.div({ textAlign: 'center', maxWidth: '100%' });

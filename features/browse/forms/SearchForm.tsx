@@ -2,16 +2,18 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/rootReducer';
 import {
   CardNameSearch,
-  OracleTextSearch,
-  TypeSelector,
-  SetSelector,
-  ColorSelector,
-  ShowAllPrintingsToggle,
   CardStatSearch,
-  SortSelector,
+  ColorSelector,
+  OracleTextSearch,
   RaritySelector,
+  SetSelector,
+  ShowAllPrintingsToggle,
+  SortSelector,
+  TypeSelector,
+  ViewModeSelector,
 } from './search-form-components';
 
+// TODO: Add headers to this thing
 const SearchForm: React.FC = () => {
   const { isFormVisible } = useSelector((state: RootState) => state.browse);
 
@@ -19,6 +21,7 @@ const SearchForm: React.FC = () => {
     <>
       {isFormVisible && (
         <>
+          <ViewModeSelector />
           <CardNameSearch />
           <OracleTextSearch />
           <TypeSelector />

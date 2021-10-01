@@ -1,15 +1,15 @@
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { StylesProvider, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import 'fontsource-roboto';
 import { AppProps } from 'next/app';
+import { SnackbarProvider } from 'notistack';
 import { useEffect } from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
-import { ThemeProvider as MuiThemeProvider, StylesProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { SnackbarProvider } from 'notistack';
-import store from '../redux/store';
 import { AuthenticationProvider } from '../auth/AuthenticationProvider';
-import GlobalStyle from '../components/styles/GlobalStyle';
 import Layout from '../components/layout/Layout';
+import GlobalStyle from '../components/styles/GlobalStyle';
+import store from '../redux/store';
 import darkTheme from '../themes/darkTheme';
 
 const MtgCbWebApp = ({ Component, pageProps }: AppProps): JSX.Element => {
