@@ -12,6 +12,7 @@ import { Dispatch, SetStateAction, useMemo } from 'react';
 import { useSortBy, useTable } from 'react-table';
 import styled from 'styled-components';
 import ManaCost, { sortByManaSymbols } from '../../components/symbols/mana/ManaCost';
+import { PriceTypes } from './browseSlice';
 import CardBox, { Card } from './CardBox';
 import CardGalleryControls from './CardGalleryControls';
 import { formatPrice } from './util/formatPrice';
@@ -25,9 +26,10 @@ interface CardTableProps {
   setFirst: Dispatch<SetStateAction<number>>;
   setPage: Dispatch<SetStateAction<number>>;
   totalResults: number;
+  priceType: PriceTypes;
 }
 
-const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalResults, setSkip, setFirst, setPage }) => {
+const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalResults, setSkip, setFirst, setPage, priceType }) => {
   const atLeastOneCardToShow = totalResults > 0;
 
   const cardsTableColumns = useMemo(
@@ -143,6 +145,7 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
   const settingGroups = [
     {
       label: 'Show Columns',
+      type: 'tableFilters',
       settings: [
         {
           key: 'id',
@@ -254,7 +257,22 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
                       {cell.column.id === 'name' && (
                         <Tooltip
                           interactive
-                          title={<CardBox card={{ id: row.values.id, name: row.values.name, set: { name: row.values['set.name'] } }} />}
+                          title={
+                            <CardBox
+                              card={{
+                                id: row.values.id,
+                                name: row.values.name,
+                                set: { name: row.values['set.name'] },
+                                low: row.values.low,
+                                average: row.values.average,
+                                high: row.values.high,
+                                foil: row.values.foil,
+                                market: row.values.market,
+                                tcgplayerId: row.values.tcgplayerId,
+                              }}
+                              priceType={priceType}
+                            />
+                          }
                         >
                           <div>{cell.render('Cell')}</div>
                         </Tooltip>

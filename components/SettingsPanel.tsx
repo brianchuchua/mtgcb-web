@@ -6,18 +6,21 @@ import IconButton from '@material-ui/core/IconButton';
 import Popover from '@material-ui/core/Popover';
 import Switch from '@material-ui/core/Switch';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 
 interface Setting {
   key: string;
   label: string;
-  getToggleHiddenProps: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  getToggleHiddenProps?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  isVisible?: boolean;
+  setVisibility?: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface SettingGroup {
   label: string;
   settings: Setting[];
+  type: string;
 }
 
 interface SettingsPanelProps {
@@ -63,13 +66,29 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ settingGroups, panelId })
                 <FormLabel component="legend" disabled>
                   {settingGroup.label}
                 </FormLabel>
-                {settingGroup.settings.map((setting) => (
-                  <FormControlLabel
-                    key={setting.key}
-                    control={<Switch color="primary" checked={false} {...setting.getToggleHiddenProps()} />}
-                    label={setting.label}
-                  />
-                ))}
+                {settingGroup.settings.map((setting) => {
+                  if (settingGroup.type === 'tableFilters') {
+                    return (
+                      <FormControlLabel
+                        key={setting.key}
+                        control={<Switch color="primary" checked={false} {...setting.getToggleHiddenProps()} />}
+                        label={setting.label}
+                      />
+                    );
+                  }
+                  if (settingGroup.type === 'toggleFilters') {
+                    return (
+                      <FormControlLabel
+                        key={setting.key}
+                        control={
+                          <Switch color="primary" checked={setting.isVisible} onChange={() => setting.setVisibility(!setting.isVisible)} />
+                        }
+                        label={setting.label}
+                      />
+                    );
+                  }
+                  return null;
+                })}
               </FormGroup>
             ))}
           </FormControl>

@@ -6,9 +6,12 @@ import CardPrice from './CardPrice';
 interface CardBoxProps {
   card: Card;
   priceType: PriceTypes;
+  nameIsVisible?: boolean;
+  priceIsVisible?: boolean;
+  setIsVisible?: boolean;
 }
 
-const CardBox: React.FC<CardBoxProps> = ({ card, priceType }) => {
+const CardBox: React.FC<CardBoxProps> = ({ card, priceType, nameIsVisible = true, priceIsVisible = true, setIsVisible = true }) => {
   const imageUrl = `https://mtgcb-images.s3.amazonaws.com/cards/images/normal/${card.id}.jpg`;
   return (
     <CardWrapper key={card.id}>
@@ -16,9 +19,9 @@ const CardBox: React.FC<CardBoxProps> = ({ card, priceType }) => {
         <LazyLoad key={`lazy-${card.id}`} once resize height={50}>
           <CardImage alt={card.name} title={card.name} src={imageUrl} />
         </LazyLoad>
-        <CardName title={card.name}>{card.name}</CardName>
-        <CardSet title={card.set?.name}>{card.set?.name}</CardSet>
-        <CardPrice card={card} priceType={priceType} />
+        {nameIsVisible && <CardName title={card.name}>{card.name}</CardName>}
+        {setIsVisible && <CardSet title={card.set?.name}>{card.set?.name}</CardSet>}
+        {priceIsVisible && <CardPrice card={card} priceType={priceType} />}
       </CardAttributes>
     </CardWrapper>
   );

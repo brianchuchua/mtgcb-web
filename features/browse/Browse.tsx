@@ -174,6 +174,7 @@ export const Browse: React.FC = () => {
             setSkip={setSkip}
             setFirst={setFirst}
             setPage={setPage}
+            priceType={priceType}
           />
         )}
       </ContentWrapper>

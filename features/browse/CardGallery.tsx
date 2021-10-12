@@ -22,7 +22,38 @@ interface CardGalleryProps {
 const CardGallery: React.FC<CardGalleryProps> = ({ cards, first, skip, page, totalResults, setSkip, setFirst, setPage, priceType }) => {
   const [cardsPerRow, setCardsPerRow] = useState(4);
   const [galleryWidth, setGalleryWidth] = useState(100);
+  const [nameIsVisible, setNameIsVisible] = useState(true);
+  const [setIsVisible, setSetIsVisible] = useState(true);
+  const [priceIsVisible, setPriceIsVisible] = useState(true);
+
   const atLeastOneCardToShow = totalResults > 0;
+
+  const settingGroups = [
+    {
+      label: 'Show Fields',
+      type: 'toggleFilters',
+      settings: [
+        {
+          key: 'name',
+          label: 'Name',
+          isVisible: nameIsVisible,
+          setVisibility: setNameIsVisible,
+        },
+        {
+          key: 'set',
+          label: 'Set',
+          isVisible: setIsVisible,
+          setVisibility: setSetIsVisible,
+        },
+        {
+          key: 'price',
+          label: 'Price',
+          isVisible: priceIsVisible,
+          setVisibility: setPriceIsVisible,
+        },
+      ],
+    },
+  ];
 
   return atLeastOneCardToShow ? (
     <>
@@ -38,10 +69,21 @@ const CardGallery: React.FC<CardGalleryProps> = ({ cards, first, skip, page, tot
         skip={skip}
         totalResults={totalResults}
         cardsPerRow={cardsPerRow}
+        settingGroups={settingGroups}
       />
 
       <CardGalleryWrapper cardsPerRow={cardsPerRow} galleryWidth={galleryWidth}>
-        {cards && cards.map((card) => <CardBox key={card.id} card={card} priceType={priceType} />)}
+        {cards &&
+          cards.map((card) => (
+            <CardBox
+              key={card.id}
+              card={card}
+              priceType={priceType}
+              nameIsVisible={nameIsVisible}
+              setIsVisible={setIsVisible}
+              priceIsVisible={priceIsVisible}
+            />
+          ))}
       </CardGalleryWrapper>
     </>
   ) : (
