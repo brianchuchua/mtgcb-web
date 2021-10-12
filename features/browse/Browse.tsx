@@ -25,6 +25,7 @@ export const Browse: React.FC = () => {
     sortBy,
     sortByDirection,
     viewMode,
+    priceType,
   } = useSelector((state: RootState) => state.browse);
   const [cards, setCards] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
@@ -42,6 +43,7 @@ export const Browse: React.FC = () => {
   const [previousSortBy, setPreviousSortBy] = useState('name');
   const [previousSortByDirection, setPreviousSortByDirection] = useState('ASC');
   const [previousSetFirst, setPreviousSetFirst] = useState(50);
+  const [previousPriceType, setPreviousPriceType] = useState('market');
 
   const dispatch = useDispatch();
 
@@ -66,7 +68,8 @@ export const Browse: React.FC = () => {
           previousCardStatSearches !== cardStatSearches ||
           previousSortBy !== sortBy ||
           previousSortByDirection !== sortByDirection ||
-          previousSetFirst !== first;
+          previousSetFirst !== first ||
+          previousPriceType !== priceType;
 
         const currentPage = cardFilterChanged ? 1 : page;
         setPage(currentPage);
@@ -83,6 +86,7 @@ export const Browse: React.FC = () => {
         setPreviousSortBy(sortBy);
         setPreviousSortByDirection(sortByDirection);
         setPreviousSetFirst(first);
+        setPreviousPriceType(priceType);
 
         const allCardsResponse = await getAllCards({
           name: searchQuery,
@@ -157,6 +161,7 @@ export const Browse: React.FC = () => {
             setSkip={setSkip}
             setFirst={setFirst}
             setPage={setPage}
+            priceType={priceType}
           />
         )}
         {viewMode === 'table' && (

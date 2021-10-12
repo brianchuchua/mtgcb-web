@@ -1,11 +1,14 @@
-import styled from 'styled-components';
 import LazyLoad from 'react-lazyload';
+import styled from 'styled-components';
+import { PriceTypes } from './browseSlice';
+import CardPrice from './CardPrice';
 
 interface CardBoxProps {
   card: Card;
+  priceType: PriceTypes;
 }
 
-const CardBox: React.FC<CardBoxProps> = ({ card }) => {
+const CardBox: React.FC<CardBoxProps> = ({ card, priceType }) => {
   const imageUrl = `https://mtgcb-images.s3.amazonaws.com/cards/images/normal/${card.id}.jpg`;
   return (
     <CardWrapper key={card.id}>
@@ -15,6 +18,7 @@ const CardBox: React.FC<CardBoxProps> = ({ card }) => {
         </LazyLoad>
         <CardName title={card.name}>{card.name}</CardName>
         <CardSet title={card.set?.name}>{card.set?.name}</CardSet>
+        <CardPrice card={card} priceType={priceType} />
       </CardAttributes>
     </CardWrapper>
   );
@@ -26,6 +30,12 @@ export interface Card {
   set: {
     name: string;
   };
+  low: number;
+  average: number;
+  high: number;
+  market: number;
+  foil: number;
+  tcgplayerId: number;
 }
 
 const CardWrapper = styled.div({

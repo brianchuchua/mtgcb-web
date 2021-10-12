@@ -2,6 +2,7 @@ import CardNameSearch from './CardNameSearch';
 import CardStatSearch from './CardStatSearch';
 import ColorSelector from './ColorSelector';
 import OracleTextSearch from './OracleTextSearch';
+import PriceTypeSelector from './PriceTypeSelector';
 import RaritySelector from './RaritySelector';
 import SetSelector from './SetSelector';
 import ShowAllPrintingsToggle from './ShowAllPrintingsToggle';
@@ -20,4 +21,5 @@ export {
   SortSelector,
   TypeSelector,
   ViewModeSelector,
+  PriceTypeSelector,
 };

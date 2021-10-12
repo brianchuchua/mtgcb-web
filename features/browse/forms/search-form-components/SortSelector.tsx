@@ -1,9 +1,9 @@
-import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
-import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { RootState } from '../../../../redux/rootReducer';
-import { sortByOptions, setCardSort, setCardSortDirection } from '../../browseSlice';
+import { setCardSort, setCardSortDirection, sortByOptions } from '../../browseSlice';
 
 const SortSelector: React.FC = () => {
   const dispatch = useDispatch();

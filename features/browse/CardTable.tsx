@@ -14,6 +14,7 @@ import styled from 'styled-components';
 import ManaCost, { sortByManaSymbols } from '../../components/symbols/mana/ManaCost';
 import CardBox, { Card } from './CardBox';
 import CardGalleryControls from './CardGalleryControls';
+import { formatPrice } from './util/formatPrice';
 
 interface CardTableProps {
   cards: Card[];
@@ -97,6 +98,31 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         Cell: ({ value }: any) => (value === '0' ? '' : value),
       },
+      {
+        accessor: 'market',
+        Header: 'Price (Market)',
+        Cell: ({ row: { original } }) => formatPrice(original, 'market'),
+      },
+      {
+        accessor: 'low',
+        Header: 'Price (Low)',
+        Cell: ({ row: { original } }) => formatPrice(original, 'low'),
+      },
+      {
+        accessor: 'average',
+        Header: 'Price (Avg)',
+        Cell: ({ row: { original } }) => formatPrice(original, 'average'),
+      },
+      {
+        accessor: 'high',
+        Header: 'Price (High)',
+        Cell: ({ row: { original } }) => formatPrice(original, 'high'),
+      },
+      {
+        accessor: 'foil',
+        Header: 'Price (Foil)',
+        Cell: ({ row: { original } }) => formatPrice(original, 'foil', false),
+      },
     ],
     []
   );
@@ -104,7 +130,11 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
   const cardsTableData = useMemo(() => cards, [cards]);
 
   const cardsTable = useTable(
-    { columns: cardsTableColumns, data: cardsTableData, initialState: { hiddenColumns: ['id', 'convertedManaCost'] } },
+    {
+      columns: cardsTableColumns,
+      data: cardsTableData,
+      initialState: { hiddenColumns: ['id', 'convertedManaCost', 'low', 'average', 'high'] },
+    },
     useSortBy
   );
 
@@ -154,6 +184,31 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
           label: 'Collector Number',
           getToggleHiddenProps: allColumns[7].getToggleHiddenProps,
         },
+        {
+          key: 'price.market',
+          label: 'Price (Market)',
+          getToggleHiddenProps: allColumns[8].getToggleHiddenProps,
+        },
+        {
+          key: 'price.low',
+          label: 'Price (Low)',
+          getToggleHiddenProps: allColumns[9].getToggleHiddenProps,
+        },
+        {
+          key: 'price.average',
+          label: 'Price (Avg)',
+          getToggleHiddenProps: allColumns[10].getToggleHiddenProps,
+        },
+        {
+          key: 'price.high',
+          label: 'Price (High)',
+          getToggleHiddenProps: allColumns[11].getToggleHiddenProps,
+        },
+        {
+          key: 'price.foil',
+          label: 'Price (Foil)',
+          getToggleHiddenProps: allColumns[12].getToggleHiddenProps,
+        },
       ],
     },
   ];
@@ -181,6 +236,7 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
                     {...column.getHeaderProps(
                       column.getSortByToggleProps({ title: '(Sorts only the current table page, not the entire search)' })
                     )}
+                    style={column.id === 'market' ? { minWidth: '175px' } : {}}
                   >
                     {column.render('Header')} <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />
                   </StyledHeaderTableCell>

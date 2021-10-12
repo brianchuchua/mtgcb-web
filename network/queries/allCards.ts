@@ -10,6 +10,12 @@ const allCards = `query allCards($first: Int = 50, $skip: Int = 0, $sortBy: [Sor
     convertedManaCost
     oracleTypeLine
     collectorNumber
+    tcgplayerId
+    low
+    average
+    high
+    market
+    foil
   }
 }
 `;

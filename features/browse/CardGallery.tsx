@@ -1,9 +1,10 @@
-import { Dispatch, SetStateAction, useState } from 'react';
-import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import CardGalleryControls from './CardGalleryControls';
+import { Dispatch, SetStateAction, useState } from 'react';
+import styled from 'styled-components';
+import { PriceTypes } from './browseSlice';
 import CardBox, { Card } from './CardBox';
+import CardGalleryControls from './CardGalleryControls';
 
 interface CardGalleryProps {
   cards: Card[];
@@ -15,9 +16,10 @@ interface CardGalleryProps {
   setFirst: Dispatch<SetStateAction<number>>;
   setPage: Dispatch<SetStateAction<number>>;
   totalResults: number;
+  priceType: PriceTypes;
 }
 
-const CardGallery: React.FC<CardGalleryProps> = ({ cards, first, skip, page, totalResults, setSkip, setFirst, setPage }) => {
+const CardGallery: React.FC<CardGalleryProps> = ({ cards, first, skip, page, totalResults, setSkip, setFirst, setPage, priceType }) => {
   const [cardsPerRow, setCardsPerRow] = useState(4);
   const [galleryWidth, setGalleryWidth] = useState(100);
   const atLeastOneCardToShow = totalResults > 0;
@@ -39,7 +41,7 @@ const CardGallery: React.FC<CardGalleryProps> = ({ cards, first, skip, page, tot
       />
 
       <CardGalleryWrapper cardsPerRow={cardsPerRow} galleryWidth={galleryWidth}>
-        {cards && cards.map((card) => <CardBox key={card.id} card={card} />)}
+        {cards && cards.map((card) => <CardBox key={card.id} card={card} priceType={priceType} />)}
       </CardGalleryWrapper>
     </>
   ) : (

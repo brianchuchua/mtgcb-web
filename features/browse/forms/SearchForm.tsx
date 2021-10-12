@@ -5,6 +5,7 @@ import {
   CardStatSearch,
   ColorSelector,
   OracleTextSearch,
+  PriceTypeSelector,
   RaritySelector,
   SetSelector,
   ShowAllPrintingsToggle,
@@ -22,6 +23,7 @@ const SearchForm: React.FC = () => {
       {isFormVisible && (
         <>
           <ViewModeSelector />
+          <PriceTypeSelector />
           <CardNameSearch />
           <OracleTextSearch />
           <TypeSelector />

@@ -21,6 +21,7 @@ const initialState: BrowseState = {
   sortBy: 'name',
   sortByDirection: 'ASC',
   viewMode: 'images',
+  priceType: 'market',
 };
 
 const browseSlice = createSlice({
@@ -95,6 +96,10 @@ const browseSlice = createSlice({
       const viewMode = action.payload;
       state.viewMode = viewMode;
     },
+    setPriceType(state, action: PayloadAction<PriceTypes>) {
+      const priceType = action.payload;
+      state.priceType = priceType;
+    },
   },
 });
 
@@ -116,6 +121,7 @@ export const {
   setCardSort,
   setCardSortDirection,
   setViewMode,
+  setPriceType,
 } = browseSlice.actions;
 
 export const searchAttributeOptions = [
@@ -123,6 +129,11 @@ export const searchAttributeOptions = [
   { value: 'powerNumeric', label: 'Power' },
   { value: 'toughnessNumeric', label: 'Toughness' },
   { value: 'loyaltyNumeric', label: 'Loyalty' },
+  { value: 'market', label: 'Price (Market)' },
+  { value: 'low', label: 'Price (Low)' },
+  { value: 'average', label: 'Price (Average)' },
+  { value: 'high', label: 'Price (High)' },
+  { value: 'foil', label: 'Price (Foil)' },
 ];
 
 export const sortByOptions = [
@@ -134,6 +145,11 @@ export const sortByOptions = [
   { value: 'powerNumeric', label: 'Power' },
   { value: 'toughnessNumeric', label: 'Toughness' },
   { value: 'loyaltyNumeric', label: 'Loyalty' },
+  { value: 'market', label: 'Price (Market)' },
+  { value: 'low', label: 'Price (Low)' },
+  { value: 'average', label: 'Price (Average)' },
+  { value: 'high', label: 'Price (High)' },
+  { value: 'foil', label: 'Price (Foil)' },
 ];
 
 export const rarityOptions = [
@@ -158,7 +174,10 @@ interface BrowseState {
   sortBy: string;
   sortByDirection: 'ASC' | 'DESC';
   viewMode: 'images' | 'table';
+  priceType: PriceTypes;
 }
+
+export type PriceTypes = 'low' | 'average' | 'high' | 'market' | 'foil';
 
 export interface CardType {
   category: string;
