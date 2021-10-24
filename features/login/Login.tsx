@@ -1,19 +1,19 @@
-import { useRouter } from 'next/router';
-import { Form, Formik, Field } from 'formik';
-import * as Yup from 'yup';
-import styled from 'styled-components';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { Field, Form, Formik } from 'formik';
+import { useRouter } from 'next/router';
+import styled from 'styled-components';
+import * as Yup from 'yup';
+import { useAuthentication } from '../../auth/AuthenticationProvider';
 import Button from '../../components/Button';
 import Link from '../../components/Link';
 import { getUser } from '../../network/features/account';
 import { logIn } from '../../network/features/login';
-import { useAuthentication } from '../../auth/AuthenticationProvider';
 
 const LoginWrapper = styled.div(({ theme }) => ({
   marginTop: theme.spacing(8),

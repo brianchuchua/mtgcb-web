@@ -6,18 +6,12 @@ import { forceCheck as forceImagesToCheckIfTheyShouldLoad } from 'react-lazyload
 import styled from 'styled-components';
 import Pagination from '../../components/Pagination';
 import SettingsPanel, { SettingGroup } from '../../components/SettingsPanel';
-import { NumberOfCardsSelect } from './forms';
+import { NumberOfItemsSelect } from './forms';
 
-interface Card {
-  id: number;
-  name: string;
-  set: {
-    name: string;
-  };
-}
+type GalleryTypes = 'cards' | 'sets';
 
-interface CardGalleryControlsProps {
-  cards: Card[];
+interface GalleryControlsProps {
+  items: any[]; // eslint-disable-line @typescript-eslint/no-explicit-any
   cardsPerRow?: number;
   page: number;
   first: number;
@@ -29,10 +23,11 @@ interface CardGalleryControlsProps {
   setGalleryWidth?: Dispatch<SetStateAction<number>>;
   totalResults: number;
   settingGroups?: SettingGroup[];
+  galleryType?: GalleryTypes;
 }
 
-const CardGalleryControls: React.FC<CardGalleryControlsProps> = ({
-  cards,
+const GalleryControls: React.FC<GalleryControlsProps> = ({
+  items,
   first,
   skip,
   page,
@@ -42,36 +37,45 @@ const CardGalleryControls: React.FC<CardGalleryControlsProps> = ({
   setPage,
   setCardsPerRow,
   setGalleryWidth,
+  galleryType,
   settingGroups = [],
 }) => {
   const startOfRange = 1 + skip;
-  const numberOfCards = cards?.length ?? 0;
+  const numberOfCards = items?.length ?? 0;
   const endOfRange = numberOfCards < first ? skip + numberOfCards : skip + first;
 
-  const atLeastOneCardToShow = totalResults > 0;
+  const atLeastOneItemToShow = totalResults > 0;
+
+  const typeLabel = galleryType === 'cards' ? 'Cards' : 'Sets';
 
   useEffect(() => {
     forceImagesToCheckIfTheyShouldLoad();
-  }, [cards, first, skip, page, totalResults]);
+  }, [items, first, skip, page, totalResults]);
 
   return (
-    atLeastOneCardToShow && (
+    atLeastOneItemToShow && (
       <>
-        <Grid container spacing={2} justify="space-between" alignItems="center">
+        <Grid
+          container
+          spacing={2}
+          justify="space-between"
+          alignItems="center"
+          style={{ marginBottom: galleryType === 'sets' ? '10px' : '0px' }}
+        >
           <Grid item sm={3}>
-            <Typography>{`Showing ${startOfRange}-${endOfRange} of ${totalResults} cards`}</Typography>
+            <Typography>{`Showing ${startOfRange}-${endOfRange} of ${totalResults} ${typeLabel.toLowerCase()}`}</Typography>
           </Grid>
           <CenteredGrid item sm={6}>
             <Pagination total={totalResults} page={page} first={first} setPage={setPage} setSkip={setSkip} />
           </CenteredGrid>
           <RightAlignedGrid container item sm={3} alignItems="center" justify="flex-end">
             <Grid item>
-              <NumberOfCardsSelect first={first} setFirst={setFirst} />
+              <NumberOfItemsSelect first={first} setFirst={setFirst} label={typeLabel} />
             </Grid>
             <Grid item>{settingGroups.length > 0 && <SettingsPanel panelId="cardGallerySettings" settingGroups={settingGroups} />}</Grid>
           </RightAlignedGrid>
         </Grid>
-        {setGalleryWidth && setCardsPerRow && (
+        {setGalleryWidth && setCardsPerRow && galleryType === 'cards' && (
           <Grid container item sm={12} spacing={2} justify="space-between" alignItems="center">
             <Grid item sm={6}>
               <Typography id="card-size-slider">Card size</Typography>
@@ -123,4 +127,4 @@ const RightAlignedGrid = styled(Grid)({
   textAlign: 'right',
 });
 
-export default CardGalleryControls;
+export default GalleryControls;

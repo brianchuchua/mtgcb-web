@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { setCardSets, CardSet } from '../../browseSlice';
-import { getCardSets } from '../../../../network/features/browse';
-import { mapCardSets } from '../mappers';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
+import { getCardSets } from '../../../../network/features/browse';
+import { CardSet, setCardSets } from '../../browseSlice';
+import { mapCardSets } from '../mappers';
 
 const SetSelector: React.FC = () => {
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ const SetSelector: React.FC = () => {
 
   useEffect(() => {
     async function fetchSets() {
-      const setsResponse = await getCardSets();
+      const setsResponse = await getCardSets({ first: 1000 }); // TODO: This is being called twice in the app, lift it up in state or make the first call lighter
       const allSets = setsResponse?.data?.data?.allSets;
       const allSetsMapped = mapCardSets(allSets);
 

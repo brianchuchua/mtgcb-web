@@ -19,18 +19,18 @@ const darkTheme = createMuiTheme({
         },
         '*': {
           'scrollbar-width': '10px',
-          'scrollbar-color': 'rgba(255,255,255,0.25)',
+          'scrollbar-color': '#474c50',
         },
         '*::-webkit-scrollbar': {
           width: '10px',
         },
 
         '*::-webkit-scrollbar-track': {
-          'background-color': 'rgba(255,255,255,0.25)',
+          'background-color': 'rgba(202,204,206,0.04)',
         },
 
         '*::-webkit-scrollbar-thumb': {
-          'background-color': 'rgba(255,255,255,0.25)',
+          'background-color': '#474c50',
           'border-radius': '10px',
         },
       },

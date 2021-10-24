@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Link from '../../components/Link';
-import { getAllCards, getAllCardsMeta } from '../../network/features/browse';
+import { costToPurchaseAll, getAllCards, getAllCardsMeta, getCardSets, getCardSetsMeta } from '../../network/features/browse';
 import { determineSortFilter } from '../../network/features/browse/filters';
 import { RootState } from '../../redux/rootReducer';
 import { useDebouncedEffect } from '../../util';
 import { setFormVisibility } from './browseSlice';
 import CardGallery from './CardGallery';
 import CardTable from './CardTable';
+import SetGallery from './SetGallery';
 
 export const Browse: React.FC = () => {
   const {
@@ -24,8 +25,12 @@ export const Browse: React.FC = () => {
     cardStatSearches,
     sortBy,
     sortByDirection,
+    viewSubject,
     viewMode,
     priceType,
+    expansionsSearchQuery,
+    expansionsSortBy,
+    expansionsSortByDirection,
   } = useSelector((state: RootState) => state.browse);
   const [cards, setCards] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
@@ -40,11 +45,21 @@ export const Browse: React.FC = () => {
   const [previousColors, setPreviousColors] = useState({});
   const [previousShowAllPrintings, setPreviousShowAllPrintings] = useState(true);
   const [previousCardStatSearches, setPreviousCardStatSearches] = useState([]);
-  const [previousSortBy, setPreviousSortBy] = useState('name');
+  const [previousSortBy, setPreviousSortBy] = useState('releasedAt');
   const [previousSortByDirection, setPreviousSortByDirection] = useState('ASC');
   const [previousSetFirst, setPreviousSetFirst] = useState(50);
   const [previousPriceType, setPreviousPriceType] = useState('market');
 
+  const [expansions, setExpansions] = useState([]);
+  const [costsToPurchase, setCostsToPurchase] = useState([]);
+  const [totalExpansionsResults, setTotalExpansionsResults] = useState(0);
+  const [expansionsSkip, setExpansionsSkip] = useState(0);
+  const [expansionsFirst, setExpansionsFirst] = useState(50);
+  const [expansionsPage, setExpansionsPage] = useState(1);
+  const [expansionsPreviousQuery, setExpansionsPreviousQuery] = useState('');
+  const [previousExpansionSortBy, setPreviousExpansionSortBy] = useState('releasedAt');
+  const [previousExpansionSortByDirection, setPreviousExpansionSortByDirection] = useState('DESC');
+  const [previousExpansionFirst, setPreviousExpansionFirst] = useState(50);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -139,6 +154,44 @@ export const Browse: React.FC = () => {
     ]
   );
 
+  useDebouncedEffect(
+    async () => {
+      async function fetchSets() {
+        const setFilterChanged =
+          expansionsPreviousQuery !== expansionsSearchQuery ||
+          previousExpansionSortBy !== expansionsSortBy ||
+          previousExpansionSortByDirection !== expansionsSortByDirection ||
+          previousExpansionFirst !== expansionsFirst;
+
+        const currentPage = setFilterChanged ? 1 : expansionsPage;
+        setExpansionsPage(currentPage);
+        setExpansionsSkip((currentPage - 1) * expansionsFirst);
+
+        setExpansionsPreviousQuery(expansionsSearchQuery);
+        setPreviousExpansionSortBy(expansionsSortBy);
+        setPreviousExpansionSortByDirection(expansionsSortByDirection);
+        setPreviousExpansionFirst(expansionsFirst);
+
+        const allExpansionsResponse = await getCardSets({ first: expansionsFirst, skip: expansionsSkip });
+        const allExpansions = allExpansionsResponse?.data?.data?.allSets;
+        setExpansions(allExpansions);
+
+        const allExpansionsMetaResponse = await getCardSetsMeta();
+        const count = allExpansionsMetaResponse?.data?.data?._allSetsMeta?.count || 0;
+        setTotalExpansionsResults(count);
+
+        if (costsToPurchase.length === 0) {
+          const costToPurchaseAllResponse = await costToPurchaseAll();
+          const costToPurchaseAllData = costToPurchaseAllResponse?.data?.data?.costToPurchaseAll?.costToPurchaseAll;
+          setCostsToPurchase(costToPurchaseAllData);
+        }
+      }
+      fetchSets();
+    },
+    400,
+    [expansionsSearchQuery, expansionsSortBy, expansionsSortByDirection, expansionsFirst, expansionsSkip, expansionsPage]
+  );
+
   // TODO: Make better Breadcrumbs component
   return (
     <Container maxWidth="xl">
@@ -151,7 +204,7 @@ export const Browse: React.FC = () => {
         </Link>
       </Breadcrumbs>
       <ContentWrapper>
-        {viewMode === 'images' && (
+        {viewSubject === 'cards' && viewMode === 'grid' && (
           <CardGallery
             cards={cards}
             totalResults={totalResults}
@@ -164,7 +217,7 @@ export const Browse: React.FC = () => {
             priceType={priceType}
           />
         )}
-        {viewMode === 'table' && (
+        {viewSubject === 'cards' && viewMode === 'table' && (
           <CardTable
             cards={cards}
             totalResults={totalResults}
@@ -177,6 +230,21 @@ export const Browse: React.FC = () => {
             priceType={priceType}
           />
         )}
+        {viewSubject === 'sets' && viewMode === 'grid' && (
+          <SetGallery
+            sets={expansions}
+            costsToPurchase={costsToPurchase}
+            totalResults={totalExpansionsResults}
+            first={expansionsFirst}
+            skip={expansionsSkip}
+            page={expansionsPage}
+            setSkip={setExpansionsSkip}
+            setFirst={setExpansionsFirst}
+            setPage={setExpansionsPage}
+            priceType={priceType}
+          />
+        )}
+        {viewSubject === 'sets' && viewMode === 'table' && <div>Set Table</div>}
       </ContentWrapper>
     </Container>
   );

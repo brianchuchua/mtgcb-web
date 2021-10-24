@@ -1,4 +1,4 @@
-import { CardColors, CardType, CardSet, CardRarity, CardStatSearch } from '../../../features/browse/browseSlice';
+import { CardColors, CardRarity, CardSet, CardStatSearch, CardType } from '../../../features/browse/browseSlice';
 
 export interface SearchOptions {
   first?: number;
@@ -13,4 +13,21 @@ export interface SearchOptions {
   cardColors: CardColors;
   showAllPrintings: boolean;
   cardStatSearches: CardStatSearch[];
+}
+
+export interface SetSearchOptions {
+  first?: number;
+  skip?: number;
+  sortBy?: string[];
+  sortByDirection?: 'ASC' | 'DESC';
+  name?: string;
+}
+
+export interface TcgplayerMassImportOptions {
+  setId: number;
+  allCount?: number;
+  mythicCount?: number;
+  rareCount?: number;
+  uncommonCount?: number;
+  commonCount?: number;
 }

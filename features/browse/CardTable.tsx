@@ -14,7 +14,7 @@ import styled from 'styled-components';
 import ManaCost, { sortByManaSymbols } from '../../components/symbols/mana/ManaCost';
 import { PriceTypes } from './browseSlice';
 import CardBox, { Card } from './CardBox';
-import CardGalleryControls from './CardGalleryControls';
+import GalleryControls from './GalleryControls';
 import { formatPrice } from './util/formatPrice';
 
 interface CardTableProps {
@@ -218,8 +218,8 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
 
   return atLeastOneCardToShow ? (
     <>
-      <CardGalleryControls
-        cards={cards}
+      <GalleryControls
+        items={cards}
         first={first}
         page={page}
         setFirst={setFirst}
@@ -228,6 +228,7 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
         skip={skip}
         totalResults={totalResults}
         settingGroups={settingGroups}
+        galleryType="cards"
       />
       <StyledTableContainer>
         <Table {...getTableProps()} size="small">

@@ -1,5 +1,5 @@
-import { allCards as allCardsQuery } from '../../queries';
 import { api } from '../../index';
+import { allCards as allCardsQuery } from '../../queries';
 import buildBrowseFilter from './buildBrowseFilter';
 import { SearchOptions } from './commonTypes';
 import determineDistinctClause from './determineDistinctClause';

@@ -17,7 +17,7 @@ const CardBox: React.FC<CardBoxProps> = ({ card, priceType, nameIsVisible = true
     <CardWrapper key={card.id}>
       <CardAttributes>
         <LazyLoad key={`lazy-${card.id}`} once resize height={50}>
-          <CardImage alt={card.name} title={card.name} src={imageUrl} />
+          <CardImage alt={card.name} title={card.name} src={imageUrl} set={card.set?.name} />
         </LazyLoad>
         {nameIsVisible && <CardName title={card.name}>{card.name}</CardName>}
         {setIsVisible && <CardSet title={card.set?.name}>{card.set?.name}</CardSet>}
@@ -62,6 +62,6 @@ const CardSet = styled.em(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const CardImage = styled.img({ width: '100%', height: 'auto', borderRadius: '5%' });
+const CardImage = styled.img(({ set }) => ({ width: '100%', height: 'auto', borderRadius: set === 'Limited Edition Alpha' ? '7%' : '5%' }));
 
 export default CardBox;

@@ -18,9 +18,10 @@ const initialState: BrowseState = {
   },
   showAllPrintings: true,
   cardStatSearches: [{ searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' }],
-  sortBy: 'name',
+  sortBy: 'releasedAt',
   sortByDirection: 'ASC',
-  viewMode: 'images',
+  viewSubject: 'cards',
+  viewMode: 'grid',
   priceType: 'market',
 };
 
@@ -92,7 +93,11 @@ const browseSlice = createSlice({
       const sortByDirection = action.payload;
       state.sortByDirection = sortByDirection;
     },
-    setViewMode(state, action: PayloadAction<'images' | 'table'>) {
+    setViewSubject(state, action: PayloadAction<'cards' | 'sets'>) {
+      const viewSubject = action.payload;
+      state.viewSubject = viewSubject;
+    },
+    setViewMode(state, action: PayloadAction<'grid' | 'table'>) {
       const viewMode = action.payload;
       state.viewMode = viewMode;
     },
@@ -120,6 +125,7 @@ export const {
   removeCardStatSearch,
   setCardSort,
   setCardSortDirection,
+  setViewSubject,
   setViewMode,
   setPriceType,
 } = browseSlice.actions;
@@ -173,7 +179,8 @@ interface BrowseState {
   cardStatSearches: CardStatSearch[];
   sortBy: string;
   sortByDirection: 'ASC' | 'DESC';
-  viewMode: 'images' | 'table';
+  viewSubject: 'cards' | 'sets';
+  viewMode: 'grid' | 'table';
   priceType: PriceTypes;
 }
 

@@ -15,7 +15,9 @@ const PriceTypeSelector: React.FC = () => {
   };
 
   const handlePriceTypeChange = (event: React.MouseEvent<HTMLElement>, newPriceType: string | null) => {
-    updatePriceType(newPriceType);
+    if (newPriceType != null) {
+      updatePriceType(newPriceType);
+    }
   };
 
   return (

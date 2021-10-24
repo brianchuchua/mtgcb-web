@@ -1,4 +1,4 @@
-import NumberOfCardsSelect from './NumberOfCardsSelect';
+import NumberOfItemsSelect from './NumberOfItemsSelect';
 import SearchForm from './SearchForm';
 
-export { NumberOfCardsSelect, SearchForm };
+export { NumberOfItemsSelect, SearchForm };

@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import { PriceTypes } from './browseSlice';
 import CardBox, { Card } from './CardBox';
-import CardGalleryControls from './CardGalleryControls';
+import GalleryControls from './GalleryControls';
 
 interface CardGalleryProps {
   cards: Card[];
@@ -57,8 +57,8 @@ const CardGallery: React.FC<CardGalleryProps> = ({ cards, first, skip, page, tot
 
   return atLeastOneCardToShow ? (
     <>
-      <CardGalleryControls
-        cards={cards}
+      <GalleryControls
+        items={cards}
         first={first}
         page={page}
         setCardsPerRow={setCardsPerRow}
@@ -70,6 +70,7 @@ const CardGallery: React.FC<CardGalleryProps> = ({ cards, first, skip, page, tot
         totalResults={totalResults}
         cardsPerRow={cardsPerRow}
         settingGroups={settingGroups}
+        galleryType="cards"
       />
 
       <CardGalleryWrapper cardsPerRow={cardsPerRow} galleryWidth={galleryWidth}>
