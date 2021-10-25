@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Link from '../../components/Link';
-import { costToPurchaseAll, getAllCards, getAllCardsMeta, getCardSets, getCardSetsMeta } from '../../network/features/browse';
+import { costToPurchaseAll, getAllCards, getAllCardsMeta } from '../../network/features/browse';
 import { determineSortFilter } from '../../network/features/browse/filters';
+import { useGetAllSetsMetaQuery, useGetAllSetsQuery } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
 import { useDebouncedEffect } from '../../util';
 import { setFormVisibility } from './browseSlice';
@@ -50,9 +51,7 @@ export const Browse: React.FC = () => {
   const [previousSetFirst, setPreviousSetFirst] = useState(50);
   const [previousPriceType, setPreviousPriceType] = useState('market');
 
-  const [expansions, setExpansions] = useState([]);
   const [costsToPurchase, setCostsToPurchase] = useState([]);
-  const [totalExpansionsResults, setTotalExpansionsResults] = useState(0);
   const [expansionsSkip, setExpansionsSkip] = useState(0);
   const [expansionsFirst, setExpansionsFirst] = useState(50);
   const [expansionsPage, setExpansionsPage] = useState(1);
@@ -172,14 +171,6 @@ export const Browse: React.FC = () => {
         setPreviousExpansionSortByDirection(expansionsSortByDirection);
         setPreviousExpansionFirst(expansionsFirst);
 
-        const allExpansionsResponse = await getCardSets({ first: expansionsFirst, skip: expansionsSkip });
-        const allExpansions = allExpansionsResponse?.data?.data?.allSets;
-        setExpansions(allExpansions);
-
-        const allExpansionsMetaResponse = await getCardSetsMeta();
-        const count = allExpansionsMetaResponse?.data?.data?._allSetsMeta?.count || 0;
-        setTotalExpansionsResults(count);
-
         if (costsToPurchase.length === 0) {
           const costToPurchaseAllResponse = await costToPurchaseAll();
           const costToPurchaseAllData = costToPurchaseAllResponse?.data?.data?.costToPurchaseAll?.costToPurchaseAll;
@@ -191,6 +182,13 @@ export const Browse: React.FC = () => {
     400,
     [expansionsSearchQuery, expansionsSortBy, expansionsSortByDirection, expansionsFirst, expansionsSkip, expansionsPage]
   );
+
+  const { data: allSetsResponse } = useGetAllSetsQuery({ first: expansionsFirst, skip: expansionsSkip });
+  const expansions = allSetsResponse?.data?.allSets;
+
+  const { data: allSetsMetaResponse } = useGetAllSetsMetaQuery({});
+  const allSetsMeta = allSetsMetaResponse?.data?._allSetsMeta;
+  const totalExpansionsResults = allSetsMeta?.count || 0;
 
   // TODO: Make better Breadcrumbs component
   return (
