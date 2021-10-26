@@ -7,7 +7,7 @@ interface TcgplayerMassImportFunction {
 }
 
 const tcgplayerMassImport: TcgplayerMassImportFunction = async (tcgplayerOptions) => {
-  const { setId, allCount, mythicCount, rareCount, uncommonCount, commonCount } = tcgplayerOptions;
+  const { setId, allCount, mythicCount, rareCount, uncommonCount, commonCount, draftCubeCount } = tcgplayerOptions;
 
   try {
     const response = await api.post('', {
@@ -19,6 +19,7 @@ const tcgplayerMassImport: TcgplayerMassImportFunction = async (tcgplayerOptions
         rareCount,
         uncommonCount,
         commonCount,
+        draftCubeCount,
       },
     });
     return response;

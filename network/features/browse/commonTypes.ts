@@ -30,4 +30,5 @@ export interface TcgplayerMassImportOptions {
   rareCount?: number;
   uncommonCount?: number;
   commonCount?: number;
+  draftCubeCount?: number;
 }

@@ -92,6 +92,34 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
                 <BuyThisButton setId={set.id} count={4} countType="common" />
               </td>
             </tr>
+            {set.sealedProductUrl && (
+              <tr>
+                <td colSpan={3}>
+                  <Button
+                    style={{ textTransform: 'capitalize', marginTop: '3px' }}
+                    variant="outlined"
+                    size="small"
+                    href={`${set.sealedProductUrl}&partner=CTNBLDR&utm_campaign=affiliate&utm_medium=CTNBLDR&utm_source=CTNBLDR&ProductTypeName=Sealed`}
+                    target="_blank"
+                    fullWidth
+                  >
+                    Buy this set sealed
+                  </Button>
+                </td>
+              </tr>
+            )}
+            {set.isDraftable && (
+              <tr>
+                <td colSpan={3}>
+                  <BuyThisButton
+                    setId={set.id}
+                    count={1}
+                    countType="draftcube"
+                    price={formatter.format(costsToPurchaseInSet[priceType].draftCube)}
+                  />
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -99,15 +127,16 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
   </SetBoxWrapper>
 );
 
-type CountType = 'all' | 'mythic' | 'rare' | 'uncommon' | 'common';
+type CountType = 'all' | 'mythic' | 'rare' | 'uncommon' | 'common' | 'draftcube';
 
 interface BuyThisButtonProps {
   setId: string;
   count: number;
   countType: CountType;
+  price?: string;
 }
 
-const BuyThisButton = ({ setId, count, countType }: BuyThisButtonProps) => {
+const BuyThisButton = ({ setId, count, countType, price }: BuyThisButtonProps) => {
   const [tcgplayerMassImportString, setTcgplayerMassImportString] = useState('');
 
   return (
@@ -117,12 +146,22 @@ const BuyThisButton = ({ setId, count, countType }: BuyThisButtonProps) => {
       target="_blank"
       id={`tcgplayer-mass-import-form-${setId}-${count}-${countType}`}
       onSubmit={(e) => handleBuyThisSubmit(e, setId, count, countType, setTcgplayerMassImportString)}
-      style={{ display: 'inline-block' }}
+      style={{ display: 'inline-block', width: countType === 'draftcube' ? '100%' : 'auto' }}
     >
       <input type="hidden" name="partner" value="CTNBLDR" />
       <input type="hidden" name="c" value={tcgplayerMassImportString} />
-      <Button style={{ textTransform: 'capitalize', marginLeft: '5px' }} variant="outlined" size="small" type="submit">
-        Buy {count}x
+      <Button
+        style={{
+          textTransform: 'capitalize',
+          marginLeft: countType === 'draftcube' ? '0px' : '5px',
+          marginTop: countType === 'draftcube' ? '3px' : '0px',
+        }}
+        variant="outlined"
+        size="small"
+        type="submit"
+        fullWidth={countType === 'draftcube'}
+      >
+        {countType === 'draftcube' ? `Buy a draft cube for ${price}` : `Buy ${count}x`}
       </Button>
     </form>
   );
@@ -134,6 +173,8 @@ const handleBuyThisSubmit = async (e, setId, count, countType, setTcgplayerMassI
 
   if (countType === 'all') {
     options.allCount = count;
+  } else if (countType === 'draftcube') {
+    options.draftCubeCount = count;
   } else if (countType === 'mythic') {
     options.mythicCount = count;
   } else if (countType === 'rare') {
@@ -145,7 +186,6 @@ const handleBuyThisSubmit = async (e, setId, count, countType, setTcgplayerMassI
   }
 
   const tcgplayerMassImportString = (await tcgplayerMassImport(options))?.data?.data?.tcgplayerMassImport?.tcgplayerMassImport;
-  console.log(tcgplayerMassImportString);
   setTcgplayerMassImportString(tcgplayerMassImportString);
   const buyThisForm: any = document.getElementById(`tcgplayer-mass-import-form-${setId}-${count}-${countType}`); // eslint-disable-line @typescript-eslint/no-explicit-any
   buyThisForm.submit();
@@ -170,6 +210,8 @@ export interface Set {
   setType: string;
   cardCount: number;
   releasedAt: string;
+  sealedProductUrl: string;
+  isDraftable: boolean;
 }
 
 interface SetBoxProps {

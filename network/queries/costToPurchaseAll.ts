@@ -8,6 +8,7 @@ const costToPurchaseAll = `query costToPurchaseAll {
         oneOfEachRare
         oneOfEachUncommon
         oneOfEachCommon
+        draftCube
       }
       low {
         oneOfEachCard
@@ -15,6 +16,7 @@ const costToPurchaseAll = `query costToPurchaseAll {
         oneOfEachRare
         oneOfEachUncommon
         oneOfEachCommon
+        draftCube
       }
       average {
         oneOfEachCard
@@ -22,6 +24,7 @@ const costToPurchaseAll = `query costToPurchaseAll {
         oneOfEachRare
         oneOfEachUncommon
         oneOfEachCommon
+        draftCube
       }
       high {
         oneOfEachCard
@@ -29,6 +32,7 @@ const costToPurchaseAll = `query costToPurchaseAll {
         oneOfEachRare
         oneOfEachUncommon
         oneOfEachCommon
+        draftCube
       }
     }
   }

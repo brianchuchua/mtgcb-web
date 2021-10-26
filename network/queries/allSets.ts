@@ -7,6 +7,8 @@ const allSets = `query allSets($first: Int = 50, $skip: Int = 0, $sortBy: [SortS
     setType
     cardCount
     releasedAt
+    sealedProductUrl
+    isDraftable
   }
 }
 `;
