@@ -13,6 +13,7 @@ import { setFormVisibility } from './browseSlice';
 import CardGallery from './CardGallery';
 import CardTable from './CardTable';
 import SetGallery from './SetGallery';
+import SetTable from './SetTable';
 
 export const Browse: React.FC = () => {
   const {
@@ -258,7 +259,19 @@ export const Browse: React.FC = () => {
             priceType={priceType}
           />
         )}
-        {viewSubject === 'sets' && viewMode === 'table' && <div>Set Table</div>}
+        {viewSubject === 'sets' && viewMode === 'table' && (
+          <MemoizedSetTable
+            sets={expansions}
+            totalResults={totalExpansionsResults}
+            first={expansionsFirst}
+            skip={expansionsSkip}
+            page={expansionsPage}
+            setSkip={setExpansionsSkip}
+            setFirst={setExpansionsFirst}
+            setPage={setExpansionsPage}
+            priceType={priceType}
+          />
+        )}
       </ContentWrapper>
     </Container>
   );
@@ -267,6 +280,7 @@ export const Browse: React.FC = () => {
 const MemoizedSetGallery = memo(SetGallery);
 const MemoizedCardGallery = memo(CardGallery);
 const MemoizedCardTable = memo(CardTable);
+const MemoizedSetTable = memo(SetTable);
 
 const ContentWrapper = styled.div(({ theme }) => ({
   marginTop: theme.spacing(0),
