@@ -259,20 +259,22 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
                         <Tooltip
                           interactive
                           title={
-                            <CardBox
-                              card={{
-                                id: row.values.id,
-                                name: row.values.name,
-                                set: { name: row.values['set.name'] },
-                                low: row.values.low,
-                                average: row.values.average,
-                                high: row.values.high,
-                                foil: row.values.foil,
-                                market: row.values.market,
-                                tcgplayerId: row.values.tcgplayerId,
-                              }}
-                              priceType={priceType}
-                            />
+                            <TooltipWrapper>
+                              <CardBox
+                                card={{
+                                  id: row.values.id,
+                                  name: row.values.name,
+                                  set: { name: row.values['set.name'] },
+                                  low: row.values.low,
+                                  average: row.values.average,
+                                  high: row.values.high,
+                                  foil: row.values.foil,
+                                  market: row.values.market,
+                                  tcgplayerId: row.values.tcgplayerId,
+                                }}
+                                priceType={priceType}
+                              />
+                            </TooltipWrapper>
                           }
                         >
                           <div>{cell.render('Cell')}</div>
@@ -301,5 +303,9 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
 const StyledTableContainer = styled(TableContainer)(() => ({ marginTop: '5px' }));
 const StyledTableHead = styled(TableHead)(() => ({ backgroundColor: '#424242', boxShadow: '2px' }));
 const StyledHeaderTableCell = styled(TableCell)(() => ({ minWidth: '150px' }));
+const TooltipWrapper = styled.div({
+  minHeight: '488px',
+  minWidth: '270px',
+});
 
 export default CardTable;
