@@ -1,6 +1,6 @@
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Container from '@material-ui/core/Container';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Link from '../../components/Link';
@@ -29,9 +29,11 @@ export const Browse: React.FC = () => {
     viewSubject,
     viewMode,
     priceType,
-    expansionsSearchQuery,
-    expansionsSortBy,
-    expansionsSortByDirection,
+    expansionSearchQuery,
+    sortExpansionBy,
+    sortExpansionByDirection,
+    expansionTypes,
+    expansionCategories,
   } = useSelector((state: RootState) => state.browse);
   const [cards, setCards] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
@@ -157,18 +159,18 @@ export const Browse: React.FC = () => {
     async () => {
       async function fetchSets() {
         const setFilterChanged =
-          expansionsPreviousQuery !== expansionsSearchQuery ||
-          previousExpansionSortBy !== expansionsSortBy ||
-          previousExpansionSortByDirection !== expansionsSortByDirection ||
+          expansionsPreviousQuery !== expansionSearchQuery ||
+          previousExpansionSortBy !== sortExpansionBy ||
+          previousExpansionSortByDirection !== sortExpansionByDirection ||
           previousExpansionFirst !== expansionsFirst;
 
         const currentPage = setFilterChanged ? 1 : expansionsPage;
         setExpansionsPage(currentPage);
         setExpansionsSkip((currentPage - 1) * expansionsFirst);
 
-        setExpansionsPreviousQuery(expansionsSearchQuery);
-        setPreviousExpansionSortBy(expansionsSortBy);
-        setPreviousExpansionSortByDirection(expansionsSortByDirection);
+        setExpansionsPreviousQuery(expansionSearchQuery);
+        setPreviousExpansionSortBy(sortExpansionBy);
+        setPreviousExpansionSortByDirection(sortExpansionByDirection);
         setPreviousExpansionFirst(expansionsFirst);
 
         if (costsToPurchase.length === 0) {
@@ -180,13 +182,27 @@ export const Browse: React.FC = () => {
       fetchSets();
     },
     400,
-    [expansionsSearchQuery, expansionsSortBy, expansionsSortByDirection, expansionsFirst, expansionsSkip, expansionsPage]
+    [expansionSearchQuery, sortExpansionBy, sortExpansionByDirection, expansionsFirst, expansionsSkip, expansionsPage]
   );
 
-  const { data: allSetsResponse } = useGetAllSetsQuery({ first: expansionsFirst, skip: expansionsSkip });
+  const { data: allSetsResponse } = useGetAllSetsQuery({
+    first: expansionsFirst,
+    skip: expansionsSkip,
+    name: expansionSearchQuery,
+    sortBy: sortExpansionBy,
+    sortByDirection: sortExpansionByDirection,
+    setTypes: expansionTypes,
+    setCategories: expansionCategories,
+  });
   const expansions = allSetsResponse?.data?.allSets;
 
-  const { data: allSetsMetaResponse } = useGetAllSetsMetaQuery({});
+  const { data: allSetsMetaResponse } = useGetAllSetsMetaQuery({
+    name: expansionSearchQuery,
+    sortBy: sortExpansionBy,
+    sortByDirection: sortExpansionByDirection,
+    setTypes: expansionTypes,
+    setCategories: expansionCategories,
+  });
   const allSetsMeta = allSetsMetaResponse?.data?._allSetsMeta;
   const totalExpansionsResults = allSetsMeta?.count || 0;
 
@@ -203,7 +219,7 @@ export const Browse: React.FC = () => {
       </Breadcrumbs>
       <ContentWrapper>
         {viewSubject === 'cards' && viewMode === 'grid' && (
-          <CardGallery
+          <MemoizedCardGallery
             cards={cards}
             totalResults={totalResults}
             first={first}
@@ -216,7 +232,7 @@ export const Browse: React.FC = () => {
           />
         )}
         {viewSubject === 'cards' && viewMode === 'table' && (
-          <CardTable
+          <MemoizedCardTable
             cards={cards}
             totalResults={totalResults}
             first={first}
@@ -229,7 +245,7 @@ export const Browse: React.FC = () => {
           />
         )}
         {viewSubject === 'sets' && viewMode === 'grid' && (
-          <SetGallery
+          <MemoizedSetGallery
             sets={expansions}
             costsToPurchase={costsToPurchase}
             totalResults={totalExpansionsResults}
@@ -247,6 +263,10 @@ export const Browse: React.FC = () => {
     </Container>
   );
 };
+
+const MemoizedSetGallery = memo(SetGallery);
+const MemoizedCardGallery = memo(CardGallery);
+const MemoizedCardTable = memo(CardTable);
 
 const ContentWrapper = styled.div(({ theme }) => ({
   marginTop: theme.spacing(0),

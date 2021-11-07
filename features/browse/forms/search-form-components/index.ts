@@ -4,7 +4,11 @@ import ColorSelector from './ColorSelector';
 import OracleTextSearch from './OracleTextSearch';
 import PriceTypeSelector from './PriceTypeSelector';
 import RaritySelector from './RaritySelector';
+import SetCategorySelector from './SetCategorySelector';
+import SetNameSearch from './SetNameSearch';
 import SetSelector from './SetSelector';
+import SetSortSelector from './SetSortSelector';
+import SetTypeSelector from './SetTypeSelector';
 import ShowAllPrintingsToggle from './ShowAllPrintingsToggle';
 import SortSelector from './SortSelector';
 import TypeSelector from './TypeSelector';
@@ -16,7 +20,11 @@ export {
   ColorSelector,
   OracleTextSearch,
   RaritySelector,
+  SetCategorySelector,
+  SetNameSearch,
   SetSelector,
+  SetSortSelector,
+  SetTypeSelector,
   ShowAllPrintingsToggle,
   SortSelector,
   TypeSelector,

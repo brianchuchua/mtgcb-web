@@ -23,6 +23,11 @@ const initialState: BrowseState = {
   viewSubject: 'cards',
   viewMode: 'grid',
   priceType: 'market',
+  expansionSearchQuery: '',
+  sortExpansionBy: 'releasedAt',
+  sortExpansionByDirection: 'DESC',
+  expansionTypes: [],
+  expansionCategories: [],
 };
 
 const browseSlice = createSlice({
@@ -105,6 +110,26 @@ const browseSlice = createSlice({
       const priceType = action.payload;
       state.priceType = priceType;
     },
+    setExpansionSearchQuery(state, action: PayloadAction<ExpansionSearchQuery>) {
+      const { expansionSearchQuery } = action.payload;
+      state.expansionSearchQuery = expansionSearchQuery;
+    },
+    setExpansionSort(state, action: PayloadAction<string>) {
+      const sortExpansionBy = action.payload;
+      state.sortExpansionBy = sortExpansionBy;
+    },
+    setExpansionSortDirection(state, action: PayloadAction<'ASC' | 'DESC'>) {
+      const sortExpansionByDirection = action.payload;
+      state.sortExpansionByDirection = sortExpansionByDirection;
+    },
+    setExpansionTypes(state, action: PayloadAction<SetTypes>) {
+      const { setTypes } = action.payload;
+      state.expansionTypes = setTypes;
+    },
+    setExpansionCategories(state, action: PayloadAction<SetCategories>) {
+      const { setCategories } = action.payload;
+      state.expansionCategories = setCategories;
+    },
   },
 });
 
@@ -128,6 +153,11 @@ export const {
   setViewSubject,
   setViewMode,
   setPriceType,
+  setExpansionSearchQuery,
+  setExpansionSort,
+  setExpansionSortDirection,
+  setExpansionTypes,
+  setExpansionCategories,
 } = browseSlice.actions;
 
 export const searchAttributeOptions = [
@@ -158,6 +188,13 @@ export const sortByOptions = [
   { value: 'foil', label: 'Price (Foil)' },
 ];
 
+export const expansionSortByOptions = [
+  { value: 'name', label: 'Name' },
+  { value: 'releasedAt', label: 'Release Date' },
+  { value: 'code', label: 'Set Code' },
+  { value: 'cardCount', label: 'Card Count' },
+];
+
 export const rarityOptions = [
   { category: 'Rarities', value: 'common', label: 'Common', exclude: false },
   { category: 'Rarities', value: 'uncommon', label: 'Uncommon', exclude: false },
@@ -165,6 +202,12 @@ export const rarityOptions = [
   { category: 'Rarities', value: 'mythic', label: 'Mythic', exclude: false },
   { category: 'Rarities', value: 'special', label: 'Special', exclude: false },
   { category: 'Rarities', value: 'none', label: 'None', exclude: false },
+];
+
+export const expansionCategoryOptions = [
+  { category: 'Set Categories', value: 'Normal', label: 'Normal', exclude: false },
+  { category: 'Set Categories', value: 'Sealed', label: 'Sealed', exclude: false },
+  { category: 'Set Categories', value: 'Special', label: 'Special', exclude: false },
 ];
 
 interface BrowseState {
@@ -182,6 +225,11 @@ interface BrowseState {
   viewSubject: 'cards' | 'sets';
   viewMode: 'grid' | 'table';
   priceType: PriceTypes;
+  expansionSearchQuery: string;
+  sortExpansionBy: string;
+  sortExpansionByDirection: 'ASC' | 'DESC';
+  expansionTypes: SetType[];
+  expansionCategories: SetCategory[];
 }
 
 export type PriceTypes = 'low' | 'average' | 'high' | 'market' | 'foil';
@@ -253,6 +301,10 @@ interface SearchQuery {
   searchQuery: string;
 }
 
+interface ExpansionSearchQuery {
+  expansionSearchQuery: string;
+}
+
 interface OracleTextQuery {
   oracleTextQuery: string;
 }
@@ -270,6 +322,28 @@ interface SearchComparatorPayload {
 interface SearchValuePayload {
   value: string;
   index: number;
+}
+
+export interface SetType {
+  category: string;
+  label: string;
+  value: string;
+  exclude: boolean;
+}
+
+interface SetTypes {
+  setTypes: SetType[];
+}
+
+export interface SetCategory {
+  category: string;
+  label: string;
+  value: string;
+  exclude: boolean;
+}
+
+export interface SetCategories {
+  setCategories: SetCategory[];
 }
 
 export default browseSlice.reducer;

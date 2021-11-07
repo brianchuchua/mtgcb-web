@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { allSetNames, allSets, allSetsMeta } from '../queries/index';
-
+import { SetCategory, SetType } from '../../features/browse/browseSlice';
+import buildBrowseExpansionFilter from '../features/browse/buildExpansionBrowseFilter';
+import { determineSortFilter } from '../features/browse/filters';
+import { allSetNames, allSets, allSetsMeta, setTypes as setTypesQuery } from '../queries/index';
 // TODO: Code split these types for readability
 
 interface AxiosResponse<T> {
@@ -15,6 +17,8 @@ interface Set {
   setType: string;
   cardCount: number;
   releasedAt: string;
+  sealedProductUrl: string;
+  isDraftable: boolean;
 }
 
 interface SetResponse {
@@ -25,6 +29,10 @@ interface AllSetsVariables {
   first: number;
   skip: number;
   sortBy?: string;
+  name: string;
+  sortByDirection: 'ASC' | 'DESC';
+  setTypes: SetType[];
+  setCategories: SetCategory[];
 }
 
 interface SetsMetaResponse {
@@ -35,6 +43,10 @@ interface SetsMetaResponse {
 
 interface AllSetsMetaVariables {
   sortBy?: string;
+  name: string;
+  sortByDirection: 'ASC' | 'DESC';
+  setTypes: SetType[];
+  setCategories: SetCategory[];
 }
 
 interface SetName {
@@ -50,13 +62,17 @@ interface AllSetNamesVariables {
   sortBy?: string;
 }
 
+interface SetTypesResponse {
+  setTypes: SetType[];
+}
+
 export const mtgcbApi = createApi({
   reducerPath: 'mtgcb',
   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_MTGCB_API_URL }),
   tagTypes: ['Sets'],
   endpoints: (builder) => ({
     getAllSets: builder.query<AxiosResponse<SetResponse>, AllSetsVariables>({
-      query: ({ first, skip, sortBy = 'releasedAt_DESC' }) => ({
+      query: ({ first, skip, name, sortBy = 'releasedAt', sortByDirection = 'DESC', setTypes, setCategories }) => ({
         url: '',
         method: 'POST',
         body: {
@@ -64,19 +80,23 @@ export const mtgcbApi = createApi({
           variables: {
             first,
             skip,
-            sortBy,
+            sortBy: determineSortFilter(sortBy, sortByDirection),
+            name,
+            where: buildBrowseExpansionFilter({ setTypes, setCategories }),
           },
         },
       }),
     }),
     getAllSetsMeta: builder.query<AxiosResponse<SetsMetaResponse>, AllSetsMetaVariables>({
-      query: ({ sortBy = 'releasedAt_DESC' }) => ({
+      query: ({ name, sortBy = 'releasedAt', sortByDirection = 'DESC', setTypes, setCategories }) => ({
         url: '',
         method: 'POST',
         body: {
           query: allSetsMeta,
           variables: {
-            sortBy,
+            sortBy: determineSortFilter(sortBy, sortByDirection),
+            name,
+            where: buildBrowseExpansionFilter({ setTypes, setCategories }),
           },
         },
       }),
@@ -93,7 +113,16 @@ export const mtgcbApi = createApi({
         },
       }),
     }),
+    getSetTypes: builder.query<AxiosResponse<SetTypesResponse>, void>({
+      query: () => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: setTypesQuery,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetAllSetsQuery, useGetAllSetsMetaQuery, useGetAllSetNamesQuery } = mtgcbApi;
+export const { useGetAllSetsQuery, useGetAllSetsMetaQuery, useGetAllSetNamesQuery, useGetSetTypesQuery } = mtgcbApi;

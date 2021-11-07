@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { setCardRarities, CardRarity, rarityOptions } from '../../browseSlice';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
+import { CardRarity, rarityOptions, setCardRarities } from '../../browseSlice';
 
 const RaritySelector: React.FC = () => {
   const dispatch = useDispatch();

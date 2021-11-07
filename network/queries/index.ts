@@ -5,6 +5,7 @@ import allSets from './allSets';
 import allSetsMeta from './allSetsMeta';
 import cardTypes from './cardTypes';
 import costToPurchaseAll from './costToPurchaseAll';
+import setTypes from './setTypes';
 import tcgplayerMassImport from './tcgplayerMassImport';
 
-export { allCards, allCardsMeta, allSets, allSetsMeta, cardTypes, costToPurchaseAll, tcgplayerMassImport, allSetNames };
+export { allCards, allCardsMeta, allSets, allSetsMeta, cardTypes, costToPurchaseAll, setTypes, tcgplayerMassImport, allSetNames };

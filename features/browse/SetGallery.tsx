@@ -44,7 +44,6 @@ const SetGallery: React.FC<SetGalleryProps> = ({
         {sets &&
           sets.map((set) => {
             const costsToPurchaseInSet = costsToPurchase?.find((costs) => Number(costs.setId) === Number(set.id));
-
             return <SetBox key={`set-box-${set.id}`} set={set} costsToPurchaseInSet={costsToPurchaseInSet} priceType={priceType} />;
           })}
       </SetGalleryWrapper>

@@ -1,5 +1,5 @@
-const allSetsMeta = `query _allSetsMeta($sortBy: [SortSetsBy!] = [releasedAt_DESC]) {
-  _allSetsMeta(sortBy: $sortBy) {
+const allSetsMeta = `query _allSetsMeta($name: String = "", $sortBy: [SortSetsBy!] = [releasedAt_DESC], $where: SetWhereInput = {}) {
+  _allSetsMeta(search: $name, sortBy: $sortBy, where: $where) {
     count
   }
 }

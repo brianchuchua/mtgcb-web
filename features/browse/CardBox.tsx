@@ -62,6 +62,14 @@ const CardSet = styled.em(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const CardImage = styled.img(({ set }) => ({ width: '100%', height: 'auto', borderRadius: set === 'Limited Edition Alpha' ? '7%' : '5%' }));
+interface CardImageProps {
+  set?: string;
+}
+
+const CardImage = styled.img<CardImageProps>(({ set }) => ({
+  width: '100%',
+  height: 'auto',
+  borderRadius: set === 'Limited Edition Alpha' ? '7%' : '5%',
+}));
 
 export default CardBox;

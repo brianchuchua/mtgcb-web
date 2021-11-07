@@ -201,7 +201,6 @@ const SetName = styled.div(({ theme }) => ({
   color: theme.palette.primary.main,
 }));
 
-const SetReleaseDate = styled.div({});
 export interface Set {
   id: string;
   name: string;

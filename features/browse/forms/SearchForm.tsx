@@ -7,7 +7,11 @@ import {
   OracleTextSearch,
   PriceTypeSelector,
   RaritySelector,
+  SetCategorySelector,
+  SetNameSearch,
   SetSelector,
+  SetSortSelector,
+  SetTypeSelector,
   ShowAllPrintingsToggle,
   SortSelector,
   TypeSelector,
@@ -16,11 +20,11 @@ import {
 
 // TODO: Add headers to this thing
 const SearchForm: React.FC = () => {
-  const { isFormVisible } = useSelector((state: RootState) => state.browse);
+  const { isFormVisible, viewSubject } = useSelector((state: RootState) => state.browse);
 
   return (
     <>
-      {isFormVisible && (
+      {isFormVisible && viewSubject === 'cards' && (
         <>
           <ViewModeSelector />
           <PriceTypeSelector />
@@ -33,6 +37,16 @@ const SearchForm: React.FC = () => {
           <CardStatSearch />
           <SortSelector />
           <ShowAllPrintingsToggle />
+        </>
+      )}
+      {isFormVisible && viewSubject === 'sets' && (
+        <>
+          <ViewModeSelector />
+          <PriceTypeSelector />
+          <SetNameSearch />
+          <SetCategorySelector />
+          <SetTypeSelector />
+          <SetSortSelector />
         </>
       )}
     </>

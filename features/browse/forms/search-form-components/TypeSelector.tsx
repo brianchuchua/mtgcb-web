@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { setCardTypes, CardType } from '../../browseSlice';
-import { getCardTypes } from '../../../../network/features/browse';
-import { mapCardTypes } from '../mappers';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
+import { getCardTypes } from '../../../../network/features/browse';
+import { CardType, setCardTypes } from '../../browseSlice';
+import { mapCardTypes } from '../mappers';
 
 const TypeSelector: React.FC = () => {
   const dispatch = useDispatch();
