@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
 import { getCardTypes } from '../../../../network/features/browse';
+import { RootState } from '../../../../redux/rootReducer';
 import { CardType, setCardTypes } from '../../browseSlice';
 import { mapCardTypes } from '../mappers';
 
@@ -14,7 +15,7 @@ const TypeSelector: React.FC = () => {
   };
 
   const [types, setTypes] = useState(null);
-  const [selectedTypes, setSelectedTypes] = useState([]);
+  const { cardTypes } = useSelector((state: RootState) => state.browse);
 
   useEffect(() => {
     async function fetchTypes() {
@@ -33,8 +34,7 @@ const TypeSelector: React.FC = () => {
         <AutocompleteWithNegation
           label="Card Types"
           options={types}
-          selectedOptions={selectedTypes}
-          setSelectedOptionsLocally={setSelectedTypes}
+          selectedOptions={cardTypes}
           setSelectedOptionsRemotely={updateCardTypes}
         />
       </StyledTypeSelector>

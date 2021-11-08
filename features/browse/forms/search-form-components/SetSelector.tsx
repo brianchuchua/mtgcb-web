@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
 import { useGetAllSetNamesQuery } from '../../../../network/services/mtgcbApi';
+import { RootState } from '../../../../redux/rootReducer';
 import { CardSet, setCardSets } from '../../browseSlice';
 import { mapCardSets } from '../mappers';
 
@@ -13,7 +13,7 @@ const SetSelector: React.FC = () => {
     dispatch(setCardSets({ cardSets: newSets }));
   };
 
-  const [selectedSets, setSelectedSets] = useState([]);
+  const { cardSets } = useSelector((state: RootState) => state.browse);
 
   const { data: allSetsMetaResponse } = useGetAllSetNamesQuery({});
   const allSetNames = allSetsMetaResponse?.data?.allSets;
@@ -22,13 +22,7 @@ const SetSelector: React.FC = () => {
   return (
     sets && (
       <StyledSetSelector>
-        <AutocompleteWithNegation
-          label="Card Sets"
-          options={sets}
-          selectedOptions={selectedSets}
-          setSelectedOptionsLocally={setSelectedSets}
-          setSelectedOptionsRemotely={updateSets}
-        />
+        <AutocompleteWithNegation label="Card Sets" options={sets} selectedOptions={cardSets} setSelectedOptionsRemotely={updateSets} />
       </StyledSetSelector>
     )
   );

@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
+import { RootState } from '../../../../redux/rootReducer';
 import { expansionCategoryOptions, SetCategory, setExpansionCategories } from '../../browseSlice';
 
 const SetCategorySelector: React.FC = () => {
@@ -11,15 +11,14 @@ const SetCategorySelector: React.FC = () => {
     dispatch(setExpansionCategories({ setCategories: selectedExpansionCategories }));
   };
 
-  const [selectedSetCategories, setSelectedSetCategories] = useState([]);
+  const { expansionCategories } = useSelector((state: RootState) => state.browse);
 
   return (
     <StyledSetCategorySelector>
       <AutocompleteWithNegation
         label="Set Categories"
         options={expansionCategoryOptions}
-        selectedOptions={selectedSetCategories}
-        setSelectedOptionsLocally={setSelectedSetCategories}
+        selectedOptions={expansionCategories}
         setSelectedOptionsRemotely={updateSetCategories}
       />
     </StyledSetCategorySelector>

@@ -1,9 +1,8 @@
-import { Dispatch, SetStateAction } from 'react';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 interface AutocompleteOption {
   category: string;
@@ -15,7 +14,6 @@ interface AutocompleteOption {
 interface AutocompleteWithNegationProps {
   options: AutocompleteOption[];
   selectedOptions: AutocompleteOption[];
-  setSelectedOptionsLocally: Dispatch<SetStateAction<AutocompleteOption[]>>;
   setSelectedOptionsRemotely: (newSelectedOptions: AutocompleteOption[]) => void;
   label: string;
 }
@@ -23,7 +21,6 @@ interface AutocompleteWithNegationProps {
 const AutocompleteWithNegation: React.FC<AutocompleteWithNegationProps> = ({
   options,
   selectedOptions,
-  setSelectedOptionsLocally,
   setSelectedOptionsRemotely,
   label,
 }) => (
@@ -37,7 +34,6 @@ const AutocompleteWithNegation: React.FC<AutocompleteWithNegationProps> = ({
     getOptionSelected={(option, value) => option.value === value.value}
     renderInput={(params) => <TextField {...params} label={label} variant="outlined" />}
     onChange={(e, newSelectedOptions: AutocompleteOption[]) => {
-      setSelectedOptionsLocally(newSelectedOptions);
       setSelectedOptionsRemotely(newSelectedOptions);
     }}
     value={selectedOptions}
@@ -60,7 +56,6 @@ const AutocompleteWithNegation: React.FC<AutocompleteWithNegationProps> = ({
               const updatedOptions = [...selectedOptions];
               updatedOptions[index] = clickedOption;
 
-              setSelectedOptionsLocally(updatedOptions);
               setSelectedOptionsRemotely(updatedOptions);
             }}
             style={{ textDecoration: option.exclude ? 'line-through' : '' }}

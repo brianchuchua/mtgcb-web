@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
+import { RootState } from '../../../../redux/rootReducer';
 import { CardRarity, rarityOptions, setCardRarities } from '../../browseSlice';
 
 const RaritySelector: React.FC = () => {
@@ -11,15 +11,14 @@ const RaritySelector: React.FC = () => {
     dispatch(setCardRarities({ cardRarities: selectedRarities }));
   };
 
-  const [selectedRarities, setSelectedRarities] = useState([]);
+  const { cardRarities } = useSelector((state: RootState) => state.browse);
 
   return (
     <StyledRaritySelector>
       <AutocompleteWithNegation
         label="Rarities"
         options={rarityOptions}
-        selectedOptions={selectedRarities}
-        setSelectedOptionsLocally={setSelectedRarities}
+        selectedOptions={cardRarities}
         setSelectedOptionsRemotely={updateRarities}
       />
     </StyledRaritySelector>

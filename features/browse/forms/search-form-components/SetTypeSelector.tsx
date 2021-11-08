@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
 import { useGetSetTypesQuery } from '../../../../network/services/mtgcbApi';
+import { RootState } from '../../../../redux/rootReducer';
 import { setExpansionTypes, SetType } from '../../browseSlice';
 
 const SetTypeSelector: React.FC = () => {
@@ -12,7 +12,7 @@ const SetTypeSelector: React.FC = () => {
     dispatch(setExpansionTypes({ setTypes: newSetTypes }));
   };
 
-  const [selectedTypes, setSelectedTypes] = useState([]);
+  const { expansionTypes } = useSelector((state: RootState) => state.browse);
 
   const { data: setTypesResponse } = useGetSetTypesQuery();
   const setTypes = setTypesResponse?.data?.setTypes;
@@ -26,8 +26,7 @@ const SetTypeSelector: React.FC = () => {
       <AutocompleteWithNegation
         label="Set Types"
         options={setTypesWithExclude}
-        selectedOptions={selectedTypes}
-        setSelectedOptionsLocally={setSelectedTypes}
+        selectedOptions={expansionTypes}
         setSelectedOptionsRemotely={updateSetTypes}
       />
     </StyledSetTypeSelector>
