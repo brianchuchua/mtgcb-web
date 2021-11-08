@@ -92,7 +92,7 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
                 <BuyThisButton setId={set.id} count={4} countType="common" />
               </td>
             </tr>
-            {set.sealedProductUrl && (
+            {set.sealedProductUrl ? (
               <tr>
                 <td colSpan={3}>
                   <Button
@@ -107,8 +107,8 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
                   </Button>
                 </td>
               </tr>
-            )}
-            {set.isDraftable && (
+            ) : null}
+            {set.isDraftable ? (
               <tr>
                 <td colSpan={3}>
                   <BuyThisButton
@@ -119,7 +119,7 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
                   />
                 </td>
               </tr>
-            )}
+            ) : null}
           </tbody>
         </table>
       </div>
