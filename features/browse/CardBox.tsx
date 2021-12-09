@@ -1,5 +1,6 @@
 import LazyLoad from 'react-lazyload';
 import styled from 'styled-components';
+import Link from '../../components/Link';
 import { PriceTypes } from './browseSlice';
 import CardPrice from './CardPrice';
 
@@ -20,7 +21,11 @@ const CardBox: React.FC<CardBoxProps> = ({ card, priceType, nameIsVisible = true
           <CardImage alt={card.name} title={card.name} src={imageUrl} set={card.set?.name} />
         </LazyLoad>
         {nameIsVisible && <CardName title={card.name}>{card.name}</CardName>}
-        {setIsVisible && <CardSet title={card.set?.name}>{card.set?.name}</CardSet>}
+        {setIsVisible && (
+          <Link href={`/browse/sets/${card.set?.slug}`}>
+            <CardSet title={card.set?.name}>{card.set?.name ?? 'Unknown Set'}</CardSet>
+          </Link>
+        )}
         {priceIsVisible && <CardPrice card={card} priceType={priceType} />}
       </CardAttributes>
     </CardWrapper>
@@ -32,6 +37,7 @@ export interface Card {
   name: string;
   set: {
     name: string;
+    slug: string;
   };
   low: number;
   average: number;
@@ -59,7 +65,6 @@ const CardSet = styled.em(({ theme }) => ({
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   maxWidth: '100%',
-  color: theme.palette.text.secondary,
 }));
 
 interface CardImageProps {

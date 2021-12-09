@@ -40,7 +40,6 @@ const getAllCards: GetAllCardsFunction = async (searchOptions) => {
     });
     return response;
   } catch (error) {
-    console.log(error);
     return null;
   }
 };

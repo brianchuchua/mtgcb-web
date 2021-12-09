@@ -12,7 +12,6 @@ import {
   SetSelector,
   SetSortSelector,
   SetTypeSelector,
-  ShowAllPrintingsToggle,
   SortSelector,
   TypeSelector,
   ViewModeSelector,
@@ -36,7 +35,6 @@ const SearchForm: React.FC = () => {
           <SetSelector />
           <CardStatSearch />
           <SortSelector />
-          <ShowAllPrintingsToggle />
         </>
       )}
       {isFormVisible && viewSubject === 'sets' && (

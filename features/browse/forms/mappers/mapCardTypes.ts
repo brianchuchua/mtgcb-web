@@ -14,7 +14,7 @@ interface CardTypes {
   planeswalkerTypes: string[];
 }
 
-interface MappedCardTypes {
+export interface MappedCardTypes {
   category: string;
   label: string;
   value: string;

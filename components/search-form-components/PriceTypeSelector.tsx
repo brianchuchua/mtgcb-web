@@ -1,17 +1,16 @@
 import Paper from '@material-ui/core/Paper';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { RootState } from '../../../../redux/rootReducer';
-import { setPriceType } from '../../browseSlice';
 
-const PriceTypeSelector: React.FC = () => {
-  const dispatch = useDispatch();
-  const { priceType } = useSelector((state: RootState) => state.browse);
+interface PriceTypeSelectorProps {
+  priceType: string;
+  setPriceType: (priceType: string) => void;
+}
 
+const PriceTypeSelector: React.FC<PriceTypeSelectorProps> = ({ priceType, setPriceType }) => {
   const updatePriceType = (priceTypeValue) => {
-    dispatch(setPriceType(priceTypeValue));
+    setPriceType(priceTypeValue);
   };
 
   const handlePriceTypeChange = (event: React.MouseEvent<HTMLElement>, newPriceType: string | null) => {

@@ -1,12 +1,11 @@
-import { CardStatSearch, CardType, CardSet, CardRarity, CardColors } from '../../../features/browse/browseSlice';
-
+import { CardColors, CardRarity, CardSet, CardStatSearch, CardType } from '../../../features/browse/browseSlice';
 import {
   addCardColorFilter,
-  addCardTypeFilter,
-  addCardSetFilter,
   addCardRarityFilter,
-  addOracleTextFilter,
+  addCardSetFilter,
   addCardStatFilter,
+  addCardTypeFilter,
+  addOracleTextFilter,
 } from './filters';
 
 interface BuildBrowseFilterSettings {

@@ -1,53 +1,31 @@
-import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
-import Select from '@material-ui/core/Select';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
-import AddCircleIcon from '@material-ui/icons/AddBox';
-import RemoveIcon from '@material-ui/icons/IndeterminateCheckBox';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
-import FormControl from '@material-ui/core/FormControl';
-import { RootState } from '../../../../redux/rootReducer';
-import {
-  ColorTypes,
-  SearchAttribute,
-  SearchComparators,
-  setSearchAttribute,
-  setComparator,
-  setCardStatSearches,
-  addCardStatSearch,
-  removeCardStatSearch,
-  searchAttributeOptions,
-} from '../../browseSlice';
+import Select from '@material-ui/core/Select';
+import AddCircleIcon from '@material-ui/icons/AddBox';
+import RemoveIcon from '@material-ui/icons/IndeterminateCheckBox';
+import styled from 'styled-components';
+import { ColorTypes, SearchAttribute, searchAttributeOptions, SearchComparators } from '../../features/browse/browseSlice';
 
-const CardStatSearch: React.FC = () => {
-  const dispatch = useDispatch();
-  const { cardStatSearches } = useSelector((state: RootState) => state.browse);
+interface CardStatSearchProps {
+  cardStatSearches: any;
+  updateSearchAttribute: (attribute: SearchAttribute, index: number) => void;
+  updateComparator: (comparator: SearchComparators, index: number) => void;
+  updateCardStatSearches: (value: string, index: number) => void;
+  handleAddCardStatSearch: () => void;
+  handleRemoveCardStatSearch: () => void;
+}
 
-  const updateSearchAttribute = (searchAttribute: SearchAttribute, index: number) => {
-    const payload = { searchAttribute, index };
-    dispatch(setSearchAttribute(payload));
-  };
-
-  const updateComparator = (comparator: SearchComparators, index: number) => {
-    const payload = { comparator, index };
-    dispatch(setComparator(payload));
-  };
-
-  const updateCardStatSearches = (value: string, index: number) => {
-    const payload = { value, index };
-    dispatch(setCardStatSearches(payload));
-  };
-
-  const handleAddCardStatSearch = () => {
-    dispatch(addCardStatSearch());
-  };
-
-  const handleRemoveCardStatSearch = () => {
-    dispatch(removeCardStatSearch());
-  };
-
+const CardStatSearch: React.FC<CardStatSearchProps> = ({
+  cardStatSearches,
+  updateSearchAttribute,
+  updateComparator,
+  updateCardStatSearches,
+  handleAddCardStatSearch,
+  handleRemoveCardStatSearch,
+}) => {
   const handleSearchAttributeChange = (event: React.ChangeEvent<{ value: unknown }>, index: number) => {
     updateSearchAttribute(event.target.value as SearchAttribute, index);
   };

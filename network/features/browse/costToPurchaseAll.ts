@@ -13,7 +13,6 @@ const costToPurchaseAll: CostToPurchaseAllFunction = async () => {
     });
     return response;
   } catch (error) {
-    console.log(error);
     return null;
   }
 };

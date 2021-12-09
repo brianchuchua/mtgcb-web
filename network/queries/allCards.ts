@@ -4,6 +4,7 @@ const allCards = `query allCards($first: Int = 50, $skip: Int = 0, $sortBy: [Sor
     name
     set:setId {
       name
+      slug
     }
     rarity
     manaCost

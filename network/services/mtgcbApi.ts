@@ -1,8 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { SetCategory, SetType } from '../../features/browse/browseSlice';
+import { Card } from '../../features/browse/CardBox';
+import buildBrowseFilter from '../features/browse/buildBrowseFilter';
 import buildBrowseExpansionFilter from '../features/browse/buildExpansionBrowseFilter';
+import determineDistinctClause from '../features/browse/determineDistinctClause';
 import { determineSortFilter } from '../features/browse/filters';
-import { allSetNames, allSets, allSetsMeta, setTypes as setTypesQuery } from '../queries/index';
+import { allCards, allCardsMeta, allSetNames, allSets, allSetsMeta, setTypes as setTypesQuery } from '../queries/index';
+import { SearchOptions } from '../types';
 // TODO: Code split these types for readability
 
 interface AxiosResponse<T> {
@@ -19,6 +23,7 @@ interface Set {
   releasedAt: string;
   sealedProductUrl: string;
   isDraftable: boolean;
+  slug: string;
 }
 
 interface SetResponse {
@@ -33,6 +38,10 @@ interface AllSetsVariables {
   sortByDirection: 'ASC' | 'DESC';
   setTypes: SetType[];
   setCategories: SetCategory[];
+}
+
+interface SetBySlugVariables {
+  slug: string;
 }
 
 interface SetsMetaResponse {
@@ -66,10 +75,20 @@ interface SetTypesResponse {
   setTypes: SetType[];
 }
 
+interface AllCardsResponse {
+  allCards: Card[];
+}
+
+interface AllCardsMetaResponse {
+  _allCardsMeta: {
+    count: number;
+  };
+}
+
 export const mtgcbApi = createApi({
   reducerPath: 'mtgcb',
   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_MTGCB_API_URL }),
-  tagTypes: ['Sets'],
+  tagTypes: ['Sets', 'Cards'],
   endpoints: (builder) => ({
     getAllSets: builder.query<AxiosResponse<SetResponse>, AllSetsVariables>({
       query: ({ first, skip, name, sortBy = 'releasedAt', sortByDirection = 'DESC', setTypes, setCategories }) => ({
@@ -101,6 +120,18 @@ export const mtgcbApi = createApi({
         },
       }),
     }),
+    getSetBySlug: builder.query<AxiosResponse<SetResponse>, SetBySlugVariables>({
+      query: ({ slug }) => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: allSets,
+          variables: {
+            where: { slug },
+          },
+        },
+      }),
+    }),
     getAllSetNames: builder.query<AxiosResponse<SetNamesResponse>, AllSetNamesVariables>({
       query: ({ sortBy = 'releasedAt_DESC' }) => ({
         url: '',
@@ -122,7 +153,75 @@ export const mtgcbApi = createApi({
         },
       }),
     }),
+    getAllCards: builder.query<AxiosResponse<AllCardsResponse>, SearchOptions>({
+      query: ({
+        first,
+        skip,
+        sortBy,
+        name,
+        oracleTextQuery,
+        cardSets,
+        cardRarities,
+        cardTypes,
+        cardColors,
+        showAllPrintings,
+        cardStatSearches,
+        sortByDirection,
+      }) => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: allCards,
+          variables: {
+            first,
+            skip,
+            sortBy: determineSortFilter(sortBy, sortByDirection),
+            name,
+            where: buildBrowseFilter({ cardSets, cardRarities, cardTypes, cardColors, oracleTextQuery, cardStatSearches }),
+            distinct: determineDistinctClause(showAllPrintings, sortBy),
+          },
+        },
+      }),
+    }),
+    getAllCardsMeta: builder.query<AxiosResponse<AllCardsMetaResponse>, SearchOptions>({
+      query: ({
+        first,
+        skip,
+        sortBy,
+        name,
+        oracleTextQuery,
+        cardSets,
+        cardRarities,
+        cardTypes,
+        cardColors,
+        showAllPrintings,
+        cardStatSearches,
+        sortByDirection,
+      }) => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: allCardsMeta,
+          variables: {
+            first,
+            skip,
+            sortBy: determineSortFilter(sortBy, sortByDirection),
+            name,
+            where: buildBrowseFilter({ cardSets, cardRarities, cardTypes, cardColors, oracleTextQuery, cardStatSearches }),
+            distinct: determineDistinctClause(showAllPrintings, sortBy),
+          },
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetAllSetsQuery, useGetAllSetsMetaQuery, useGetAllSetNamesQuery, useGetSetTypesQuery } = mtgcbApi;
+export const {
+  useGetAllSetsQuery,
+  useGetAllSetsMetaQuery,
+  useGetSetBySlugQuery,
+  useGetAllSetNamesQuery,
+  useGetSetTypesQuery,
+  useGetAllCardsQuery,
+  useGetAllCardsMetaQuery,
+} = mtgcbApi;

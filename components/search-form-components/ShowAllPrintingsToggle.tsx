@@ -2,19 +2,14 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
-import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { RootState } from '../../../../redux/rootReducer';
-import { setShowAllPrintings } from '../../browseSlice';
 
-const ShowAllPrintingsToggle: React.FC = () => {
-  const dispatch = useDispatch();
-  const { showAllPrintings } = useSelector((state: RootState) => state.browse);
+interface ShowAllPrintingsToggleProps {
+  showAllPrintings: boolean;
+  updateShowAllPrintings: (showAllPrintings: boolean) => void;
+}
 
-  const updateShowAllPrintings = (toggleValue) => {
-    dispatch(setShowAllPrintings(toggleValue));
-  };
-
+const ShowAllPrintingsToggle: React.FC<ShowAllPrintingsToggleProps> = ({ showAllPrintings, updateShowAllPrintings }) => {
   const handleShowAllPrintingsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     updateShowAllPrintings(event.target.checked);
   };

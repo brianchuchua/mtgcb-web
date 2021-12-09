@@ -5,17 +5,24 @@ import TableIcon from '@material-ui/icons/TableChart';
 import ImagesIcon from '@material-ui/icons/ViewComfy';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { RootState } from '../../../../redux/rootReducer';
-import { setViewMode, setViewSubject } from '../../browseSlice';
 
-const ViewModeSelector: React.FC = () => {
-  const dispatch = useDispatch();
-  const { viewMode, viewSubject } = useSelector((state: RootState) => state.browse);
-
+interface ViewModeSelectorProps {
+  showSubjectChangeSection?: boolean;
+  viewMode: string;
+  viewSubject: string;
+  setViewSubject?: (subject: string) => void;
+  setViewMode: (mode: string) => void;
+}
+const ViewModeSelector: React.FC<ViewModeSelectorProps> = ({
+  showSubjectChangeSection = true,
+  viewMode,
+  viewSubject,
+  setViewSubject,
+  setViewMode,
+}) => {
   const updateViewSubject = (viewSubjectValue) => {
-    dispatch(setViewSubject(viewSubjectValue));
+    setViewSubject(viewSubjectValue);
   };
 
   const handleViewSubjectChange = (event: React.MouseEvent<HTMLElement>, newViewSubject: string | null) => {
@@ -25,7 +32,7 @@ const ViewModeSelector: React.FC = () => {
   };
 
   const updateViewMode = (viewModeValue) => {
-    dispatch(setViewMode(viewModeValue));
+    setViewMode(viewModeValue);
   };
 
   const handleViewModeChange = (event: React.MouseEvent<HTMLElement>, newViewMode: string | null) => {
@@ -37,14 +44,16 @@ const ViewModeSelector: React.FC = () => {
   return (
     <ToggleGroupWrapper>
       <div>
-        <StyledToggleButtonGroup value={viewSubject} onChange={handleViewSubjectChange} exclusive aria-label="view as cards or sets">
-          <StyledToggleButton value="cards" aria-label="card">
-            <DashboardIcon style={{ marginRight: '3px' }} /> View Cards
-          </StyledToggleButton>
-          <StyledToggleButton value="sets" aria-label="set">
-            <LibraryIcon style={{ marginRight: '3px' }} /> View Sets
-          </StyledToggleButton>
-        </StyledToggleButtonGroup>
+        {showSubjectChangeSection && (
+          <StyledToggleButtonGroup value={viewSubject} onChange={handleViewSubjectChange} exclusive aria-label="view as cards or sets">
+            <StyledToggleButton value="cards" aria-label="card">
+              <DashboardIcon style={{ marginRight: '3px' }} /> View Cards
+            </StyledToggleButton>
+            <StyledToggleButton value="sets" aria-label="set">
+              <LibraryIcon style={{ marginRight: '3px' }} /> View Sets
+            </StyledToggleButton>
+          </StyledToggleButtonGroup>
+        )}
       </div>
       <div>
         <StyledToggleButtonGroup

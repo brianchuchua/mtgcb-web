@@ -1,6 +1,3 @@
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import styled from 'styled-components';
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -13,8 +10,11 @@ import Divider from '@material-ui/core/Divider';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
-import Link from '../../components/Link';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import styled from 'styled-components';
 import { useAuthentication } from '../../auth/AuthenticationProvider';
+import Link from '../../components/Link';
 import { UserPasswordForm, UserProfileForm } from './forms';
 
 export const Account: React.FC = () => {

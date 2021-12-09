@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 import { useSortBy, useTable } from 'react-table';
 import styled from 'styled-components';
+import Link from '../../components/Link';
 import { PriceTypes } from './browseSlice';
 import GalleryControls from './GalleryControls';
 import { Set } from './SetBox';
@@ -39,6 +40,16 @@ const SetTable: React.FC<SetTableProps> = ({ sets, first, skip, page, totalResul
       {
         accessor: 'name',
         Header: 'Name',
+        Cell: (cell) => {
+          const setName = cell?.row?.values?.name ?? 'Unknown Set';
+          const setSlug = cell?.row?.values?.slug ?? 'unknown-set';
+          return (
+            <Link href={`/browse/sets/${setSlug}`} variant="body2">
+              {setName}
+            </Link>
+          );
+        },
+        sortType: (a, b) => (a?.values?.set?.name ?? '').localeCompare(b?.values?.set?.name ?? ''),
       },
       {
         accessor: 'code',
@@ -62,6 +73,10 @@ const SetTable: React.FC<SetTableProps> = ({ sets, first, skip, page, totalResul
         Header: 'Release Date',
         Cell: ({ cell: { value } }) => value?.slice(0, 10),
       },
+      {
+        accessor: 'slug',
+        Header: 'Slug',
+      },
     ],
     []
   );
@@ -72,7 +87,7 @@ const SetTable: React.FC<SetTableProps> = ({ sets, first, skip, page, totalResul
     {
       columns: setsTableColumns,
       data: setsTableData,
-      initialState: { hiddenColumns: ['id'] },
+      initialState: { hiddenColumns: ['id', 'slug'] },
     },
     useSortBy
   );

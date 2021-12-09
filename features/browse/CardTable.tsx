@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 import { useSortBy, useTable } from 'react-table';
 import styled from 'styled-components';
+import Link from '../../components/Link';
 import ManaCost, { sortByManaSymbols } from '../../components/symbols/mana/ManaCost';
 import { PriceTypes } from './browseSlice';
 import CardBox, { Card } from './CardBox';
@@ -43,8 +44,14 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
         Header: 'Name',
       },
       {
-        accessor: 'set.name',
+        accessor: 'set',
         Header: 'Set',
+        Cell: ({ cell: { value } }) => (
+          <Link href={`/browse/sets/${value?.slug}`} variant="body2">
+            {value?.name ?? 'Unknown Set'}
+          </Link>
+        ),
+        sortType: (a, b) => (a?.values?.set?.name ?? '').localeCompare(b?.values?.set?.name ?? ''),
       },
       {
         accessor: 'rarity',
@@ -158,7 +165,7 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
           getToggleHiddenProps: allColumns[1].getToggleHiddenProps,
         },
         {
-          key: 'set.name',
+          key: 'set',
           label: 'Set',
           getToggleHiddenProps: allColumns[2].getToggleHiddenProps,
         },

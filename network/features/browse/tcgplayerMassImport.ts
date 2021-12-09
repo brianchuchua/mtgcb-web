@@ -24,7 +24,6 @@ const tcgplayerMassImport: TcgplayerMassImportFunction = async (tcgplayerOptions
     });
     return response;
   } catch (error) {
-    console.log(error);
     return null;
   }
 };

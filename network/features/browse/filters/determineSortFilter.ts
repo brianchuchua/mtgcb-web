@@ -6,6 +6,12 @@ const determineSortFilter: DetermineSortFilterFunction = (sortBy, sortByDirectio
   if (sortBy === 'collectorNumber') {
     return [`collectorNumberNumeric_${sortByDirection}`, `collectorNumber_${sortByDirection}`, 'name_ASC', 'releasedAt_ASC'];
   }
+  if (sortBy === 'releasedAt') {
+    return [`${sortBy}_${sortByDirection}`, 'name_ASC'];
+  }
+  if (sortBy === 'name') {
+    return [`${sortBy}_${sortByDirection}`, 'releasedAt_ASC'];
+  }
 
   return [`${sortBy}_${sortByDirection}`, 'name_ASC', 'releasedAt_ASC'];
 };

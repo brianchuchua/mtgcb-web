@@ -2,6 +2,7 @@ const allSets = `query allSets($first: Int = 50, $skip: Int = 0, $name: String =
   allSets(first: $first, skip: $skip, search: $name, sortBy: $sortBy, where: $where) {
     id
     name
+    slug
     code
     category
     setType

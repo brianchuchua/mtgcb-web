@@ -88,6 +88,7 @@ export const Browse: React.FC = () => {
           previousSetFirst !== first ||
           previousPriceType !== priceType;
 
+        // TODO: Clean this up and use redux query instead
         const currentPage = cardFilterChanged ? 1 : page;
         setPage(currentPage);
         setSkip((currentPage - 1) * first);

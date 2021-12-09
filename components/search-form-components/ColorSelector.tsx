@@ -1,24 +1,24 @@
-import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
-import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
-import { RootState } from '../../../../redux/rootReducer';
-import { setCardColors, setColorType, ColorTypes } from '../../browseSlice';
-import { WhiteManaButton, BlueManaButton, BlackManaButton, RedManaButton, GreenManaButton, ColorlessManaButton } from '../buttons';
+import Select from '@material-ui/core/Select';
+import styled from 'styled-components';
+import { CardColors, ColorTypes } from '../../features/browse/browseSlice';
+import {
+  BlackManaButton,
+  BlueManaButton,
+  ColorlessManaButton,
+  GreenManaButton,
+  RedManaButton,
+  WhiteManaButton,
+} from '../../features/browse/forms/buttons';
 
-const ColorSelector: React.FC = () => {
-  const dispatch = useDispatch();
-  const { cardColors } = useSelector((state: RootState) => state.browse);
+interface ColorSelectorProps {
+  cardColors: CardColors;
+  updateCardColors: (color: string) => void;
+  updateColorType: (colorType: ColorTypes) => void;
+}
 
-  const updateCardColors = (color: string) => {
-    dispatch(setCardColors(color));
-  };
-
-  const updateColorType = (type: ColorTypes) => {
-    dispatch(setColorType(type));
-  };
-
+const ColorSelector: React.FC<ColorSelectorProps> = ({ cardColors, updateCardColors, updateColorType }) => {
   const handleManaButtonClick = (color) => {
     updateCardColors(color);
   };

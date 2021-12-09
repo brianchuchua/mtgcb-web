@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
+import TypeSelector from '../../../../components/search-form-components/TypeSelector';
 import { getCardTypes } from '../../../../network/features/browse';
 import { RootState } from '../../../../redux/rootReducer';
 import { CardType, setCardTypes } from '../../browseSlice';
 import { mapCardTypes } from '../mappers';
 
-const TypeSelector: React.FC = () => {
+const ConnectedTypeSelector: React.FC = () => {
   const dispatch = useDispatch();
 
   const updateCardTypes = (newCardTypes: CardType[]) => {
@@ -28,24 +27,7 @@ const TypeSelector: React.FC = () => {
     fetchTypes();
   }, []);
 
-  return (
-    types && (
-      <StyledTypeSelector>
-        <AutocompleteWithNegation
-          label="Card Types"
-          options={types}
-          selectedOptions={cardTypes}
-          setSelectedOptionsRemotely={updateCardTypes}
-        />
-      </StyledTypeSelector>
-    )
-  );
+  return <TypeSelector types={types} cardTypes={cardTypes} updateCardTypes={updateCardTypes} />;
 };
 
-const StyledTypeSelector = styled.div(() => ({
-  paddingLeft: '8px',
-  paddingRight: '8px',
-  paddingBottom: '10px',
-}));
-
-export default TypeSelector;
+export default ConnectedTypeSelector;

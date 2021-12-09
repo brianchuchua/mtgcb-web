@@ -3,6 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { useState } from 'react';
 import styled from 'styled-components';
+import Link from '../../components/Link';
 import { tcgplayerMassImport } from '../../network/features/browse';
 import { PriceTypes } from './browseSlice';
 import { formatter } from './util/formatPrice';
@@ -12,7 +13,9 @@ import titleCase from './util/titleCase';
 const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, isComplete = false }) => (
   <SetBoxWrapper variant="outlined">
     <SetName>
-      {set.name} ({set.code})
+      <Link href={`/browse/sets/${set.slug}`}>
+        {set.name} ({set.code})
+      </Link>
     </SetName>
     <Typography variant="body2" color="textSecondary" component="div">
       {set.releasedAt?.slice(0, 10)}
@@ -211,6 +214,7 @@ export interface Set {
   releasedAt: string;
   sealedProductUrl: string;
   isDraftable: boolean;
+  slug: string;
 }
 
 interface SetBoxProps {
