@@ -13,7 +13,7 @@ import { useAuthentication } from '../../auth/AuthenticationProvider';
 import Button from '../../components/Button';
 import Link from '../../components/Link';
 import { getUser } from '../../network/features/account';
-import { logIn } from '../../network/features/login';
+import { logIn, migrateLegacyAccount } from '../../network/features/login';
 
 const LoginWrapper = styled.div(({ theme }) => ({
   marginTop: theme.spacing(8),
@@ -50,6 +50,14 @@ export const logIntoMtgCb: LogIntoMtgCbFunction = async (username, password) => 
     data: null,
     error: null,
   };
+
+  // Before the real logIn, we migrate the user's account from the legacy experience if relevant
+  const resultFromMigratingAccount = await migrateLegacyAccount(username, password);
+  const authResponse = resultFromMigratingAccount?.data?.data?.authenticateUserWithPasswordLegacy;
+  if (!authResponse?.readyForLogin) {
+    response.error = authResponse?.reason || authResponse?.error || 'An unknown error has occured';
+    return response;
+  }
 
   const result = await logIn(username, password);
 

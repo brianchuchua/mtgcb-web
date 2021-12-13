@@ -1,14 +1,14 @@
 import { api } from '../../index';
-import { authenticateUserWithPassword } from '../../mutations';
+import { authenticateUserWithPasswordLegacy } from '../../mutations';
 
-interface LogInFunction {
+interface MigrateLegacyAccountFunction {
   (username: string, password: string): any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-const logIn: LogInFunction = async (username, password) => {
+const migrateLegacyAccount: MigrateLegacyAccountFunction = async (username, password) => {
   try {
     const response = await api.post('', {
-      query: authenticateUserWithPassword,
+      query: authenticateUserWithPasswordLegacy,
       variables: {
         username,
         password,
@@ -20,4 +20,4 @@ const logIn: LogInFunction = async (username, password) => {
   }
 };
 
-export default logIn;
+export default migrateLegacyAccount;
