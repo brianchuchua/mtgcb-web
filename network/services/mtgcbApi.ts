@@ -1,89 +1,25 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { SetCategory, SetType } from '../../features/browse/browseSlice';
 import { Card } from '../../features/browse/CardBox';
+import { SetSummary } from '../../features/browse/SetBox';
 import buildBrowseFilter from '../features/browse/buildBrowseFilter';
 import buildBrowseExpansionFilter from '../features/browse/buildExpansionBrowseFilter';
+import { SearchOptions } from '../features/browse/commonTypes';
 import determineDistinctClause from '../features/browse/determineDistinctClause';
 import { determineSortFilter } from '../features/browse/filters';
-import { allCards, allCardsMeta, allSetNames, allSets, allSetsMeta, setTypes as setTypesQuery } from '../queries/index';
-import { SearchOptions } from '../types';
-// TODO: Code split these types for readability
+import {
+  allCards,
+  allCardsMeta,
+  allSetNames,
+  allSets,
+  allSetsMeta,
+  collectionSummaryLegacy,
+  costToPurchaseAll,
+  setTypes as setTypesQuery,
+} from '../queries/index';
 
-interface AxiosResponse<T> {
-  data: T;
-}
-
-interface Set {
-  id: string;
-  name: string;
-  code: string;
-  category: string;
-  setType: string;
-  cardCount: number;
-  releasedAt: string;
-  sealedProductUrl: string;
-  isDraftable: boolean;
-  slug: string;
-}
-
-interface SetResponse {
-  allSets: Set[];
-}
-
-interface AllSetsVariables {
-  first: number;
-  skip: number;
-  sortBy?: string;
-  name: string;
-  sortByDirection: 'ASC' | 'DESC';
-  setTypes: SetType[];
-  setCategories: SetCategory[];
-}
-
-interface SetBySlugVariables {
-  slug: string;
-}
-
-interface SetsMetaResponse {
-  _allSetsMeta: {
-    count: number;
-  };
-}
-
-interface AllSetsMetaVariables {
-  sortBy?: string;
-  name: string;
-  sortByDirection: 'ASC' | 'DESC';
-  setTypes: SetType[];
-  setCategories: SetCategory[];
-}
-
-interface SetName {
-  id: string;
-  name: string;
-}
-
-interface SetNamesResponse {
-  allSets: SetName[];
-}
-
-interface AllSetNamesVariables {
-  sortBy?: string;
-}
-
-interface SetTypesResponse {
-  setTypes: SetType[];
-}
-
-interface AllCardsResponse {
-  allCards: Card[];
-}
-
-interface AllCardsMetaResponse {
-  _allCardsMeta: {
-    count: number;
-  };
-}
+// TODO: Use tagging system to set up dependencies of when calls caches need to be busted
+// Example: When a user's collection is updated, need to repull some of the collection analysis calls
 
 export const mtgcbApi = createApi({
   reducerPath: 'mtgcb',
@@ -213,6 +149,27 @@ export const mtgcbApi = createApi({
         },
       }),
     }),
+    getCostToPurchaseAll: builder.query<AxiosResponse<CostToPurchaseAllResponse>, void>({
+      query: () => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: costToPurchaseAll,
+        },
+      }),
+    }),
+    getCollectionSummaryLegacy: builder.query<AxiosResponse<CollectionSummaryLegacyResponse>, CollectionSummaryLegacyVariables>({
+      query: ({ userId }) => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: collectionSummaryLegacy,
+          variables: {
+            userId: Number(userId),
+          },
+        },
+      }),
+    }),
   }),
 });
 
@@ -224,4 +181,120 @@ export const {
   useGetSetTypesQuery,
   useGetAllCardsQuery,
   useGetAllCardsMetaQuery,
+  useGetCostToPurchaseAllQuery,
+  useGetCollectionSummaryLegacyQuery,
 } = mtgcbApi;
+
+// TODO: Code split these types for readability
+
+interface AxiosResponse<T> {
+  data: T;
+}
+
+interface Set {
+  id: string;
+  name: string;
+  code: string;
+  category: string;
+  setType: string;
+  cardCount: number;
+  releasedAt: string;
+  sealedProductUrl: string;
+  isDraftable: boolean;
+  slug: string;
+}
+
+interface SetResponse {
+  allSets: Set[];
+}
+
+interface AllSetsVariables {
+  first: number;
+  skip: number;
+  sortBy?: string;
+  name: string;
+  sortByDirection: 'ASC' | 'DESC';
+  setTypes: SetType[];
+  setCategories: SetCategory[];
+}
+
+interface SetBySlugVariables {
+  slug: string;
+}
+
+interface SetsMetaResponse {
+  _allSetsMeta: {
+    count: number;
+  };
+}
+
+interface AllSetsMetaVariables {
+  sortBy?: string;
+  name: string;
+  sortByDirection: 'ASC' | 'DESC';
+  setTypes: SetType[];
+  setCategories: SetCategory[];
+}
+
+interface SetName {
+  id: string;
+  name: string;
+}
+
+interface SetNamesResponse {
+  allSets: SetName[];
+}
+
+interface AllSetNamesVariables {
+  sortBy?: string;
+}
+
+interface SetTypesResponse {
+  setTypes: SetType[];
+}
+
+interface AllCardsResponse {
+  allCards: Card[];
+}
+
+interface AllCardsMetaResponse {
+  _allCardsMeta: {
+    count: number;
+  };
+}
+
+interface CostToPurchasePerPrice {
+  oneOfEachCard: number;
+  oneOfEachMythic: number;
+  oneOfEachRare: number;
+  oneOfEachUncommon: number;
+  oneOfEachCommon: number;
+  draftCube: number;
+}
+
+interface CostsToPurchaseAll {
+  setId: number;
+  market: CostToPurchasePerPrice;
+  low: CostToPurchasePerPrice;
+  average: CostToPurchasePerPrice;
+  high: CostToPurchasePerPrice;
+}
+
+interface CostToPurchaseAllResponse {
+  costToPurchaseAll: {
+    costToPurchaseAll: CostsToPurchaseAll[];
+  };
+}
+
+interface CollectionSummaryLegacyResponse {
+  collectionSummaryLegacy: {
+    numberOfCardsInMagic: number;
+    totalCardsCollected: number;
+    uniquePrintingsCollected: number;
+    collectionSummary: SetSummary[];
+  };
+}
+
+interface CollectionSummaryLegacyVariables {
+  userId: string;
+}

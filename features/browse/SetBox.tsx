@@ -219,19 +219,28 @@ export interface Set {
 
 interface SetBoxProps {
   set: Set;
-  costsToPurchaseInSet: CostToPurchase;
+  costsToPurchaseInSet: SetSummary;
   priceType: PriceTypes;
   isComplete?: boolean;
 }
 
-export interface CostToPurchase {
+export interface SetSummary {
   setId: number;
+  cardsInSet?: number;
+  totalCardsCollectedInSet?: number;
+  uniquePrintingsCollectedInSet?: number;
   market: {
     oneOfEachCard: number;
     oneOfEachMythic: number;
     oneOfEachRare: number;
     oneOfEachUncommon: number;
     oneOfEachCommon: number;
+    fourOfEachCard?: number;
+    fourOfEachMythic?: number;
+    fourOfEachRare?: number;
+    fourOfEachUncommon?: number;
+    fourOfEachCommon?: number;
+    draftCube?: number;
   };
   low: {
     oneOfEachCard: number;
@@ -239,6 +248,12 @@ export interface CostToPurchase {
     oneOfEachRare: number;
     oneOfEachUncommon: number;
     oneOfEachCommon: number;
+    fourOfEachCard?: number;
+    fourOfEachMythic?: number;
+    fourOfEachRare?: number;
+    fourOfEachUncommon?: number;
+    fourOfEachCommon?: number;
+    draftCube?: number;
   };
   average: {
     oneOfEachCard: number;
@@ -246,6 +261,12 @@ export interface CostToPurchase {
     oneOfEachRare: number;
     oneOfEachUncommon: number;
     oneOfEachCommon: number;
+    fourOfEachCard?: number;
+    fourOfEachMythic?: number;
+    fourOfEachRare?: number;
+    fourOfEachUncommon?: number;
+    fourOfEachCommon?: number;
+    draftCube?: number;
   };
   high: {
     oneOfEachCard: number;
@@ -253,6 +274,12 @@ export interface CostToPurchase {
     oneOfEachRare: number;
     oneOfEachUncommon: number;
     oneOfEachCommon: number;
+    fourOfEachCard?: number;
+    fourOfEachMythic?: number;
+    fourOfEachRare?: number;
+    fourOfEachUncommon?: number;
+    fourOfEachCommon?: number;
+    draftCube?: number;
   };
 }
 

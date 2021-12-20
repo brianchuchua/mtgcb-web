@@ -1,3 +1,4 @@
+import useDebounce from './useDebounce';
 import useDebouncedEffect from './useDebouncedEffect';
 
-export { useDebouncedEffect };
+export { useDebounce, useDebouncedEffect };

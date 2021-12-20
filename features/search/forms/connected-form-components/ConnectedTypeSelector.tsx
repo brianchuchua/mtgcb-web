@@ -3,10 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import TypeSelector from '../../../../components/search-form-components/TypeSelector';
 import { getCardTypes } from '../../../../network/features/browse';
 import { RootState } from '../../../../redux/rootReducer';
+import { CardType } from '../../../browse/browseSlice';
 import { mapCardTypes } from '../../../browse/forms/mappers';
-import { CardType, setCardTypes } from '../../setSlice';
+import { ConnectedSearchFormComponentProps } from './types';
 
-const ConnectedTypeSelector: React.FC = () => {
+interface ConnectedTypeSelectorProps extends ConnectedSearchFormComponentProps {
+  setCardTypes: any;
+}
+
+const ConnectedTypeSelector: React.FC<ConnectedTypeSelectorProps> = ({ reduxSlice, setCardTypes }) => {
   const dispatch = useDispatch();
 
   const updateCardTypes = (newCardTypes: CardType[]) => {
@@ -14,7 +19,7 @@ const ConnectedTypeSelector: React.FC = () => {
   };
 
   const [types, setTypes] = useState(null);
-  const { cardTypes } = useSelector((state: RootState) => state.set);
+  const { cardTypes } = useSelector((state: RootState) => state[reduxSlice]);
 
   useEffect(() => {
     async function fetchTypes() {

@@ -271,7 +271,7 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
                                 card={{
                                   id: row.values.id,
                                   name: row.values.name,
-                                  set: { name: row.values['set.name'] },
+                                  set: { name: row.values['set.name'], slug: row.values['set.slug'] },
                                   low: row.values.low,
                                   average: row.values.average,
                                   high: row.values.high,

@@ -1,19 +1,27 @@
 import { useDispatch, useSelector } from 'react-redux';
 import CardStatSearch from '../../../../components/search-form-components/CardStatSearch';
 import { RootState } from '../../../../redux/rootReducer';
-import {
+import { SearchAttribute, SearchComparators } from '../../../browse/browseSlice';
+import { ConnectedSearchFormComponentProps } from './types';
+
+interface ConnectedCardStatSearchProps extends ConnectedSearchFormComponentProps {
+  addCardStatSearch: any;
+  removeCardStatSearch: any;
+  setCardStatSearches: any;
+  setComparator: any;
+  setSearchAttribute: any;
+}
+
+const ConnectedCardStatSearch: React.FC<ConnectedCardStatSearchProps> = ({
+  reduxSlice,
   addCardStatSearch,
   removeCardStatSearch,
-  SearchAttribute,
-  SearchComparators,
   setCardStatSearches,
   setComparator,
   setSearchAttribute,
-} from '../../browseSlice';
-
-const ConnectedCardStatSearch: React.FC = () => {
+}) => {
   const dispatch = useDispatch();
-  const { cardStatSearches } = useSelector((state: RootState) => state.browse);
+  const { cardStatSearches } = useSelector((state: RootState) => state[reduxSlice]);
 
   const updateSearchAttribute = (searchAttribute: SearchAttribute, index: number) => {
     const payload = { searchAttribute, index };

@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: BrowseState = {
-  isFormVisible: false,
   searchQuery: '',
   oracleTextQuery: '',
   cardTypes: [],
@@ -20,6 +19,7 @@ const initialState: BrowseState = {
   cardStatSearches: [{ searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' }],
   sortBy: 'releasedAt',
   sortByDirection: 'ASC',
+  isFormVisible: false,
   viewSubject: 'cards',
   viewMode: 'grid',
   priceType: 'market',
@@ -34,10 +34,6 @@ const browseSlice = createSlice({
   name: 'browse',
   initialState,
   reducers: {
-    setFormVisibility(state, action: PayloadAction<FormVisibility>) {
-      const { isFormVisibile } = action.payload;
-      state.isFormVisible = isFormVisibile;
-    },
     setSearchQuery(state, action: PayloadAction<SearchQuery>) {
       const { searchQuery } = action.payload;
       state.searchQuery = searchQuery;
@@ -98,6 +94,10 @@ const browseSlice = createSlice({
       const sortByDirection = action.payload;
       state.sortByDirection = sortByDirection;
     },
+    setFormVisibility(state, action: PayloadAction<FormVisibility>) {
+      const { isFormVisibile } = action.payload;
+      state.isFormVisible = isFormVisibile;
+    },
     setViewSubject(state, action: PayloadAction<'cards' | 'sets'>) {
       const viewSubject = action.payload;
       state.viewSubject = viewSubject;
@@ -134,7 +134,6 @@ const browseSlice = createSlice({
 });
 
 export const {
-  setFormVisibility,
   setSearchQuery,
   setOracleTextQuery,
   setCardTypes,
@@ -150,6 +149,7 @@ export const {
   removeCardStatSearch,
   setCardSort,
   setCardSortDirection,
+  setFormVisibility,
   setViewSubject,
   setViewMode,
   setPriceType,
@@ -211,7 +211,6 @@ export const expansionCategoryOptions = [
 ];
 
 interface BrowseState {
-  isFormVisible: boolean;
   searchQuery: string;
   oracleTextQuery: string;
   cardTypes: CardType[];
@@ -222,6 +221,7 @@ interface BrowseState {
   cardStatSearches: CardStatSearch[];
   sortBy: string;
   sortByDirection: 'ASC' | 'DESC';
+  isFormVisible: boolean;
   viewSubject: 'cards' | 'sets';
   viewMode: 'grid' | 'table';
   priceType: PriceTypes;
@@ -293,10 +293,6 @@ export interface CardRarities {
   cardRarities: CardRarity[];
 }
 
-interface FormVisibility {
-  isFormVisibile: boolean;
-}
-
 interface SearchQuery {
   searchQuery: string;
 }
@@ -344,6 +340,10 @@ export interface SetCategory {
 
 export interface SetCategories {
   setCategories: SetCategory[];
+}
+
+interface FormVisibility {
+  isFormVisibile: boolean;
 }
 
 export default browseSlice.reducer;

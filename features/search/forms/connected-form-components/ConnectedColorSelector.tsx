@@ -1,11 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux';
 import ColorSelector from '../../../../components/search-form-components/ColorSelector';
 import { RootState } from '../../../../redux/rootReducer';
-import { ColorTypes, setCardColors, setColorType } from '../../setSlice';
+import { ColorTypes } from '../../../browse/browseSlice';
+import { ConnectedSearchFormComponentProps } from './types';
 
-const ConnectedColorSelector: React.FC = () => {
+interface ConnectedColorSelectorProps extends ConnectedSearchFormComponentProps {
+  setColorType: any;
+  setCardColors: any;
+}
+
+const ConnectedColorSelector: React.FC<ConnectedColorSelectorProps> = ({ reduxSlice, setCardColors, setColorType }) => {
   const dispatch = useDispatch();
-  const { cardColors } = useSelector((state: RootState) => state.set);
+  const { cardColors } = useSelector((state: RootState) => state[reduxSlice]);
 
   const updateCardColors = (color: string) => {
     dispatch(setCardColors(color));

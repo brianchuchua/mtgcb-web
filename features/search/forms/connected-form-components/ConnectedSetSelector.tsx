@@ -3,17 +3,22 @@ import styled from 'styled-components';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
 import { useGetAllSetNamesQuery } from '../../../../network/services/mtgcbApi';
 import { RootState } from '../../../../redux/rootReducer';
-import { CardSet, setCardSets } from '../../browseSlice';
-import { mapCardSets } from '../mappers';
+import { CardSet } from '../../../browse/browseSlice';
+import { mapCardSets } from '../../../browse/forms/mappers';
+import { ConnectedSearchFormComponentProps } from './types';
 
-const SetSelector: React.FC = () => {
+interface ConnectedSetSelectorProps extends ConnectedSearchFormComponentProps {
+  setCardSets: any;
+}
+
+const ConnectedSetSelector: React.FC<ConnectedSetSelectorProps> = ({ reduxSlice, setCardSets }) => {
   const dispatch = useDispatch();
 
   const updateSets = (newSets: CardSet[]) => {
     dispatch(setCardSets({ cardSets: newSets }));
   };
 
-  const { cardSets } = useSelector((state: RootState) => state.browse);
+  const { cardSets } = useSelector((state: RootState) => state[reduxSlice]);
 
   const { data: allSetsMetaResponse } = useGetAllSetNamesQuery({});
   const allSetNames = allSetsMetaResponse?.data?.allSets;
@@ -34,4 +39,4 @@ const StyledSetSelector = styled.div(() => ({
   paddingBottom: '10px',
 }));
 
-export default SetSelector;
+export default ConnectedSetSelector;

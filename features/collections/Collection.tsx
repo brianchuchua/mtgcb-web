@@ -9,17 +9,17 @@ import {
   useGetAllCardsQuery,
   useGetAllSetsMetaQuery,
   useGetAllSetsQuery,
-  useGetCostToPurchaseAllQuery,
+  useGetCollectionSummaryLegacyQuery,
 } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
 import useDebounce, { searchFieldDebounceTimeMs } from '../../util/useDebounce';
-import { setFormVisibility } from './browseSlice';
-import CardGallery from './CardGallery';
-import CardTable from './CardTable';
-import SetGallery from './SetGallery';
-import SetTable from './SetTable';
+import CardGallery from '../browse/CardGallery';
+import CardTable from '../browse/CardTable';
+import SetGallery from '../browse/SetGallery';
+import SetTable from '../browse/SetTable';
+import { setFormVisibility } from './collectionSlice';
 
-export const Browse: React.FC = () => {
+export const Collection: React.FC<CollectionProps> = ({ userId }) => {
   const {
     searchQuery,
     oracleTextQuery,
@@ -39,7 +39,7 @@ export const Browse: React.FC = () => {
     sortExpansionByDirection,
     expansionTypes,
     expansionCategories,
-  } = useSelector((state: RootState) => state.browse);
+  } = useSelector((state: RootState) => state.collection);
 
   const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
   const debouncedOracleTextQuery = useDebounce(oracleTextQuery, searchFieldDebounceTimeMs);
@@ -90,8 +90,14 @@ export const Browse: React.FC = () => {
     sortByDirection,
   });
 
-  const { data: costToPurchaseAll, isLoading: isCostsToPurchaseLoading, error: costsToPurchaseError } = useGetCostToPurchaseAllQuery();
-  const costsToPurchase = costToPurchaseAll?.data?.costToPurchaseAll?.costToPurchaseAll;
+  const {
+    data: collectionSummary,
+    isLoading: isCollectionSummaryLoading,
+    error: collectionSummaryError,
+  } = useGetCollectionSummaryLegacyQuery({ userId });
+
+  const costsToPurchase = collectionSummary?.data?.collectionSummaryLegacy?.collectionSummary;
+
   const cards = cardData?.data?.allCards;
   const totalResults = cardMetaData?.data?._allCardsMeta?.count;
 
@@ -124,7 +130,10 @@ export const Browse: React.FC = () => {
           MTG CB
         </Link>
         <Link href="#" variant="body2" color="inherit">
-          Browse
+          Collections
+        </Link>
+        <Link href={`/collections/${userId}`} variant="body2" color="inherit">
+          Name's Collection
         </Link>
       </Breadcrumbs>
       <ContentWrapper>
@@ -194,3 +203,7 @@ const MemoizedSetTable = memo(SetTable);
 const ContentWrapper = styled.div(({ theme }) => ({
   marginTop: theme.spacing(0),
 }));
+
+interface CollectionProps {
+  userId: string;
+}

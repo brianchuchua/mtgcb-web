@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 interface UseDebouncedEffectFunction {
   (effect: () => void, delay: number, deps: Array<unknown>): void;

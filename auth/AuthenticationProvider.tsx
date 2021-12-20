@@ -1,5 +1,5 @@
-import React, { createContext, useState, useContext, useEffect, SetStateAction } from 'react';
 import { useRouter } from 'next/router';
+import React, { createContext, SetStateAction, useContext, useEffect, useState } from 'react';
 import { getUser } from '../network/features/account';
 
 export interface User {

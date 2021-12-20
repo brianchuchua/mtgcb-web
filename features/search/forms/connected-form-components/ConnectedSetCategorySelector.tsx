@@ -2,16 +2,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
 import { RootState } from '../../../../redux/rootReducer';
-import { expansionCategoryOptions, SetCategory, setExpansionCategories } from '../../browseSlice';
+import { expansionCategoryOptions, SetCategory } from '../../../browse/browseSlice';
+import { ConnectedSearchFormComponentProps } from './types';
 
-const SetCategorySelector: React.FC = () => {
+interface ConnectedSetCategorySelectorProps extends ConnectedSearchFormComponentProps {
+  setExpansionCategories: any;
+}
+
+const ConnectedSetCategorySelector: React.FC<ConnectedSetCategorySelectorProps> = ({ reduxSlice, setExpansionCategories }) => {
   const dispatch = useDispatch();
 
   const updateSetCategories = (selectedExpansionCategories: SetCategory[]) => {
     dispatch(setExpansionCategories({ setCategories: selectedExpansionCategories }));
   };
 
-  const { expansionCategories } = useSelector((state: RootState) => state.browse);
+  const { expansionCategories } = useSelector((state: RootState) => state[reduxSlice]);
 
   return (
     <StyledSetCategorySelector>
@@ -31,4 +36,4 @@ const StyledSetCategorySelector = styled.div(() => ({
   paddingBottom: '10px',
 }));
 
-export default SetCategorySelector;
+export default ConnectedSetCategorySelector;

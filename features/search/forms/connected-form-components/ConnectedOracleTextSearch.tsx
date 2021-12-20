@@ -1,11 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux';
 import OracleTextSearch from '../../../../components/search-form-components/OracleTextSearch';
 import { RootState } from '../../../../redux/rootReducer';
-import { setOracleTextQuery } from '../../browseSlice';
+import { ConnectedSearchFormComponentProps } from './types';
 
-const ConnectedOracleTextSearch: React.FC = () => {
+interface ConnectedOracleTextSearchProps extends ConnectedSearchFormComponentProps {
+  setOracleTextQuery: any;
+}
+
+const ConnectedOracleTextSearch: React.FC<ConnectedOracleTextSearchProps> = ({ reduxSlice, setOracleTextQuery }) => {
   const dispatch = useDispatch();
-  const { oracleTextQuery } = useSelector((state: RootState) => state.browse);
+  const { oracleTextQuery } = useSelector((state: RootState) => state[reduxSlice]);
 
   const updateOracleTextQuery = (newOracleTextQuery: string) => {
     dispatch(setOracleTextQuery({ oracleTextQuery: newOracleTextQuery }));

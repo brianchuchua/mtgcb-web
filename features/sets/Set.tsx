@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Link from '../../components/Link';
 import { useGetAllCardsMetaQuery, useGetAllCardsQuery, useGetSetBySlugQuery } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
+import useDebounce, { searchFieldDebounceTimeMs } from '../../util/useDebounce';
 import CardGallery from '../browse/CardGallery';
 import CardTable from '../browse/CardTable';
 import titleCase from '../browse/util/titleCase';
@@ -38,7 +39,10 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
     return function cleanUpForm() {
       dispatch(setFormVisibility({ isFormVisibile: false }));
     };
-  }, [dispatch]);
+  }, []);
+
+  const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
+  const debouncedOracleTextQuery = useDebounce(oracleTextQuery, searchFieldDebounceTimeMs);
 
   const [skip, setSkip] = useState(0);
   const [first, setFirst] = useState(50);
@@ -50,11 +54,14 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
     first,
     skip,
     sortBy,
-    name: searchQuery,
-    oracleTextQuery,
+    name: debouncedSearchQuery,
+    oracleTextQuery: debouncedOracleTextQuery,
     cardSets: [
       {
+        category: 'Sets',
         value: setData?.data?.allSets?.[0]?.id,
+        label: setData?.data?.allSets?.[0]?.name,
+        exclude: false,
       },
     ],
     cardRarities,
@@ -67,11 +74,14 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
 
   const { data: cardMetaData, isLoading: isCardMetaDataLoading, error: cardMetaError } = useGetAllCardsMetaQuery({
     sortBy,
-    name: searchQuery,
-    oracleTextQuery,
+    name: debouncedSearchQuery,
+    oracleTextQuery: debouncedOracleTextQuery,
     cardSets: [
       {
+        category: 'Sets',
         value: setData?.data?.allSets?.[0]?.id,
+        label: setData?.data?.allSets?.[0]?.name,
+        exclude: false,
       },
     ],
     cardRarities,

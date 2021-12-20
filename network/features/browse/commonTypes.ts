@@ -3,7 +3,7 @@ import { CardColors, CardRarity, CardSet, CardStatSearch, CardType } from '../..
 export interface SearchOptions {
   first?: number;
   skip?: number;
-  sortBy?: string[];
+  sortBy?: string;
   sortByDirection?: 'ASC' | 'DESC';
   name?: string;
   oracleTextQuery?: string;

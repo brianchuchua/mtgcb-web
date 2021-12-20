@@ -1,11 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux';
 import ShowAllPrintingsToggle from '../../../../components/search-form-components/ShowAllPrintingsToggle';
 import { RootState } from '../../../../redux/rootReducer';
-import { setShowAllPrintings } from '../../setSlice';
+import { ConnectedSearchFormComponentProps } from './types';
 
-const ConnectedShowAllPrintingsToggle: React.FC = () => {
+interface ConnectedShowAllPrintingsToggleProps extends ConnectedSearchFormComponentProps {
+  setShowAllPrintings: any;
+}
+
+const ConnectedShowAllPrintingsToggle: React.FC<ConnectedShowAllPrintingsToggleProps> = ({ reduxSlice, setShowAllPrintings }) => {
   const dispatch = useDispatch();
-  const { showAllPrintings } = useSelector((state: RootState) => state.set);
+  const { showAllPrintings } = useSelector((state: RootState) => state[reduxSlice]);
 
   const updateShowAllPrintings = (toggleValue) => {
     dispatch(setShowAllPrintings(toggleValue));

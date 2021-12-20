@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState: SetState = {
+const initialState: CollectionState = {
   searchQuery: '',
   oracleTextQuery: '',
   cardTypes: [],
+  cardSets: [],
   cardRarities: [],
   cardColors: {
     white: false,
@@ -16,7 +17,7 @@ const initialState: SetState = {
   },
   showAllPrintings: true,
   cardStatSearches: [{ searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' }],
-  sortBy: 'collectorNumber',
+  sortBy: 'releasedAt',
   sortByDirection: 'ASC',
   isFormVisible: false,
   viewSubject: 'cards',
@@ -29,8 +30,8 @@ const initialState: SetState = {
   expansionCategories: [],
 };
 
-const setSlice = createSlice({
-  name: 'set',
+const collectionSlice = createSlice({
+  name: 'collection',
   initialState,
   reducers: {
     setSearchQuery(state, action: PayloadAction<SearchQuery>) {
@@ -44,6 +45,10 @@ const setSlice = createSlice({
     setCardTypes(state, action: PayloadAction<CardTypes>) {
       const { cardTypes } = action.payload;
       state.cardTypes = cardTypes;
+    },
+    setCardSets(state, action: PayloadAction<CardSets>) {
+      const { cardSets } = action.payload;
+      state.cardSets = cardSets;
     },
     setCardRarities(state, action: PayloadAction<CardRarities>) {
       const { cardRarities } = action.payload;
@@ -132,6 +137,7 @@ export const {
   setSearchQuery,
   setOracleTextQuery,
   setCardTypes,
+  setCardSets,
   setCardRarities,
   setCardColors,
   setColorType,
@@ -152,7 +158,7 @@ export const {
   setExpansionSortDirection,
   setExpansionTypes,
   setExpansionCategories,
-} = setSlice.actions;
+} = collectionSlice.actions;
 
 export const searchAttributeOptions = [
   { value: 'convertedManaCost', label: 'CMC' },
@@ -204,10 +210,11 @@ export const expansionCategoryOptions = [
   { category: 'Set Categories', value: 'Special', label: 'Special', exclude: false },
 ];
 
-interface SetState {
+interface CollectionState {
   searchQuery: string;
   oracleTextQuery: string;
   cardTypes: CardType[];
+  cardSets: CardSet[];
   cardRarities: CardRarity[];
   cardColors: CardColors;
   showAllPrintings: boolean;
@@ -339,4 +346,4 @@ export interface SetCategories {
   setCategories: SetCategory[];
 }
 
-export default setSlice.reducer;
+export default collectionSlice.reducer;

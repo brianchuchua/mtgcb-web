@@ -1,11 +1,9 @@
-const determineDistinctClause = (showAllPrintings: boolean, sortBy: string[]): string[] => {
-  if (showAllPrintings || !sortBy?.[0] || sortBy[0] === '_') {
+const determineDistinctClause = (showAllPrintings: boolean, sortBy: string): string[] => {
+  if (showAllPrintings || sortBy == null) {
     return null;
   }
 
-  const sortByAttribute = sortBy[0].split('_')[0];
-
-  return [sortByAttribute, 'name'];
+  return [sortBy, 'name'];
 };
 
 export default determineDistinctClause;

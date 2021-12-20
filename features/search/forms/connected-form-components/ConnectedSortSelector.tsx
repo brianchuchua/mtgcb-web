@@ -1,11 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux';
 import SortSelector from '../../../../components/search-form-components/SortSelector';
 import { RootState } from '../../../../redux/rootReducer';
-import { setCardSort, setCardSortDirection } from '../../browseSlice';
+import { ConnectedSearchFormComponentProps } from './types';
 
-const ConnectedSortSelector: React.FC = () => {
+interface ConnectedSortSelectorProps extends ConnectedSearchFormComponentProps {
+  setCardSort: any;
+  setCardSortDirection: any;
+}
+
+const ConnectedSortSelector: React.FC<ConnectedSortSelectorProps> = ({ reduxSlice, setCardSort, setCardSortDirection }) => {
   const dispatch = useDispatch();
-  const { sortBy, sortByDirection } = useSelector((state: RootState) => state.browse);
+  const { sortBy, sortByDirection } = useSelector((state: RootState) => state[reduxSlice]);
 
   const handleSortByChange = (event: React.ChangeEvent<{ value: string }>) => {
     dispatch(setCardSort(event.target.value));

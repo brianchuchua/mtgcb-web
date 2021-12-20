@@ -6,6 +6,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useState } from 'react';
 import { SearchForm } from '../../features/browse/forms';
+import CollectionSearchForm from '../../features/collections/forms/CollectionSearchForm';
 import { SetSearchForm } from '../../features/sets/forms';
 import AccountMenu from './AccountMenu';
 import HeaderBar from './HeaderBar';
@@ -63,6 +64,7 @@ const Header: React.FC = () => {
         <List>
           <SearchForm />
           <SetSearchForm />
+          <CollectionSearchForm />
         </List>
       </Sidenav>
     </>

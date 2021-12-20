@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { CardType } from '../../features/browse/browseSlice';
-import { MappedCardTypes } from '../../features/browse/forms/mappers';
+import { MappedCardTypes } from '../../features/browse/forms/mappers/mapCardTypes';
 import AutocompleteWithNegation from '../AutocompleteWithNegation';
 
 interface TypeSelectorProps {

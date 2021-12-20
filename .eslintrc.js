@@ -94,7 +94,7 @@ module.exports = {
       },
     ],
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
+    'react-hooks/exhaustive-deps': 'off',
     'react/prop-types': 'off',
   },
   plugins: ['html', 'prettier', 'react-hooks', '@typescript-eslint'],

@@ -7,10 +7,12 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import HomeIcon from '@material-ui/icons/Home';
 import LibraryIcon from '@material-ui/icons/ImportContacts';
 import { useRouter } from 'next/router';
+import { useAuthentication } from '../../auth/AuthenticationProvider';
 import Link from '../Link';
 
 const SidenavItems: React.FC = () => {
   const router = useRouter();
+  const { isAuthenticated, user } = useAuthentication();
   const currentPath = router.pathname;
 
   return (
@@ -27,12 +29,20 @@ const SidenavItems: React.FC = () => {
         </ListItemIcon>
         <ListItemText primary="Browse" />
       </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <LibraryIcon />
-        </ListItemIcon>
-        <ListItemText primary="Collection" />
-      </ListItem>
+      {isAuthenticated && (
+        <ListItem
+          button
+          component={Link}
+          href={`/collections/${user.id}`}
+          color="inherit"
+          selected={currentPath === `/collections/${user.id}`}
+        >
+          <ListItemIcon>
+            <LibraryIcon />
+          </ListItemIcon>
+          <ListItemText primary="Collection" />
+        </ListItem>
+      )}
       <ListItem button>
         <ListItemIcon>
           <BarChartIcon />

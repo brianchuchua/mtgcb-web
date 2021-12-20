@@ -6,11 +6,15 @@ import SearchIcon from '@material-ui/icons/Search';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { RootState } from '../../../../redux/rootReducer';
-import { setExpansionSearchQuery } from '../../browseSlice';
+import { ConnectedSearchFormComponentProps } from './types';
 
-const SetNameSearch: React.FC = () => {
+interface ConnectedSetNameSearchProps extends ConnectedSearchFormComponentProps {
+  setExpansionSearchQuery: any;
+}
+
+const ConnectedSetNameSearch: React.FC<ConnectedSetNameSearchProps> = ({ reduxSlice, setExpansionSearchQuery }) => {
   const dispatch = useDispatch();
-  const { expansionSearchQuery } = useSelector((state: RootState) => state.browse);
+  const { expansionSearchQuery } = useSelector((state: RootState) => state[reduxSlice]);
 
   const updateSearchQuery = (newSearchQuery: string) => {
     dispatch(setExpansionSearchQuery({ expansionSearchQuery: newSearchQuery }));
@@ -45,4 +49,4 @@ const StyledSetNameSearch = styled(FormControl)(() => ({
   paddingBottom: '10px',
 }));
 
-export default SetNameSearch;
+export default ConnectedSetNameSearch;

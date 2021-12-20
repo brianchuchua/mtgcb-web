@@ -3,16 +3,21 @@ import styled from 'styled-components';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
 import { useGetSetTypesQuery } from '../../../../network/services/mtgcbApi';
 import { RootState } from '../../../../redux/rootReducer';
-import { setExpansionTypes, SetType } from '../../browseSlice';
+import { SetType } from '../../../browse/browseSlice';
+import { ConnectedSearchFormComponentProps } from './types';
 
-const SetTypeSelector: React.FC = () => {
+interface ConnectedSetTypeSelectorProps extends ConnectedSearchFormComponentProps {
+  setExpansionTypes: any;
+}
+
+const ConnectedSetTypeSelector: React.FC<ConnectedSetTypeSelectorProps> = ({ reduxSlice, setExpansionTypes }) => {
   const dispatch = useDispatch();
 
   const updateSetTypes = (newSetTypes: SetType[]) => {
     dispatch(setExpansionTypes({ setTypes: newSetTypes }));
   };
 
-  const { expansionTypes } = useSelector((state: RootState) => state.browse);
+  const { expansionTypes } = useSelector((state: RootState) => state[reduxSlice]);
 
   const { data: setTypesResponse } = useGetSetTypesQuery();
   const setTypes = setTypesResponse?.data?.setTypes;
@@ -39,4 +44,4 @@ const StyledSetTypeSelector = styled.div(() => ({
   paddingBottom: '10px',
 }));
 
-export default SetTypeSelector;
+export default ConnectedSetTypeSelector;

@@ -4,8 +4,20 @@ import allSetNames from './allSetNames';
 import allSets from './allSets';
 import allSetsMeta from './allSetsMeta';
 import cardTypes from './cardTypes';
+import collectionSummaryLegacy from './collectionSummaryLegacy';
 import costToPurchaseAll from './costToPurchaseAll';
 import setTypes from './setTypes';
 import tcgplayerMassImport from './tcgplayerMassImport';
 
-export { allCards, allCardsMeta, allSets, allSetsMeta, cardTypes, costToPurchaseAll, setTypes, tcgplayerMassImport, allSetNames };
+export {
+  allCards,
+  allCardsMeta,
+  allSets,
+  allSetsMeta,
+  cardTypes,
+  collectionSummaryLegacy,
+  costToPurchaseAll,
+  setTypes,
+  tcgplayerMassImport,
+  allSetNames,
+};

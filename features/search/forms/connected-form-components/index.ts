@@ -4,11 +4,11 @@ import ConnectedColorSelector from './ConnectedColorSelector';
 import ConnectedOracleTextSearch from './ConnectedOracleTextSearch';
 import ConnectedPriceTypeSelector from './ConnectedPriceTypeSelector';
 import ConnectedRaritySelector from './ConnectedRaritySelector';
-import SetCategorySelector from './SetCategorySelector';
-import SetNameSearch from './SetNameSearch';
-import SetSelector from './SetSelector';
-import SetSortSelector from './SetSortSelector';
-import SetTypeSelector from './SetTypeSelector';
+import ConnectedSetCategorySelector from './ConnectedSetCategorySelector';
+import ConnectedSetNameSearch from './ConnectedSetNameSearch';
+import ConnectedSetSelector from './ConnectedSetSelector';
+import ConnectedSetSortSelector from './ConnectedSetSortSelector';
+import ConnectedSetTypeSelector from './ConnectedSetTypeSelector';
 import ConnectedShowAllPrintingsToggle from './ConnectedShowAllPrintingsToggle';
 import ConnectedSortSelector from './ConnectedSortSelector';
 import ConnectedTypeSelector from './ConnectedTypeSelector';
@@ -20,11 +20,11 @@ export {
   ConnectedColorSelector as ColorSelector,
   ConnectedOracleTextSearch as OracleTextSearch,
   ConnectedRaritySelector as RaritySelector,
-  SetCategorySelector,
-  SetNameSearch,
-  SetSelector,
-  SetSortSelector,
-  SetTypeSelector,
+  ConnectedSetCategorySelector as SetCategorySelector,
+  ConnectedSetNameSearch as SetNameSearch,
+  ConnectedSetSelector as SetSelector,
+  ConnectedSetSortSelector as SetSortSelector,
+  ConnectedSetTypeSelector as SetTypeSelector,
   ConnectedShowAllPrintingsToggle as ShowAllPrintingsToggle,
   ConnectedSortSelector as SortSelector,
   ConnectedTypeSelector as TypeSelector,

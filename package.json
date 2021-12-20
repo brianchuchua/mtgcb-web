@@ -1,6 +1,6 @@
 {
   "name": "mtgcb-web",
-  "version": "0.25.0",
+  "version": "0.26.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 4000",
@@ -20,6 +20,7 @@
     "clsx": "1.1.1",
     "fontsource-roboto": "3.0.3",
     "formik": "2.1.5",
+    "lodash.debounce": "4.0.8",
     "next": "9.5.2",
     "notistack": "1.0.1",
     "react": "16.13.1",

@@ -1,11 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux';
 import PriceTypeSelector from '../../../../components/search-form-components/PriceTypeSelector';
 import { RootState } from '../../../../redux/rootReducer';
-import { setPriceType } from '../../browseSlice';
+import { ConnectedSearchFormComponentProps } from './types';
 
-const ConnectedPriceTypeSelector: React.FC = () => {
+interface ConnectedPriceTypeSelectorProps extends ConnectedSearchFormComponentProps {
+  setPriceType: any;
+}
+
+const ConnectedPriceTypeSelector: React.FC<ConnectedPriceTypeSelectorProps> = ({ reduxSlice, setPriceType }) => {
   const dispatch = useDispatch();
-  const { priceType } = useSelector((state: RootState) => state.browse);
+  const { priceType } = useSelector((state: RootState) => state[reduxSlice]);
 
   const updatePriceType = (priceTypeValue) => {
     dispatch(setPriceType(priceTypeValue));

@@ -3,11 +3,17 @@ import Select from '@material-ui/core/Select';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { RootState } from '../../../../redux/rootReducer';
-import { expansionSortByOptions, setExpansionSort, setExpansionSortDirection } from '../../browseSlice';
+import { expansionSortByOptions } from '../../../browse/browseSlice';
+import { ConnectedSearchFormComponentProps } from './types';
 
-const SetSortSelector: React.FC = () => {
+interface ConnectedSetSortSelectorProps extends ConnectedSearchFormComponentProps {
+  setExpansionSort: any;
+  setExpansionSortDirection: any;
+}
+
+const ConnectedSetSortSelector: React.FC<ConnectedSetSortSelectorProps> = ({ reduxSlice, setExpansionSort, setExpansionSortDirection }) => {
   const dispatch = useDispatch();
-  const { sortExpansionBy, sortExpansionByDirection } = useSelector((state: RootState) => state.browse);
+  const { sortExpansionBy, sortExpansionByDirection } = useSelector((state: RootState) => state[reduxSlice]);
 
   const handleSortByChange = (event: React.ChangeEvent<{ value: string }>) => {
     dispatch(setExpansionSort(event.target.value));
@@ -50,4 +56,4 @@ const SortByDirection = styled(Select)(() => ({
   width: 'calc(35% - 8px)',
 }));
 
-export default SetSortSelector;
+export default ConnectedSetSortSelector;

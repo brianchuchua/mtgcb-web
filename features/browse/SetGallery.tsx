@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import { PriceTypes } from './browseSlice';
 import GalleryControls from './GalleryControls';
-import SetBox, { CostToPurchase, Set } from './SetBox';
+import SetBox, { Set, SetSummary } from './SetBox';
 
 const SetGallery: React.FC<SetGalleryProps> = ({
   sets,
@@ -73,7 +73,7 @@ const SetGalleryWrapper = styled.div<SetGalleryWrapperProps>(({ setsPerRow = 4, 
 
 interface SetGalleryProps {
   sets: Set[];
-  costsToPurchase: CostToPurchase[];
+  costsToPurchase: SetSummary[];
   page: number;
   first: number;
   skip: number;
