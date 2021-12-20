@@ -1,5 +1,7 @@
 const collectionSummaryLegacy = `query collectionSummaryLegacy($userId: Int!) {
   collectionSummaryLegacy(userId: $userId) {
+    userId
+    username
     numberOfCardsInMagic
     totalCardsCollected
     uniquePrintingsCollected

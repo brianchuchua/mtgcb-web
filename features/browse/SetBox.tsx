@@ -4,13 +4,13 @@ import Typography from '@material-ui/core/Typography';
 import { useState } from 'react';
 import styled from 'styled-components';
 import Link from '../../components/Link';
-import { tcgplayerMassImport } from '../../network/features/browse';
+import { tcgplayerMassImport, tcgplayerMassImportForUserLegacy } from '../../network/features/browse';
 import { PriceTypes } from './browseSlice';
 import { formatter } from './util/formatPrice';
 import titleCase from './util/titleCase';
 
 // TODO: Make a component for the set icon
-const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, isComplete = false }) => (
+const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, isComplete = false, userId = null }) => (
   <SetBoxWrapper variant="outlined">
     <SetName>
       <Link href={`/browse/sets/${set.slug}`}>
@@ -47,8 +47,8 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
                 </Typography>
               </td>
               <td>
-                <BuyThisButton setId={set.id} count={1} countType="all" />
-                <BuyThisButton setId={set.id} count={4} countType="all" />
+                <BuyThisButton setId={set.id} count={1} countType="all" userId={userId} />
+                <BuyThisButton setId={set.id} count={4} countType="all" userId={userId} />
               </td>
             </tr>
             <tr>
@@ -58,8 +58,8 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
                 </Typography>
               </td>
               <td>
-                <BuyThisButton setId={set.id} count={1} countType="mythic" />
-                <BuyThisButton setId={set.id} count={4} countType="mythic" />
+                <BuyThisButton setId={set.id} count={1} countType="mythic" userId={userId} />
+                <BuyThisButton setId={set.id} count={4} countType="mythic" userId={userId} />
               </td>
             </tr>
             <tr>
@@ -69,8 +69,8 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
                 </Typography>
               </td>
               <td>
-                <BuyThisButton setId={set.id} count={1} countType="rare" />
-                <BuyThisButton setId={set.id} count={4} countType="rare" />
+                <BuyThisButton setId={set.id} count={1} countType="rare" userId={userId} />
+                <BuyThisButton setId={set.id} count={4} countType="rare" userId={userId} />
               </td>
             </tr>
             <tr>
@@ -80,8 +80,8 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
                 </Typography>
               </td>
               <td>
-                <BuyThisButton setId={set.id} count={1} countType="uncommon" />
-                <BuyThisButton setId={set.id} count={4} countType="uncommon" />
+                <BuyThisButton setId={set.id} count={1} countType="uncommon" userId={userId} />
+                <BuyThisButton setId={set.id} count={4} countType="uncommon" userId={userId} />
               </td>
             </tr>
             <tr>
@@ -91,8 +91,8 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
                 </Typography>
               </td>
               <td>
-                <BuyThisButton setId={set.id} count={1} countType="common" />
-                <BuyThisButton setId={set.id} count={4} countType="common" />
+                <BuyThisButton setId={set.id} count={1} countType="common" userId={userId} />
+                <BuyThisButton setId={set.id} count={4} countType="common" userId={userId} />
               </td>
             </tr>
             {set.sealedProductUrl ? (
@@ -119,6 +119,7 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
                     count={1}
                     countType="draftcube"
                     price={formatter.format(costsToPurchaseInSet[priceType].draftCube)}
+                    userId={userId}
                   />
                 </td>
               </tr>
@@ -134,12 +135,13 @@ type CountType = 'all' | 'mythic' | 'rare' | 'uncommon' | 'common' | 'draftcube'
 
 interface BuyThisButtonProps {
   setId: string;
+  userId?: string;
   count: number;
   countType: CountType;
   price?: string;
 }
 
-const BuyThisButton = ({ setId, count, countType, price }: BuyThisButtonProps) => {
+const BuyThisButton = ({ setId, count, countType, price, userId = null }: BuyThisButtonProps) => {
   const [tcgplayerMassImportString, setTcgplayerMassImportString] = useState('');
 
   return (
@@ -148,7 +150,7 @@ const BuyThisButton = ({ setId, count, countType, price }: BuyThisButtonProps) =
       action="https://store.tcgplayer.com/massentry?partner=CTNBLDR"
       target="_blank"
       id={`tcgplayer-mass-import-form-${setId}-${count}-${countType}`}
-      onSubmit={(e) => handleBuyThisSubmit(e, setId, count, countType, setTcgplayerMassImportString)}
+      onSubmit={(e) => handleBuyThisSubmit(e, setId, count, countType, setTcgplayerMassImportString, userId)}
       style={{ display: 'inline-block', width: countType === 'draftcube' ? '100%' : 'auto' }}
     >
       <input type="hidden" name="partner" value="CTNBLDR" />
@@ -170,7 +172,7 @@ const BuyThisButton = ({ setId, count, countType, price }: BuyThisButtonProps) =
   );
 };
 
-const handleBuyThisSubmit = async (e, setId, count, countType, setTcgplayerMassImportString) => {
+const handleBuyThisSubmit = async (e, setId, count, countType, setTcgplayerMassImportString, userId = null) => {
   e.preventDefault();
   const options: any = { setId: parseInt(setId, 10) }; // eslint-disable-line @typescript-eslint/no-explicit-any
 
@@ -188,7 +190,13 @@ const handleBuyThisSubmit = async (e, setId, count, countType, setTcgplayerMassI
     options.commonCount = count;
   }
 
-  const tcgplayerMassImportString = (await tcgplayerMassImport(options))?.data?.data?.tcgplayerMassImport?.tcgplayerMassImport;
+  if (userId) {
+    options.userId = userId;
+  }
+
+  const tcgplayerMassImportString = userId
+    ? (await tcgplayerMassImportForUserLegacy(options))?.data?.data?.tcgplayerMassImportForUserLegacy?.tcgplayerMassImport
+    : (await tcgplayerMassImport(options))?.data?.data?.tcgplayerMassImport?.tcgplayerMassImport;
   setTcgplayerMassImportString(tcgplayerMassImportString);
   const buyThisForm: any = document.getElementById(`tcgplayer-mass-import-form-${setId}-${count}-${countType}`); // eslint-disable-line @typescript-eslint/no-explicit-any
   buyThisForm.submit();
@@ -222,6 +230,7 @@ interface SetBoxProps {
   costsToPurchaseInSet: SetSummary;
   priceType: PriceTypes;
   isComplete?: boolean;
+  userId?: string;
 }
 
 export interface SetSummary {

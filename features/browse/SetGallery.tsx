@@ -17,6 +17,7 @@ const SetGallery: React.FC<SetGalleryProps> = ({
   setFirst,
   setPage,
   priceType,
+  userId = null,
 }) => {
   const [setsPerRow, setSetsPerRow] = useState(4);
   const [galleryWidth, setGalleryWidth] = useState(100);
@@ -44,7 +45,15 @@ const SetGallery: React.FC<SetGalleryProps> = ({
         {sets &&
           sets.map((set) => {
             const costsToPurchaseInSet = costsToPurchase?.find((costs) => Number(costs.setId) === Number(set.id));
-            return <SetBox key={`set-box-${set.id}`} set={set} costsToPurchaseInSet={costsToPurchaseInSet} priceType={priceType} />;
+            return (
+              <SetBox
+                key={`set-box-${set.id}`}
+                set={set}
+                costsToPurchaseInSet={costsToPurchaseInSet}
+                priceType={priceType}
+                userId={userId}
+              />
+            );
           })}
       </SetGalleryWrapper>
     </>
@@ -82,6 +91,7 @@ interface SetGalleryProps {
   setPage: Dispatch<SetStateAction<number>>;
   totalResults: number;
   priceType: PriceTypes;
+  userId?: string;
 }
 
 export default SetGallery;

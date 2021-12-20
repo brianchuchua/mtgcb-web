@@ -48,7 +48,6 @@ const CollectionSearchForm: React.FC = () => {
 
   return (
     <>
-      {reduxSlice}
       {isFormVisible && viewSubject === 'cards' && (
         <>
           <ViewModeSelector reduxSlice={reduxSlice} setViewMode={setViewMode} setViewSubject={setViewSubject} />

@@ -97,6 +97,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
   } = useGetCollectionSummaryLegacyQuery({ userId });
 
   const costsToPurchase = collectionSummary?.data?.collectionSummaryLegacy?.collectionSummary;
+  const username = collectionSummary?.data?.collectionSummaryLegacy?.username;
 
   const cards = cardData?.data?.allCards;
   const totalResults = cardMetaData?.data?._allCardsMeta?.count;
@@ -133,7 +134,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
           Collections
         </Link>
         <Link href={`/collections/${userId}`} variant="body2" color="inherit">
-          Name's Collection
+          {username}'s Collection
         </Link>
       </Breadcrumbs>
       <ContentWrapper>
@@ -175,6 +176,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
             setFirst={setExpansionsFirst}
             setPage={setExpansionsPage}
             priceType={priceType}
+            userId={userId}
           />
         )}
         {viewSubject === 'sets' && viewMode === 'table' && (

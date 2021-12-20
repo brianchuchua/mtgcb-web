@@ -32,3 +32,14 @@ export interface TcgplayerMassImportOptions {
   commonCount?: number;
   draftCubeCount?: number;
 }
+
+export interface TcgplayerMassImportForUserLegacyOptions {
+  setId: number;
+  userId: number;
+  allCount?: number;
+  mythicCount?: number;
+  rareCount?: number;
+  uncommonCount?: number;
+  commonCount?: number;
+  draftCubeCount?: number;
+}

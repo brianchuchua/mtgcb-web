@@ -16,10 +16,12 @@ import {
   collectionSummaryLegacy,
   costToPurchaseAll,
   setTypes as setTypesQuery,
+  tcgplayerMassImportForUserLegacy,
 } from '../queries/index';
 
 // TODO: Use tagging system to set up dependencies of when calls caches need to be busted
 // Example: When a user's collection is updated, need to repull some of the collection analysis calls
+// TODO: Evaluate caching strategy for all queries
 
 export const mtgcbApi = createApi({
   reducerPath: 'mtgcb',
@@ -170,6 +172,23 @@ export const mtgcbApi = createApi({
         },
       }),
     }),
+    getTcgplayerMassImportForUserLegacy: builder.query<
+      // TODO: Remove me, not a great fit for redux query
+      AxiosResponse<TcgplayerMassImportForUserLegacyResponse>,
+      TcgplayerMassImportForUserLegacyVariables
+    >({
+      query: ({ setId, userId }) => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: tcgplayerMassImportForUserLegacy,
+          variables: {
+            setId: Number(setId),
+            userId: Number(userId),
+          },
+        },
+      }),
+    }),
   }),
 });
 
@@ -183,6 +202,7 @@ export const {
   useGetAllCardsMetaQuery,
   useGetCostToPurchaseAllQuery,
   useGetCollectionSummaryLegacyQuery,
+  useGetTcgplayerMassImportForUserLegacyQuery,
 } = mtgcbApi;
 
 // TODO: Code split these types for readability
@@ -288,6 +308,8 @@ interface CostToPurchaseAllResponse {
 
 interface CollectionSummaryLegacyResponse {
   collectionSummaryLegacy: {
+    userId: number;
+    username: string;
     numberOfCardsInMagic: number;
     totalCardsCollected: number;
     uniquePrintingsCollected: number;
@@ -297,4 +319,16 @@ interface CollectionSummaryLegacyResponse {
 
 interface CollectionSummaryLegacyVariables {
   userId: string;
+}
+
+interface TcgplayerMassImportForUserLegacyResponse {
+  tcgplayerMassImportForUserLegacy: {
+    setId: number;
+    tcgplayerMassImport: string;
+  };
+}
+
+interface TcgplayerMassImportForUserLegacyVariables {
+  userId: string;
+  setId: string;
 }

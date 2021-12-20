@@ -6,6 +6,7 @@ interface TcgplayerMassImportFunction {
   (tcgplayerOptions: TcgplayerMassImportOptions): any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
+// TODO: Migrate me to redux query
 const tcgplayerMassImport: TcgplayerMassImportFunction = async (tcgplayerOptions) => {
   const { setId, allCount, mythicCount, rareCount, uncommonCount, commonCount, draftCubeCount } = tcgplayerOptions;
 
