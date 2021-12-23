@@ -313,6 +313,8 @@ interface CollectionSummaryLegacyResponse {
     numberOfCardsInMagic: number;
     totalCardsCollected: number;
     uniquePrintingsCollected: number;
+    percentageCollected: number;
+    totalValue: number;
     collectionSummary: SetSummary[];
   };
 }

@@ -1,5 +1,7 @@
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Container from '@material-ui/core/Container';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Typography from '@material-ui/core/Typography';
 import { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -17,6 +19,7 @@ import CardGallery from '../browse/CardGallery';
 import CardTable from '../browse/CardTable';
 import SetGallery from '../browse/SetGallery';
 import SetTable from '../browse/SetTable';
+import { formatter } from '../browse/util/formatPrice';
 import { setFormVisibility } from './collectionSlice';
 
 export const Collection: React.FC<CollectionProps> = ({ userId }) => {
@@ -50,7 +53,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
   const [page, setPage] = useState(1);
 
   const [expansionsSkip, setExpansionsSkip] = useState(0);
-  const [expansionsFirst, setExpansionsFirst] = useState(50);
+  const [expansionsFirst, setExpansionsFirst] = useState(16);
   const [expansionsPage, setExpansionsPage] = useState(1);
 
   const dispatch = useDispatch();
@@ -98,6 +101,14 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
 
   const costsToPurchase = collectionSummary?.data?.collectionSummaryLegacy?.collectionSummary;
   const username = collectionSummary?.data?.collectionSummaryLegacy?.username;
+  const collectionDetails = {
+    username,
+    numberOfCardsInMagic: collectionSummary?.data?.collectionSummaryLegacy?.numberOfCardsInMagic,
+    totalCardsCollected: collectionSummary?.data?.collectionSummaryLegacy?.totalCardsCollected,
+    uniquePrintingsCollected: collectionSummary?.data?.collectionSummaryLegacy?.uniquePrintingsCollected,
+    percentageCollected: collectionSummary?.data?.collectionSummaryLegacy?.percentageCollected,
+    totalValue: collectionSummary?.data?.collectionSummaryLegacy?.totalValue?.[priceType],
+  };
 
   const cards = cardData?.data?.allCards;
   const totalResults = cardMetaData?.data?._allCardsMeta?.count;
@@ -137,6 +148,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
           {username}'s Collection
         </Link>
       </Breadcrumbs>
+      {collectionDetails && <CollectionDetails collectionDetails={collectionDetails} />}
       <ContentWrapper>
         {viewSubject === 'cards' && viewMode === 'grid' && (
           <MemoizedCardGallery
@@ -182,6 +194,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
         {viewSubject === 'sets' && viewMode === 'table' && (
           <MemoizedSetTable
             sets={expansions}
+            costsToPurchase={costsToPurchase}
             totalResults={totalExpansionsResults}
             first={expansionsFirst}
             skip={expansionsSkip}
@@ -190,6 +203,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
             setFirst={setExpansionsFirst}
             setPage={setExpansionsPage}
             priceType={priceType}
+            isCollectorMode
           />
         )}
       </ContentWrapper>
@@ -209,3 +223,70 @@ const ContentWrapper = styled.div(({ theme }) => ({
 interface CollectionProps {
   userId: string;
 }
+
+interface CollectionDetailsProps {
+  collectionDetails: {
+    username: string;
+    numberOfCardsInMagic: number;
+    totalCardsCollected: number;
+    uniquePrintingsCollected: number;
+    percentageCollected: number;
+    totalValue: number;
+  };
+}
+
+const CollectionDetails: React.FC<CollectionDetailsProps> = ({ collectionDetails }) => (
+  <CollectionDetailsWrapper>
+    <CollectionDetailsTitle variant="h3">{collectionDetails.username}'s Collection</CollectionDetailsTitle>
+    <CollectionDetailsBody>
+      <Typography variant="h5" color="textSecondary" component="div">
+        {collectionDetails.uniquePrintingsCollected}/{collectionDetails.numberOfCardsInMagic}
+      </Typography>
+      <Typography variant="body2" color="textSecondary" component="div">
+        <em>({collectionDetails.totalCardsCollected} total cards collected)</em>
+      </Typography>
+      <Typography variant="body2" color="textSecondary" component="div">
+        <em>Collection value: {formatter.format(collectionDetails.totalValue)}</em>
+      </Typography>
+      <CollectionProgressWrapper>
+        <StyledLinearProgress variant="determinate" value={collectionDetails.percentageCollected ?? 0} color="secondary" />
+        <LinearProgressLabel>
+          <Typography variant="body2" color="textSecondary" component="div">
+            {collectionDetails.percentageCollected}% collected!
+          </Typography>
+        </LinearProgressLabel>
+      </CollectionProgressWrapper>
+    </CollectionDetailsBody>
+  </CollectionDetailsWrapper>
+);
+
+const CollectionDetailsWrapper = styled.div(() => ({
+  width: '100%',
+}));
+
+const CollectionDetailsTitle = styled(Typography)({
+  textAlign: 'center',
+});
+
+const CollectionDetailsBody = styled.div({
+  textAlign: 'center',
+});
+
+const CollectionProgressWrapper = styled.div({
+  position: 'relative',
+});
+
+const StyledLinearProgress = styled(LinearProgress)({
+  height: '25px',
+  width: '100%',
+  margin: '10px auto 10px',
+  textAlign: 'center',
+});
+
+const LinearProgressLabel = styled.div({
+  position: 'absolute',
+  top: '3px',
+  textAlign: 'center',
+  margin: '0 auto',
+  width: '100%',
+});

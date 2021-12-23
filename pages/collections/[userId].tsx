@@ -9,7 +9,7 @@ const CollectionPage: React.FC = () => {
 
   return (
     <Container component="main" maxWidth="xl">
-      {id ? <Collection userId={id} /> : null}
+      {id ? <Collection userId={id} /> : <></>}
     </Container>
   );
 };

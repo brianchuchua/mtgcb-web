@@ -20,7 +20,7 @@ const initialState: CollectionState = {
   sortBy: 'releasedAt',
   sortByDirection: 'ASC',
   isFormVisible: false,
-  viewSubject: 'cards',
+  viewSubject: 'sets',
   viewMode: 'grid',
   priceType: 'market',
   expansionSearchQuery: '',
@@ -192,7 +192,7 @@ export const expansionSortByOptions = [
   { value: 'name', label: 'Name' },
   { value: 'releasedAt', label: 'Release Date' },
   { value: 'code', label: 'Set Code' },
-  { value: 'cardCount', label: 'Card Count' },
+  { value: 'cardCount', label: 'Cards In Set' },
 ];
 
 export const rarityOptions = [

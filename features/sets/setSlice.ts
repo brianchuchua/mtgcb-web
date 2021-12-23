@@ -186,7 +186,7 @@ export const expansionSortByOptions = [
   { value: 'name', label: 'Name' },
   { value: 'releasedAt', label: 'Release Date' },
   { value: 'code', label: 'Set Code' },
-  { value: 'cardCount', label: 'Card Count' },
+  { value: 'cardCount', label: 'Cards In Set' },
 ];
 
 export const rarityOptions = [

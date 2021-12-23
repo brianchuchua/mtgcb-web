@@ -50,7 +50,7 @@ export const Browse: React.FC = () => {
   const [page, setPage] = useState(1);
 
   const [expansionsSkip, setExpansionsSkip] = useState(0);
-  const [expansionsFirst, setExpansionsFirst] = useState(50);
+  const [expansionsFirst, setExpansionsFirst] = useState(16);
   const [expansionsPage, setExpansionsPage] = useState(1);
 
   const dispatch = useDispatch();

@@ -10,14 +10,15 @@ import Typography from '@material-ui/core/Typography';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 import { useSortBy, useTable } from 'react-table';
 import styled from 'styled-components';
-import Link from '../../components/Link';
 import { PriceTypes } from './browseSlice';
 import GalleryControls from './GalleryControls';
-import { Set } from './SetBox';
-import titleCase from './util/titleCase';
+import { Set, SetSummary } from './SetBox';
+import { browseTableColumns, collectionTableColumns } from './tables/setTableColumns';
+import { browseHiddenColumns, browseSettingGroups, collectionHiddenColumns, collectionSettingGroups } from './tables/setTableSettings';
 
 interface SetTableProps {
   sets: Set[];
+  costsToPurchase?: SetSummary[];
   page: number;
   first: number;
   skip: number;
@@ -26,117 +27,57 @@ interface SetTableProps {
   setPage: Dispatch<SetStateAction<number>>;
   totalResults: number;
   priceType: PriceTypes;
+  isCollectorMode?: boolean;
 }
 
-const SetTable: React.FC<SetTableProps> = ({ sets, first, skip, page, totalResults, setSkip, setFirst, setPage, priceType }) => {
+const SetTable: React.FC<SetTableProps> = ({
+  sets,
+  costsToPurchase,
+  first,
+  skip,
+  page,
+  totalResults,
+  setSkip,
+  setFirst,
+  setPage,
+  priceType,
+  isCollectorMode = false,
+}) => {
   const atLeastOneSetToShow = totalResults > 0;
 
-  const setsTableColumns = useMemo(
-    () => [
-      {
-        accessor: 'id',
-        Header: 'MTG CB ID',
-      },
-      {
-        accessor: 'name',
-        Header: 'Name',
-        Cell: (cell) => {
-          const setName = cell?.row?.values?.name ?? 'Unknown Set';
-          const setSlug = cell?.row?.values?.slug ?? 'unknown-set';
-          return (
-            <Link href={`/browse/sets/${setSlug}`} variant="body2">
-              {setName}
-            </Link>
-          );
-        },
-        sortType: (a, b) => (a?.values?.set?.name ?? '').localeCompare(b?.values?.set?.name ?? ''),
-      },
-      {
-        accessor: 'code',
-        Header: 'Code',
-      },
-      {
-        accessor: 'cardCount',
-        Header: 'Card Count',
-      },
-      {
-        accessor: 'category',
-        Header: 'Category',
-      },
-      {
-        accessor: 'setType',
-        Header: 'Type',
-        Cell: ({ cell: { value } }) => titleCase(value),
-      },
-      {
-        accessor: 'releasedAt',
-        Header: 'Release Date',
-        Cell: ({ cell: { value } }) => value?.slice(0, 10),
-      },
-      {
-        accessor: 'slug',
-        Header: 'Slug',
-      },
-    ],
-    []
-  );
+  const setsTableColumns = useMemo(() => (isCollectorMode ? collectionTableColumns(priceType) : browseTableColumns(priceType)), [
+    costsToPurchase,
+    priceType,
+  ]);
 
-  const setsTableData = useMemo(() => sets, [sets]);
+  const setsTableData = useMemo(() => {
+    const setsWithCostsToPurchase = [];
+    if (costsToPurchase) {
+      sets?.forEach((set) => {
+        const costsToPurchaseInSet = costsToPurchase?.find((costs) => Number(costs.setId) === Number(set.id));
+        const setWithCostToPurchase = { ...set, costsToPurchaseInSet };
+        setsWithCostsToPurchase.push(setWithCostToPurchase);
+      });
+    } else {
+      return sets;
+    }
+    return setsWithCostsToPurchase;
+  }, [sets, costsToPurchase]);
 
   const setsTable = useTable(
     {
       columns: setsTableColumns,
       data: setsTableData,
-      initialState: { hiddenColumns: ['id', 'slug'] },
+      initialState: {
+        hiddenColumns: isCollectorMode ? collectionHiddenColumns : browseHiddenColumns,
+      },
     },
     useSortBy
   );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, allColumns, prepareRow } = setsTable;
 
-  const settingGroups = [
-    {
-      label: 'Show Columns',
-      type: 'tableFilters',
-      settings: [
-        {
-          key: 'id',
-          label: 'MTG CB ID',
-          getToggleHiddenProps: allColumns[0].getToggleHiddenProps,
-        },
-        {
-          key: 'name',
-          label: 'Name',
-          getToggleHiddenProps: allColumns[1].getToggleHiddenProps,
-        },
-        {
-          key: 'code',
-          label: 'Code',
-          getToggleHiddenProps: allColumns[2].getToggleHiddenProps,
-        },
-        {
-          key: 'cardCount',
-          label: 'Card Count',
-          getToggleHiddenProps: allColumns[3].getToggleHiddenProps,
-        },
-        {
-          key: 'category',
-          label: 'Category',
-          getToggleHiddenProps: allColumns[4].getToggleHiddenProps,
-        },
-        {
-          key: 'setType',
-          label: 'Type',
-          getToggleHiddenProps: allColumns[5].getToggleHiddenProps,
-        },
-        {
-          key: 'releasedAt_utc',
-          label: 'Release Date',
-          getToggleHiddenProps: allColumns[6].getToggleHiddenProps,
-        },
-      ],
-    },
-  ];
+  const settingGroups = isCollectorMode ? collectionSettingGroups(allColumns, priceType) : browseSettingGroups(allColumns, priceType);
 
   return atLeastOneSetToShow ? (
     <>
@@ -162,6 +103,7 @@ const SetTable: React.FC<SetTableProps> = ({ sets, first, skip, page, totalResul
                     {...column.getHeaderProps(
                       column.getSortByToggleProps({ title: '(Sorts only the current table page, not the entire search)' })
                     )}
+                    style={column.id === 'costsToPurchaseInSet.percentageCollected' ? { minWidth: '275px' } : {}}
                   >
                     {column.render('Header')} <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />
                   </StyledHeaderTableCell>

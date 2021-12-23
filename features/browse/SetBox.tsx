@@ -1,4 +1,6 @@
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { useState } from 'react';
@@ -9,7 +11,6 @@ import { PriceTypes } from './browseSlice';
 import { formatter } from './util/formatPrice';
 import titleCase from './util/titleCase';
 
-// TODO: Make a component for the set icon
 const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, isComplete = false, userId = null }) => (
   <SetBoxWrapper variant="outlined">
     <SetName>
@@ -18,26 +19,36 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
       </Link>
     </SetName>
     <Typography variant="body2" color="textSecondary" component="div">
-      {set.releasedAt?.slice(0, 10)}
-    </Typography>
-    <div style={{ padding: '5px' }}>
-      <i
-        className={`ss ss-${set.code.toLowerCase()} ss-5x ss-common ss-fw`}
-        style={{
-          // WebkitTextStroke: '1px #fff', // TODO: Use this style for a complete set so I can support ss-mythic ss-grad
-          textShadow: '-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff',
-        }}
-      />
-    </div>
-    <Typography variant="body2" color="textSecondary" component="div">
-      {set.cardCount ? `${set.cardCount} cards` : ''}
-    </Typography>
-    <Typography variant="body2" color="textSecondary" component="div">
       {set.category} Set
       {set.setType ? ` - ${titleCase(set.setType)}` : ''}
     </Typography>
+    <Typography variant="body2" color="textSecondary" component="div">
+      {set.releasedAt?.slice(0, 10)}
+    </Typography>
+    {costsToPurchaseInSet && userId ? (
+      <>
+        <SetIconWithRadialProgress percentage={costsToPurchaseInSet.percentageCollected} setCode={set.code} />
+        <SetStatisticsInCollection
+          cardCount={costsToPurchaseInSet?.cardsInSet}
+          totalCardsCollectedInSet={costsToPurchaseInSet?.totalCardsCollectedInSet}
+          uniquePrintingsCollectedInSet={costsToPurchaseInSet?.uniquePrintingsCollectedInSet}
+        />
+        <Typography variant="body2" color="textSecondary" component="div">
+          <em>Current set value: {formatter.format(costsToPurchaseInSet[priceType].totalValue)}</em>
+        </Typography>
+      </>
+    ) : (
+      <>
+        <SetIcon setCode={set.code} />
+        <SetStatistics cardCount={set.cardCount} />
+      </>
+    )}
     {costsToPurchaseInSet && (
       <div style={{ marginTop: '10px' }}>
+        <Typography variant="body2" color="textSecondary" component="div">
+          {userId ? 'Costs to complete:' : 'Costs to purchase:'}
+        </Typography>
+
         <table style={{ display: 'inline-block', textAlign: 'center' }}>
           <tbody>
             <tr>
@@ -223,6 +234,7 @@ export interface Set {
   sealedProductUrl: string;
   isDraftable: boolean;
   slug: string;
+  costsToPurchase?: SetSummary;
 }
 
 interface SetBoxProps {
@@ -238,6 +250,7 @@ export interface SetSummary {
   cardsInSet?: number;
   totalCardsCollectedInSet?: number;
   uniquePrintingsCollectedInSet?: number;
+  percentageCollected?: number;
   market: {
     oneOfEachCard: number;
     oneOfEachMythic: number;
@@ -291,5 +304,92 @@ export interface SetSummary {
     draftCube?: number;
   };
 }
+
+interface SetStatisticsProps {
+  cardCount?: number;
+}
+
+const SetStatistics: React.FC<SetStatisticsProps> = ({ cardCount }) => (
+  <Typography variant="body2" color="textSecondary" component="div">
+    {cardCount ? `${cardCount} cards` : ''}
+  </Typography>
+);
+
+interface SetStatisticsInCollectionProps {
+  cardCount?: number;
+  totalCardsCollectedInSet?: number;
+  uniquePrintingsCollectedInSet?: number;
+}
+
+const SetStatisticsInCollection: React.FC<SetStatisticsInCollectionProps> = ({
+  cardCount,
+  totalCardsCollectedInSet,
+  uniquePrintingsCollectedInSet,
+}) => (
+  <div>
+    <Typography variant="body2" color="textSecondary" component="div">
+      {uniquePrintingsCollectedInSet}/{cardCount}
+    </Typography>
+    <Typography variant="body2" color="textSecondary" component="div">
+      <em>({totalCardsCollectedInSet} total cards collected)</em>
+    </Typography>
+  </div>
+);
+
+interface SetIconWithRadialProgressProps {
+  setCode?: string;
+  percentage?: number;
+}
+
+const SetIconWithRadialProgress: React.FC<SetIconWithRadialProgressProps> = ({ percentage, setCode }) => (
+  <Box position="relative" display="inline-flex" style={{ padding: '5px' }}>
+    <CircularProgress variant="determinate" value={100} thickness={4.5} size={110} style={{ color: '#707070', position: 'absolute' }} />
+
+    <Box position="relative" display="inline-flex">
+      <CircularProgress
+        variant="determinate"
+        value={percentage}
+        thickness={4.5}
+        size={110}
+        color="secondary"
+        style={{ color: percentage < 100 ? '' : '#cd4809' }}
+      />
+      <Box top={0} left={0} bottom={0} right={0} position="absolute" display="flex" alignItems="center" justifyContent="center">
+        <SetIcon setCode={setCode} percentage={percentage} />
+      </Box>
+    </Box>
+  </Box>
+);
+
+interface SetIconProps {
+  setCode?: string;
+  percentage?: number;
+  showPercentage?: boolean;
+}
+
+const SetIcon: React.FC<SetIconProps> = ({ setCode = '', percentage = 0, showPercentage = false }) => (
+  <div style={{ padding: '5px', position: 'relative' }}>
+    <i
+      className={`ss ss-${setCode.toLowerCase()} ss-5x ss-common ss-fw ${percentage >= 100 ? 'ss-mythic ss-grad' : ''}`}
+      style={{
+        WebkitTextStroke: percentage >= 100 ? '2px #000' : '',
+        textShadow: percentage < 100 ? '-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff' : '',
+      }}
+    />
+    <div
+      style={{
+        position: 'absolute',
+        fontSize: '10px',
+        textAlign: 'center',
+        width: '100%',
+        bottom: '-17px',
+        left: '1px',
+        color: '#dddddd',
+      }}
+    >
+      {showPercentage ? percentage : ''}
+    </div>
+  </div>
+);
 
 export default SetBox;

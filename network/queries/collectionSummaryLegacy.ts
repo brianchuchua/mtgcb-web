@@ -5,11 +5,19 @@ const collectionSummaryLegacy = `query collectionSummaryLegacy($userId: Int!) {
     numberOfCardsInMagic
     totalCardsCollected
     uniquePrintingsCollected
+    percentageCollected
+    totalValue {
+      market
+      low
+      average
+      high
+    }
     collectionSummary { 
       setId
       cardsInSet
       totalCardsCollectedInSet
       uniquePrintingsCollectedInSet
+      percentageCollected
       market {
         oneOfEachCard
         oneOfEachMythic
@@ -22,6 +30,7 @@ const collectionSummaryLegacy = `query collectionSummaryLegacy($userId: Int!) {
         fourOfEachUncommon
         fourOfEachCommon
         draftCube
+        totalValue
       }
       low {
         oneOfEachCard
@@ -35,6 +44,7 @@ const collectionSummaryLegacy = `query collectionSummaryLegacy($userId: Int!) {
         fourOfEachUncommon
         fourOfEachCommon
         draftCube
+        totalValue
       }
       average {
         oneOfEachCard
@@ -48,6 +58,7 @@ const collectionSummaryLegacy = `query collectionSummaryLegacy($userId: Int!) {
         fourOfEachUncommon
         fourOfEachCommon
         draftCube
+        totalValue
       }
       high {
         oneOfEachCard
@@ -61,6 +72,7 @@ const collectionSummaryLegacy = `query collectionSummaryLegacy($userId: Int!) {
         fourOfEachUncommon
         fourOfEachCommon
         draftCube
+        totalValue
       }
     }
   }
