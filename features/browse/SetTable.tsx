@@ -28,6 +28,7 @@ interface SetTableProps {
   totalResults: number;
   priceType: PriceTypes;
   isCollectorMode?: boolean;
+  userId?: string;
 }
 
 const SetTable: React.FC<SetTableProps> = ({
@@ -42,10 +43,11 @@ const SetTable: React.FC<SetTableProps> = ({
   setPage,
   priceType,
   isCollectorMode = false,
+  userId = null,
 }) => {
   const atLeastOneSetToShow = totalResults > 0;
 
-  const setsTableColumns = useMemo(() => (isCollectorMode ? collectionTableColumns(priceType) : browseTableColumns(priceType)), [
+  const setsTableColumns = useMemo(() => (isCollectorMode ? collectionTableColumns(priceType, userId) : browseTableColumns(priceType)), [
     costsToPurchase,
     priceType,
   ]);

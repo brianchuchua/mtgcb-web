@@ -13,8 +13,10 @@ import {
   allSetNames,
   allSets,
   allSetsMeta,
+  collectionByCardIdLegacy,
   collectionSummaryLegacy,
   costToPurchaseAll,
+  setSummaryLegacy,
   setTypes as setTypesQuery,
   tcgplayerMassImportForUserLegacy,
 } from '../queries/index';
@@ -189,6 +191,32 @@ export const mtgcbApi = createApi({
         },
       }),
     }),
+    getSetSummaryLegacy: builder.query<AxiosResponse<SetSummaryLegacyResponse>, SetSummaryLegacyVariables>({
+      query: ({ setId, userId }) => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: setSummaryLegacy,
+          variables: {
+            setId: Number(setId),
+            userId: Number(userId),
+          },
+        },
+      }),
+    }),
+    getCollectionByCardIdLegacy: builder.query<AxiosResponse<CollectionByCardIdLegacyResponse>, CollectionByCardIdLegacyVariables>({
+      query: ({ cardIds, userId }) => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: collectionByCardIdLegacy,
+          variables: {
+            cardIds: cardIds.map((cardId) => Number(cardId)),
+            userId: Number(userId),
+          },
+        },
+      }),
+    }),
   }),
 });
 
@@ -201,8 +229,10 @@ export const {
   useGetAllCardsQuery,
   useGetAllCardsMetaQuery,
   useGetCostToPurchaseAllQuery,
+  useGetCollectionByCardIdLegacyQuery,
   useGetCollectionSummaryLegacyQuery,
   useGetTcgplayerMassImportForUserLegacyQuery,
+  useGetSetSummaryLegacyQuery,
 } = mtgcbApi;
 
 // TODO: Code split these types for readability
@@ -333,4 +363,52 @@ interface TcgplayerMassImportForUserLegacyResponse {
 interface TcgplayerMassImportForUserLegacyVariables {
   userId: string;
   setId: string;
+}
+
+interface SetSummaryLegacyResponse {
+  setSummaryLegacy: {
+    setId: number;
+    userId: number;
+    username: string;
+    cardsInSet: number;
+    totalCardsCollectedInSet: number;
+    uniquePrintingsCollectedInSet: number;
+    percentageCollected: number;
+    collection: [
+      {
+        cardID: number;
+        quantityReg: number;
+        quantityFoil: number;
+      }
+    ];
+    totalValue: {
+      market: number;
+      low: number;
+      average: number;
+      high: number;
+    };
+  };
+}
+
+interface SetSummaryLegacyVariables {
+  setId: string;
+  userId: string;
+}
+
+interface CollectionByCardIdLegacyVariables {
+  cardIds: number[];
+  userId: string;
+}
+
+interface CollectionByCardIdLegacyResponse {
+  collectionByCardIdLegacy: {
+    userId: number;
+    collection: [
+      {
+        cardID: number;
+        quantityReg: number;
+        quantityFoil: number;
+      }
+    ];
+  };
 }

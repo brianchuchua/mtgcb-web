@@ -1,6 +1,6 @@
 import Container from '@material-ui/core/Container';
 import { useRouter } from 'next/router';
-import { Collection } from '../../features/collections/Collection';
+import { Collection } from '../../../features/collections/Collection';
 
 const CollectionPage: React.FC = () => {
   const router = useRouter();

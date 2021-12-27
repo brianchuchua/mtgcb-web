@@ -4,7 +4,7 @@ import Link from '../../../components/Link';
 import { formatter } from '../util/formatPrice';
 import titleCase from '../util/titleCase';
 
-export const collectionTableColumns = (priceType) => [
+export const collectionTableColumns = (priceType, userId) => [
   {
     accessor: 'id',
     Header: 'MTG CB ID',
@@ -20,7 +20,7 @@ export const collectionTableColumns = (priceType) => [
       const setName = cell?.row?.values?.name ?? 'Unknown Set';
       const setSlug = cell?.row?.values?.slug ?? 'unknown-set';
       return (
-        <Link href={`/browse/sets/${setSlug}`} variant="body2">
+        <Link href={`/collections/${userId}/sets/${setSlug}`} variant="body2">
           {setName}
         </Link>
       );

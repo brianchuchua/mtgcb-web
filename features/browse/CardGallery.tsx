@@ -17,9 +17,29 @@ interface CardGalleryProps {
   setPage: Dispatch<SetStateAction<number>>;
   totalResults: number;
   priceType: PriceTypes;
+  collectionByCardId?: [
+    {
+      cardID: string;
+      quantityReg: number;
+      quantityFoil: number;
+    }
+  ];
+  userId?: string;
 }
 
-const CardGallery: React.FC<CardGalleryProps> = ({ cards, first, skip, page, totalResults, setSkip, setFirst, setPage, priceType }) => {
+const CardGallery: React.FC<CardGalleryProps> = ({
+  cards,
+  first,
+  skip,
+  page,
+  totalResults,
+  setSkip,
+  setFirst,
+  setPage,
+  priceType,
+  collectionByCardId,
+  userId,
+}) => {
   const [cardsPerRow, setCardsPerRow] = useState(4);
   const [galleryWidth, setGalleryWidth] = useState(100);
   const [nameIsVisible, setNameIsVisible] = useState(true);
@@ -83,6 +103,9 @@ const CardGallery: React.FC<CardGalleryProps> = ({ cards, first, skip, page, tot
               nameIsVisible={nameIsVisible}
               setIsVisible={setIsVisible}
               priceIsVisible={priceIsVisible}
+              userId={userId}
+              quantityReg={collectionByCardId?.[card.id]?.quantityReg ?? 0}
+              quantityFoil={collectionByCardId?.[card.id]?.quantityFoil ?? 0}
             />
           ))}
       </CardGalleryWrapper>

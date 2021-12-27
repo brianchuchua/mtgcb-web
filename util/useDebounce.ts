@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const searchFieldDebounceTimeMs = 200;
+export const searchFieldDebounceTimeMs = 350;
 
 const useDebounce = (value: string, delay: number): string => {
   const [debouncedValue, setDebouncedValue] = useState(value);

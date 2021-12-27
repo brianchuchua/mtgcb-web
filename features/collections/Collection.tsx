@@ -11,6 +11,7 @@ import {
   useGetAllCardsQuery,
   useGetAllSetsMetaQuery,
   useGetAllSetsQuery,
+  useGetCollectionByCardIdLegacyQuery,
   useGetCollectionSummaryLegacyQuery,
 } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
@@ -113,6 +114,25 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
   const cards = cardData?.data?.allCards;
   const totalResults = cardMetaData?.data?._allCardsMeta?.count;
 
+  const cardIds = cards?.map((card) => card.id);
+
+  const {
+    data: collectionByCardIdResponse,
+    isLoading: isCollectionByCardIdLoading,
+    error: collectionByCardIdError,
+  } = useGetCollectionByCardIdLegacyQuery(
+    {
+      userId,
+      cardIds,
+    },
+    { skip: cardIds == null }
+  );
+
+  const collectionByCardId = collectionByCardIdResponse?.data?.collectionByCardIdLegacy?.collection?.reduce((acc, curr) => {
+    acc[curr.cardID] = curr;
+    return acc;
+  }, {} as any); // eslint-disable-line @typescript-eslint/no-explicit-any
+
   const { data: allSetsResponse } = useGetAllSetsQuery({
     first: expansionsFirst,
     skip: expansionsSkip,
@@ -141,7 +161,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
         <Link href="/" variant="body2" color="inherit">
           MTG CB
         </Link>
-        <Link href="#" variant="body2" color="inherit">
+        <Link href={`/collections/${userId}`} variant="body2" color="inherit">
           Collections
         </Link>
         <Link href={`/collections/${userId}`} variant="body2" color="inherit">
@@ -161,6 +181,8 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
             setFirst={setFirst}
             setPage={setPage}
             priceType={priceType}
+            userId={userId}
+            collectionByCardId={collectionByCardId}
           />
         )}
         {viewSubject === 'cards' && viewMode === 'table' && (
@@ -174,6 +196,8 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
             setFirst={setFirst}
             setPage={setPage}
             priceType={priceType}
+            userId={userId}
+            collectionByCardId={collectionByCardId}
           />
         )}
         {viewSubject === 'sets' && viewMode === 'grid' && (
@@ -204,6 +228,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
             setPage={setExpansionsPage}
             priceType={priceType}
             isCollectorMode
+            userId={userId}
           />
         )}
       </ContentWrapper>

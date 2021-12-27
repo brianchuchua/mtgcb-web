@@ -14,7 +14,7 @@ import titleCase from './util/titleCase';
 const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, isComplete = false, userId = null }) => (
   <SetBoxWrapper variant="outlined">
     <SetName>
-      <Link href={`/browse/sets/${set.slug}`}>
+      <Link href={userId ? `/collections/${userId}/sets/${set.slug}` : `/browse/sets/${set.slug}`}>
         {set.name} ({set.code})
       </Link>
     </SetName>
@@ -367,7 +367,7 @@ interface SetIconProps {
   showPercentage?: boolean;
 }
 
-const SetIcon: React.FC<SetIconProps> = ({ setCode = '', percentage = 0, showPercentage = false }) => (
+export const SetIcon: React.FC<SetIconProps> = ({ setCode = '', percentage = 0, showPercentage = false }) => (
   <div style={{ padding: '5px', position: 'relative' }}>
     <i
       className={`ss ss-${setCode.toLowerCase()} ss-5x ss-common ss-fw ${percentage >= 100 ? 'ss-mythic ss-grad' : ''}`}

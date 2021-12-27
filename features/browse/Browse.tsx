@@ -123,7 +123,7 @@ export const Browse: React.FC = () => {
         <Link href="/" variant="body2" color="inherit">
           MTG CB
         </Link>
-        <Link href="#" variant="body2" color="inherit">
+        <Link href="/browse" variant="body2" color="inherit">
           Browse
         </Link>
       </Breadcrumbs>

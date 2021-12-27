@@ -4,8 +4,10 @@ import allSetNames from './allSetNames';
 import allSets from './allSets';
 import allSetsMeta from './allSetsMeta';
 import cardTypes from './cardTypes';
+import collectionByCardIdLegacy from './collectionByCardIdLegacy';
 import collectionSummaryLegacy from './collectionSummaryLegacy';
 import costToPurchaseAll from './costToPurchaseAll';
+import setSummaryLegacy from './setSummaryLegacy';
 import setTypes from './setTypes';
 import tcgplayerMassImport from './tcgplayerMassImport';
 import tcgplayerMassImportForUserLegacy from './tcgplayerMassImportForUserLegacy';
@@ -16,8 +18,10 @@ export {
   allSets,
   allSetsMeta,
   cardTypes,
+  collectionByCardIdLegacy,
   collectionSummaryLegacy,
   costToPurchaseAll,
+  setSummaryLegacy,
   setTypes,
   tcgplayerMassImport,
   tcgplayerMassImportForUserLegacy,

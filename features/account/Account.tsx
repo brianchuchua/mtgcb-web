@@ -43,7 +43,7 @@ export const Account: React.FC = () => {
         <Link href="/" variant="body2" color="inherit">
           MTG CB
         </Link>
-        <Link href="#" variant="body2" color="inherit">
+        <Link href="/account" variant="body2" color="inherit">
           Account
         </Link>
       </Breadcrumbs>

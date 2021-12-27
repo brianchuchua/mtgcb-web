@@ -7,6 +7,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { useState } from 'react';
 import { SearchForm } from '../../features/browse/forms';
 import CollectionSearchForm from '../../features/collections/forms/CollectionSearchForm';
+import { SetCollectionSearchForm } from '../../features/collections/sets/forms';
 import { SetSearchForm } from '../../features/sets/forms';
 import AccountMenu from './AccountMenu';
 import HeaderBar from './HeaderBar';
@@ -65,6 +66,7 @@ const Header: React.FC = () => {
           <SearchForm />
           <SetSearchForm />
           <CollectionSearchForm />
+          <SetCollectionSearchForm />
         </List>
       </Sidenav>
     </>

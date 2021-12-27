@@ -28,9 +28,31 @@ interface CardTableProps {
   setPage: Dispatch<SetStateAction<number>>;
   totalResults: number;
   priceType: PriceTypes;
+  collectionByCardId?: [
+    {
+      cardID: string;
+      quantityReg: number;
+      quantityFoil: number;
+    }
+  ];
+  userId?: string;
+  isShowingSingleSet?: boolean;
 }
 
-const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalResults, setSkip, setFirst, setPage, priceType }) => {
+const CardTable: React.FC<CardTableProps> = ({
+  cards,
+  first,
+  skip,
+  page,
+  totalResults,
+  setSkip,
+  setFirst,
+  setPage,
+  priceType,
+  userId,
+  collectionByCardId,
+  isShowingSingleSet = false,
+}) => {
   const atLeastOneCardToShow = totalResults > 0;
 
   const cardsTableColumns = useMemo(
@@ -47,7 +69,7 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
         accessor: 'set',
         Header: 'Set',
         Cell: ({ cell: { value } }) => (
-          <Link href={`/browse/sets/${value?.slug}`} variant="body2">
+          <Link href={userId ? `/collections/${userId}/sets/${value?.slug}` : `/browse/sets/${value?.slug}`} variant="body2">
             {value?.name ?? 'Unknown Set'}
           </Link>
         ),
@@ -108,6 +130,14 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
         Cell: ({ value }: any) => (value === '0' ? '' : value),
       },
       {
+        accessor: 'quantityReg',
+        Header: 'Qt.',
+      },
+      {
+        accessor: 'quantityFoil',
+        Header: 'Foil Qt.',
+      },
+      {
         accessor: 'market',
         Header: 'Price (Market)',
         Cell: ({ row: { original } }) => formatPrice(original, 'market'),
@@ -132,17 +162,44 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
         Header: 'Price (Foil)',
         Cell: ({ row: { original } }) => formatPrice(original, 'foil', false),
       },
+      {
+        accessor: 'tcgplayerId',
+        Header: 'TCGPlayer ID',
+      },
     ],
     []
   );
 
-  const cardsTableData = useMemo(() => cards, [cards]);
+  const cardsTableData = useMemo(() => {
+    if (collectionByCardId) {
+      return cards.map((card) => ({
+        ...card,
+        quantityReg: collectionByCardId?.[card.id]?.quantityReg ?? 0,
+        quantityFoil: collectionByCardId?.[card.id]?.quantityFoil ?? 0,
+      }));
+    }
+
+    return cards;
+  }, [cards, collectionByCardId]);
 
   const cardsTable = useTable(
     {
       columns: cardsTableColumns,
       data: cardsTableData,
-      initialState: { hiddenColumns: ['id', 'convertedManaCost', 'low', 'average', 'high'] },
+      initialState: {
+        hiddenColumns: [
+          'id',
+          'convertedManaCost',
+          'oracleTypeLine',
+          'low',
+          'average',
+          'high',
+          'tcgplayerId',
+          isShowingSingleSet ? 'set' : '',
+          userId ? '' : 'quantityReg',
+          userId ? '' : 'quantityFoil',
+        ],
+      }, // TODO: Hide quantities if not in collector mode, see other table
     },
     useSortBy
   );
@@ -195,29 +252,44 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
           getToggleHiddenProps: allColumns[7].getToggleHiddenProps,
         },
         {
+          key: 'quantityReg',
+          label: 'Quantity (Regular)',
+          getToggleHiddenProps: allColumns[8].getToggleHiddenProps,
+        },
+        {
+          key: 'quantityFoil',
+          label: 'Quantity (Foil)',
+          getToggleHiddenProps: allColumns[9].getToggleHiddenProps,
+        },
+        {
           key: 'price.market',
           label: 'Price (Market)',
-          getToggleHiddenProps: allColumns[8].getToggleHiddenProps,
+          getToggleHiddenProps: allColumns[10].getToggleHiddenProps,
         },
         {
           key: 'price.low',
           label: 'Price (Low)',
-          getToggleHiddenProps: allColumns[9].getToggleHiddenProps,
+          getToggleHiddenProps: allColumns[11].getToggleHiddenProps,
         },
         {
           key: 'price.average',
           label: 'Price (Avg)',
-          getToggleHiddenProps: allColumns[10].getToggleHiddenProps,
+          getToggleHiddenProps: allColumns[12].getToggleHiddenProps,
         },
         {
           key: 'price.high',
           label: 'Price (High)',
-          getToggleHiddenProps: allColumns[11].getToggleHiddenProps,
+          getToggleHiddenProps: allColumns[13].getToggleHiddenProps,
         },
         {
           key: 'price.foil',
           label: 'Price (Foil)',
-          getToggleHiddenProps: allColumns[12].getToggleHiddenProps,
+          getToggleHiddenProps: allColumns[14].getToggleHiddenProps,
+        },
+        {
+          key: 'tcgplayerId',
+          label: 'TCGPlayer ID',
+          getToggleHiddenProps: allColumns[15].getToggleHiddenProps,
         },
       ],
     },
@@ -271,7 +343,7 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
                                 card={{
                                   id: row.values.id,
                                   name: row.values.name,
-                                  set: { name: row.values['set.name'], slug: row.values['set.slug'] },
+                                  set: { name: row.values.set.name, slug: row.values.set.slug },
                                   low: row.values.low,
                                   average: row.values.average,
                                   high: row.values.high,
@@ -284,7 +356,15 @@ const CardTable: React.FC<CardTableProps> = ({ cards, first, skip, page, totalRe
                             </TooltipWrapper>
                           }
                         >
-                          <div>{cell.render('Cell')}</div>
+                          <div>
+                            <Link
+                              href={generateCardUrl(row.values.tcgplayerId, row.values.name, row.values)}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {cell.render('Cell')}
+                            </Link>
+                          </div>
                         </Tooltip>
                       )}
                       {cell.column.id === 'manaCost' && <ManaCost manaCost={row.values.manaCost} />}
@@ -315,4 +395,8 @@ const TooltipWrapper = styled.div({
   minWidth: '270px',
 });
 
+const generateCardUrl = (cardId: string | number, cardName: string, card: any) =>
+  cardId
+    ? `https://shop.tcgplayer.com/magic/product/productsearch?id=${cardId}&utm_campaign=affiliate&utm_medium=CTNBLDR&utm_source=CTNBLDR`
+    : `https://www.tcgplayer.com/search/magic/product?productLineName=magic&q=${cardName}&utm_campaign=affiliate&utm_medium=CTNBLDR&utm_source=CTNBLDR`;
 export default CardTable;
