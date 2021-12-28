@@ -3,101 +3,89 @@ import Typography from '@material-ui/core/Typography';
 
 const HomePage: React.FC = () => (
   <Container maxWidth="xl">
-    <Typography variant="h3" component="h1">
-      Hello, Multiverse!
+    <Typography variant="h3" component="h1" align="center">
+      MTG CB Limited Edition Alpha - Build v0.30.0 👷‍♂️
+    </Typography>
+    <Typography paragraph align="center">
+      <em>Last updated: 2021-12-27</em>
     </Typography>
     <br />
-
+    <br />
+    <Typography variant="h5" component="h2">
+      Introduction
+    </Typography>
+    <br />
     <Typography paragraph>
-      Show a live graph here. Something cool. Number of users or cards or value of cards. Lorem ipsum dolor sit amet, consectetur adipiscing
-      elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo
-      vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id
-      interdum velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit adipiscing bibendum
-      est ultricies integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-      Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget arcu dictum varius duis
-      at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
+      Thank you for joining the Limited Edition Alpha! This is a very early look at the alpha build, exclusive to patrons, which is updated
+      (and broken 🚧) regularly. Your feedback is highly valued and appreciated!
+    </Typography>
+    <Typography variant="h5" component="h2">
+      Getting Started
     </Typography>
     <Typography paragraph>
-      Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-      elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-      consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt ornare
-      massa eget egestas purus viverra accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-      et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean euismod elementum
-      nisi quis eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci
-      a.
+      <ul>
+        <li>
+          Check out the <u>Browse</u> section on the left, even if you're not logged in, to browse every card and set in Magic with a brand
+          new set of filters and viewing options.
+          <br />
+          🧙‍♂️
+          <Typography component="em" color="textSecondary">
+            "The previous MTG CB didn't let you browse cards outside the context of a collection so I think this is pretty neat!"
+          </Typography>
+          <br />
+          👷‍♂️
+          <Typography component="em" color="textSecondary">
+            "Caveat: Please focus your testing for tablets and desktop devices -- mobile views will be optimized as a separate pass."
+          </Typography>
+        </li>
+        <li>
+          Log in (top-right) using your existing MTG CB account and check out the <u>Collection</u> section to browse your collection.
+          <br />
+          🧙‍♂️
+          <Typography component="em" color="textSecondary">
+            "This is similar to the Browse experience but you additionally get stats about your collection."
+          </Typography>
+          <br />
+          👷‍♂️
+          <Typography component="em" color="textSecondary">
+            "Caveat: Collections are in <u>read-only mode</u> right now pending a database migration, but you'll soon be able to update them
+            here too. The updates will sync between both sites!"
+          </Typography>
+        </li>
+        <li>
+          🧙‍♂️
+          <Typography component="em" color="textSecondary">
+            "Some of the other pages are placeholders for now."
+          </Typography>
+          <br />
+          👷
+          <Typography component="em" color="textSecondary">
+            "What he said!"
+          </Typography>
+        </li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
+      Roadmap
     </Typography>
     <Typography paragraph>
-      Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-      elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-      consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt ornare
-      massa eget egestas purus viverra accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-      et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean euismod elementum
-      nisi quis eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci
-      a.
+      <ul>
+        <li>⏳ Limited Edition Alpha (In Progress): Feature parity with the current MTG CB. This is being added one piece at a time.</li>
+        <li>Limited Edition Beta (March): As many of the new MTG CB features that can be squeezed in here.</li>
+        <li>Unlimited Edition (June): Full release of the new MTG CB.</li>
+        <li>
+          Combo Winter (New): I need to invest some time in upgrading the libraries used by the new MTG CB. I'll do this after the main
+          release.
+        </li>
+        <li>Revised Edition (TBD): The v1.1 update adding a single new requested feature.</li>
+        <li>
+          Future Updates (TBD): Future updates will follow the same pattern of v1.2, v1.3, and so on, each adding a single new feature in
+          focused iterations.
+        </li>
+      </ul>
     </Typography>
-    <Typography paragraph>
-      Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-      elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-      consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt ornare
-      massa eget egestas purus viverra accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-      et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean euismod elementum
-      nisi quis eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci
-      a.
-    </Typography>
-    <Typography paragraph>
-      Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-      elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-      consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt ornare
-      massa eget egestas purus viverra accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-      et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean euismod elementum
-      nisi quis eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci
-      a.
-    </Typography>
-    <Typography paragraph>
-      Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-      elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-      consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt ornare
-      massa eget egestas purus viverra accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-      et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean euismod elementum
-      nisi quis eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci
-      a.
-    </Typography>
-    <Typography paragraph>
-      Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-      elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-      consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt ornare
-      massa eget egestas purus viverra accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-      et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean euismod elementum
-      nisi quis eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci
-      a.
-    </Typography>
-    <Typography paragraph>
-      Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-      elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-      consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt ornare
-      massa eget egestas purus viverra accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-      et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean euismod elementum
-      nisi quis eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci
-      a.
-    </Typography>
-    <Typography paragraph>
-      Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-      elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-      consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt ornare
-      massa eget egestas purus viverra accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-      et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean euismod elementum
-      nisi quis eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci
-      a.
-    </Typography>
-    <Typography paragraph>
-      Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-      elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-      consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt ornare
-      massa eget egestas purus viverra accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-      et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean euismod elementum
-      nisi quis eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci
-      a.
-    </Typography>
+    This page will eventually be a snazzy homepage, but for now, you can use it to see what's new in the latest build and what's coming up
+    next. Feel free to send me any feedback via Discord or Patreon! <em>There will be bugs. 🐛</em>
   </Container>
 );
 
