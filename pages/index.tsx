@@ -66,6 +66,14 @@ const HomePage: React.FC = () => (
       </ul>
     </Typography>
     <Typography variant="h5" component="h2">
+      Coming Up Next
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Disabling read-only mode so you can edit your collections here too.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       Roadmap
     </Typography>
     <Typography paragraph>
