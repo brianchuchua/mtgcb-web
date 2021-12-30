@@ -72,6 +72,7 @@ const HomePage: React.FC = () => (
       <ul>
         <li>Disabling read-only mode so you can edit your collections here too.</li>
         <li>Database data fixes -- sets missing release dates, cards missing sets, etc.</li>
+        <li>Collection-based filters and sorting</li>
         <li>The Great Subset Split™ and subset interfaces</li>
         <li>Bug fixes</li>
       </ul>
