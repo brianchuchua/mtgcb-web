@@ -4,10 +4,10 @@ import Typography from '@material-ui/core/Typography';
 const HomePage: React.FC = () => (
   <Container maxWidth="xl">
     <Typography variant="h3" component="h1" align="center">
-      MTG CB Limited Edition Alpha - Build v0.30.0 👷‍♂️
+      MTG CB Limited Edition Alpha - Build v0.31.0 👷‍♂️
     </Typography>
     <Typography paragraph align="center">
-      <em>Last updated: 2021-12-27</em>
+      <em>Last updated: 2021-12-29</em>
     </Typography>
     <br />
     <br />
@@ -71,6 +71,9 @@ const HomePage: React.FC = () => (
     <Typography paragraph>
       <ul>
         <li>Disabling read-only mode so you can edit your collections here too.</li>
+        <li>Database data fixes -- sets missing release dates, cards missing sets, etc.</li>
+        <li>The Great Subset Split™ and subset interfaces</li>
+        <li>Bug fixes</li>
       </ul>
     </Typography>
     <Typography variant="h5" component="h2">
@@ -78,8 +81,11 @@ const HomePage: React.FC = () => (
     </Typography>
     <Typography paragraph>
       <ul>
-        <li>⏳ Limited Edition Alpha (In Progress): Feature parity with the current MTG CB. This is being added one piece at a time.</li>
-        <li>Limited Edition Beta (March): As many of the new MTG CB features that can be squeezed in here.</li>
+        <li>⏳ Limited Edition Alpha (In Progress): Feature parity with the current MTG CB. This is being moved one piece at a time.</li>
+        <li>
+          Limited Edition Beta (March): As many of the new MTG CB features that can be squeezed in here (Tokens, Custom Collection Goals,
+          and Foreign Cards).
+        </li>
         <li>Unlimited Edition (June): Full release of the new MTG CB.</li>
         <li>
           Combo Winter (New): I need to invest some time in upgrading the libraries used by the new MTG CB. I'll do this after the main
