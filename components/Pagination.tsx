@@ -1,6 +1,6 @@
+import MuiPagination from '@material-ui/lab/Pagination';
 import { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
-import MuiPagination from '@material-ui/lab/Pagination';
 
 interface PaginationProps {
   total: number;

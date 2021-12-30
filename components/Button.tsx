@@ -1,6 +1,6 @@
-import styled from 'styled-components';
 import MuiButton, { ButtonProps as MuiButtonProps } from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import styled from 'styled-components';
 
 const ButtonWrapper = styled.div({
   position: 'relative',

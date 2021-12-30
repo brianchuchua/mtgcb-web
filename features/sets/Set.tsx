@@ -119,11 +119,11 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
       </Breadcrumbs>
       <div>
         {set ? (
-          <div style={{ textAlign: 'center' }}>
-            <Typography variant="h4" component="div">
-              {set?.name}
-            </Typography>
+          <div>
             <div style={{ textAlign: 'center' }}>
+              <Typography variant="h4" component="div">
+                {set?.name}
+              </Typography>
               <i
                 className={`ss ss-${set.code.toLowerCase()} ss-5x ss-common ss-fw`}
                 style={{

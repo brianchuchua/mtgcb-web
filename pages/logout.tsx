@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { logOut } from '../network/features/login';
 import { useAuthentication } from '../auth/AuthenticationProvider';
+import { logOut } from '../network/features/login';
 
 const logOutOfMtgCb = async () => {
   const response = {

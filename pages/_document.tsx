@@ -1,7 +1,7 @@
-import React from 'react';
-import NextDocument, { DocumentContext, DocumentInitialProps } from 'next/document';
-import { ServerStyleSheet as StyledComponentSheets } from 'styled-components';
 import { ServerStyleSheets as MaterialUiServerStyleSheets } from '@material-ui/core/styles';
+import NextDocument, { DocumentContext, DocumentInitialProps } from 'next/document';
+import React from 'react';
+import { ServerStyleSheet as StyledComponentSheets } from 'styled-components';
 
 export default class Document extends NextDocument {
   static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {

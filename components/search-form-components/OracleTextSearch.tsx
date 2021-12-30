@@ -29,7 +29,15 @@ const OracleTextSearch: React.FC<OracleTextSearchProps> = ({ oracleTextQuery, up
             placement="right"
             title={
               <>
-                The following special symbols are supported:
+                <div>
+                  You can search for exact matches within quotes:
+                  <br />
+                  Ex. "loses the game"
+                  <br />
+                  <br />
+                  The following special symbols are also supported:
+                </div>
+
                 <ul>
                   <li>
                     {`{T} – tap symbol`} <i className="ms ms-tap" />

@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
+import styled from 'styled-components';
 
 // Reason: https://github.com/mui-org/material-ui/issues/20373
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
