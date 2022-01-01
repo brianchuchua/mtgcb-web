@@ -6,6 +6,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import HomeIcon from '@material-ui/icons/Home';
 import LibraryIcon from '@material-ui/icons/ImportContacts';
+import ListAltIcon from '@material-ui/icons/ListAlt';
 import { useRouter } from 'next/router';
 import { useAuthentication } from '../../auth/AuthenticationProvider';
 import Link from '../Link';
@@ -47,13 +48,19 @@ const SidenavItems: React.FC = () => {
         <ListItemIcon>
           <BarChartIcon />
         </ListItemIcon>
-        <ListItemText primary="Goals" />
+        <ListItemText primary="Goals (In Development)" />
       </ListItem>
       <ListItem button>
         <ListItemIcon>
           <FavoriteIcon />
         </ListItemIcon>
-        <ListItemText primary="Patrons" />
+        <ListItemText primary="Patrons (In Development)" />
+      </ListItem>
+      <ListItem button component={Link} href="/changelog" color="inherit" selected={currentPath === '/changelog'}>
+        <ListItemIcon>
+          <ListAltIcon />
+        </ListItemIcon>
+        <ListItemText primary="Changelog" />
       </ListItem>
     </div>
   );

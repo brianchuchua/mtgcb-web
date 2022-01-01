@@ -57,7 +57,7 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   const [first, setFirst] = useState(50);
   const [page, setPage] = useState(1);
 
-  const { data: setData, isLoading: isSetLoading, error: setError } = useGetSetBySlugQuery({ slug: setSlug });
+  const { data: setData, isLoading: isSetLoading, error: setError } = useGetSetBySlugQuery({ slug: setSlug }, { skip: setSlug == null });
 
   const { data: cardData, isLoading: isCardDataLoading, error: cardError } = useGetAllCardsQuery({
     first,
@@ -107,7 +107,7 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
       setId: setData?.data?.allSets?.[0]?.id,
       userId,
     },
-    { skip: setId == null }
+    { skip: setId == null || userId == null }
   );
 
   const set = setData?.data?.allSets?.[0];
@@ -122,8 +122,6 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
     return acc;
   }, {} as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
-  console.log(setSummary); // TODO: It's a defaulting issue
-
   const collectionDetails = {
     setName: set?.name,
     setCode: set?.code,
@@ -133,7 +131,7 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
     totalCardsCollectedInSet: setSummary?.totalCardsCollectedInSet,
     uniquePrintingsCollectedInSet: setSummary?.uniquePrintingsCollectedInSet,
     percentageCollected: setSummary?.percentageCollected,
-    totalValue: setSummary?.totalValue, // TODO: Implement, probably needs to be added to the API
+    totalValue: setSummary?.totalValue,
   };
 
   // TODO: Add buy links here and come up with a good interface, similar to how Scryfall does card pages perhaps
