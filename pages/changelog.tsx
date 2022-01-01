@@ -13,6 +13,7 @@ const ChangelogPage: React.FC = () => (
       <ul>
         <li>Fixed a bug where unique cards completed weren't being calculated properly on the Set collection view.</li>
         <li>Made it clearer which pages are still not yet implemented.</li>
+        <li>Corrected percentage rounding issue (281/282 cards is 99%, not 100%)</li>
       </ul>
     </Typography>
   </Container>
