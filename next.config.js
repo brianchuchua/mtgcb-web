@@ -7,6 +7,16 @@ const { withSentryConfig } = require('@sentry/nextjs');
 
 const moduleExports = {
   // Your existing module.exports
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        destination: 'https://alpha.mtgcollectionbuilder.com/:path*',
+        has: [{ type: 'header', key: 'host', value: 'mtgcb-web.herokuapp.com' }],
+        permanent: true,
+      },
+    ];
+  },
 };
 
 const sentryWebpackPluginOptions = {
