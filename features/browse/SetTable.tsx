@@ -53,6 +53,9 @@ const SetTable: React.FC<SetTableProps> = ({
   ]);
 
   const setsTableData = useMemo(() => {
+    if (!sets) {
+      return [];
+    }
     const setsWithCostsToPurchase = [];
     if (costsToPurchase) {
       sets?.forEach((set) => {

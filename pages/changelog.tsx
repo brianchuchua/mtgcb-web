@@ -7,6 +7,17 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-01-02 (v0.32.1)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>
+          Fixed several client-side errors reported in Sentry.io -- viewing a table "too quickly" would cause a crash if data weren't
+          available for it yet.
+        </li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-01-01 (v0.32.0)
     </Typography>
     <Typography paragraph>

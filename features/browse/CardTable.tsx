@@ -171,6 +171,9 @@ const CardTable: React.FC<CardTableProps> = ({
   );
 
   const cardsTableData = useMemo(() => {
+    if (!cards) {
+      return [];
+    }
     if (collectionByCardId) {
       return cards.map((card) => ({
         ...card,
@@ -343,7 +346,7 @@ const CardTable: React.FC<CardTableProps> = ({
                                 card={{
                                   id: row.values.id,
                                   name: row.values.name,
-                                  set: { name: row.values.set.name, slug: row.values.set.slug },
+                                  set: { name: row.values.set?.name || '', slug: row.values.set?.slug || '' },
                                   low: row.values.low,
                                   average: row.values.average,
                                   high: row.values.high,
