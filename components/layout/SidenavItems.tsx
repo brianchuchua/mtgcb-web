@@ -14,7 +14,7 @@ import Link from '../Link';
 const SidenavItems: React.FC = () => {
   const router = useRouter();
   const { isAuthenticated, user } = useAuthentication();
-  const currentPath = router.pathname;
+  const currentPath = router.asPath;
 
   return (
     <div>
@@ -24,7 +24,7 @@ const SidenavItems: React.FC = () => {
         </ListItemIcon>
         <ListItemText primary="Home" />
       </ListItem>
-      <ListItem button component={Link} href="/browse" color="inherit" selected={currentPath === '/browse'}>
+      <ListItem button component={Link} href="/browse" color="inherit" selected={currentPath.startsWith('/browse')}>
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
@@ -36,7 +36,7 @@ const SidenavItems: React.FC = () => {
           component={Link}
           href={`/collections/${user.id}`}
           color="inherit"
-          selected={currentPath === `/collections/${user.id}`}
+          selected={currentPath?.startsWith(`/collections/${user.id}`)}
         >
           <ListItemIcon>
             <LibraryIcon />

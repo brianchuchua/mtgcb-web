@@ -114,6 +114,13 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
   const cards = cardData?.data?.allCards;
   const totalResults = cardMetaData?.data?._allCardsMeta?.count;
 
+  useEffect(() => {
+    if (skip > totalResults) {
+      setSkip(0);
+      setPage(1);
+    }
+  }, [skip, totalResults]);
+
   const cardIds = cards?.map((card) => card.id);
 
   const {
@@ -153,6 +160,13 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
   });
   const allSetsMeta = allSetsMetaResponse?.data?._allSetsMeta;
   const totalExpansionsResults = allSetsMeta?.count || 0;
+
+  useEffect(() => {
+    if (expansionsSkip > totalExpansionsResults) {
+      setExpansionsSkip(0);
+      setExpansionsPage(1);
+    }
+  }, [expansionsSkip, totalExpansionsResults]);
 
   // TODO: Make better Breadcrumbs component
   return (

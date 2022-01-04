@@ -7,6 +7,18 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-01-03 (v0.32.2)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>
+          Fixed a bug causing blank search results due to filters changing after the user navigated to a further page of a previous search.
+          The page will properly reset back to 1 now.
+        </li>
+        <li>Fixed a bug where the Collection menu item was not always active when viewing your collection.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-01-02 (v0.32.1)
     </Typography>
     <Typography paragraph>

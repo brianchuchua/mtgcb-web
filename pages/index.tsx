@@ -4,10 +4,10 @@ import Typography from '@material-ui/core/Typography';
 const HomePage: React.FC = () => (
   <Container maxWidth="xl">
     <Typography variant="h3" component="h1" align="center">
-      MTG CB Limited Edition Alpha - Build v0.32.1 👷‍♂️
+      MTG CB Limited Edition Alpha - Build v0.32.2 👷‍♂️
     </Typography>
     <Typography paragraph align="center">
-      <em>Last updated: 2022-01-02</em>
+      <em>Last updated: 2022-01-03</em>
     </Typography>
     <br />
     <br />
