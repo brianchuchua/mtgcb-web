@@ -2,7 +2,7 @@ import Drawer from '@material-ui/core/Drawer';
 import styled from 'styled-components';
 import { drawerWidth } from './constants';
 
-const Sidenav = styled(Drawer)(({ theme, open }) => {
+const Sidenav = styled(Drawer).withConfig({})(({ theme, open }) => {
   if (open) {
     return {
       whiteSpace: 'nowrap',

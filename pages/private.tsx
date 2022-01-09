@@ -7,9 +7,7 @@ const PrivatePage: React.FC = () => {
   const showLoadingSkeleton = isCheckingAuth || !isAuthenticated;
 
   return (
-    <Container component="main" maxWidth="xl">
-      {showLoadingSkeleton ? <div>Loading...</div> : <div>You are LOGGED IN if you can read this.</div>}
-    </Container>
+    <Container maxWidth="xl">{showLoadingSkeleton ? <div>Loading...</div> : <div>You are LOGGED IN if you can read this.</div>}</Container>
   );
 };
 

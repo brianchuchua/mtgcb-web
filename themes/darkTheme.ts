@@ -1,5 +1,6 @@
 import { indigo } from '@material-ui/core/colors';
 import { createMuiTheme } from '@material-ui/core/styles';
+import breakpoints from './breakpoints';
 
 const darkTheme = createMuiTheme({
   palette: {
@@ -10,6 +11,9 @@ const darkTheme = createMuiTheme({
       default: '#1c2025',
     },
     secondary: indigo,
+  },
+  breakpoints: {
+    values: breakpoints,
   },
   overrides: {
     MuiCssBaseline: {
@@ -32,6 +36,9 @@ const darkTheme = createMuiTheme({
         '*::-webkit-scrollbar-thumb': {
           'background-color': '#474c50',
           'border-radius': '10px',
+        },
+        '*::-webkit-scrollbar-corner': {
+          'background-color': '#474c50',
         },
       },
     },

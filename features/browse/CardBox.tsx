@@ -70,7 +70,7 @@ export interface Card {
 
 const CardWrapper = styled.div({
   display: 'inline-block',
-  fontSize: 'clamp(12px, 1.0vw, 22px)',
+  fontSize: 'clamp(16px, 1.0vw, 22px)',
   height: 'auto',
   minHeight: '50px',
   lineHeight: 1.43,

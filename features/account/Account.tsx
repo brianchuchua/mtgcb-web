@@ -1,11 +1,9 @@
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -14,7 +12,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useAuthentication } from '../../auth/AuthenticationProvider';
-import Link from '../../components/Link';
+import { ResponsiveContainer } from '../../components/layout/ResponsiveContainer';
 import { UserPasswordForm, UserProfileForm } from './forms';
 
 export const Account: React.FC = () => {
@@ -35,18 +33,8 @@ export const Account: React.FC = () => {
     return <></>;
   }
 
-  // TODO: Make a nice layout of breadcrumbs, container, and so on, like a normal page wrapper/layout
-  // TODO: Figure out proper max width and nesting
   return (
-    <Container maxWidth="lg">
-      <Breadcrumbs separator=">" aria-label="breadcrumb">
-        <Link href="/" variant="body2" color="inherit">
-          MTG CB
-        </Link>
-        <Link href="/account" variant="body2" color="inherit">
-          Account
-        </Link>
-      </Breadcrumbs>
+    <ResponsiveContainer maxWidth="xl">
       <Typography component="h1" variant="h5">
         Settings
       </Typography>
@@ -76,7 +64,7 @@ export const Account: React.FC = () => {
           </Card>
         </TabPanel>
       </ContentWrapper>
-    </Container>
+    </ResponsiveContainer>
   );
 };
 

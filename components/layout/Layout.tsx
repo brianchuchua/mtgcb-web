@@ -12,6 +12,7 @@ const ContentWrapper = styled.main(({ theme }) => ({
   overflow: 'auto',
   backgroundColor: theme.palette.background.default,
   padding: theme.spacing(3),
+  paddingTop: theme.spacing(1),
 }));
 
 const ToolbarSpacer = styled.div(({ theme }) => ({

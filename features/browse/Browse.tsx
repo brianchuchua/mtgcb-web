@@ -1,9 +1,7 @@
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Container from '@material-ui/core/Container';
 import { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import Link from '../../components/Link';
+import { ResponsiveContainer } from '../../components/layout/ResponsiveContainer';
 import {
   useGetAllCardsMetaQuery,
   useGetAllCardsQuery,
@@ -130,17 +128,8 @@ export const Browse: React.FC = () => {
     }
   }, [expansionsSkip, totalExpansionsResults]);
 
-  // TODO: Make better Breadcrumbs component
   return (
-    <Container maxWidth="xl">
-      <Breadcrumbs separator=">" aria-label="breadcrumb">
-        <Link href="/" variant="body2" color="inherit">
-          MTG CB
-        </Link>
-        <Link href="/browse" variant="body2" color="inherit">
-          Browse
-        </Link>
-      </Breadcrumbs>
+    <ResponsiveContainer maxWidth="xl">
       <ContentWrapper>
         {viewSubject === 'cards' && viewMode === 'grid' && (
           <MemoizedCardGallery
@@ -196,7 +185,7 @@ export const Browse: React.FC = () => {
           />
         )}
       </ContentWrapper>
-    </Container>
+    </ResponsiveContainer>
   );
 };
 

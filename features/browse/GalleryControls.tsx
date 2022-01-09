@@ -6,6 +6,8 @@ import { forceCheck as forceImagesToCheckIfTheyShouldLoad } from 'react-lazyload
 import styled from 'styled-components';
 import Pagination from '../../components/Pagination';
 import SettingsPanel, { SettingGroup } from '../../components/SettingsPanel';
+import breakpoints from '../../themes/breakpoints';
+import { useWindowDimensions } from '../../util';
 import { NumberOfItemsSelect } from './forms';
 
 type GalleryTypes = 'cards' | 'sets';
@@ -52,30 +54,46 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
     forceImagesToCheckIfTheyShouldLoad();
   }, [items, first, skip, page, totalResults]);
 
+  const { width } = useWindowDimensions();
+
+  useEffect(() => {
+    if (width < breakpoints.sm) {
+      handleCardsPerRowChange(1, setCardsPerRow);
+    } else {
+      handleCardsPerRowChange(4, setCardsPerRow);
+    }
+  }, [width]);
+
   return (
     atLeastOneItemToShow && (
       <>
-        <Grid
-          container
-          spacing={2}
-          justify="space-between"
-          alignItems="center"
-          style={{ marginBottom: galleryType === 'sets' ? '10px' : '0px' }}
-        >
-          <Grid item sm={3}>
-            <Typography>{`Showing ${startOfRange}-${endOfRange} of ${totalResults} ${typeLabel.toLowerCase()}`}</Typography>
-          </Grid>
-          <CenteredGrid item sm={6}>
-            <Pagination total={totalResults} page={page} first={first} setPage={setPage} setSkip={setSkip} />
-          </CenteredGrid>
-          <RightAlignedGrid container item sm={3} alignItems="center" justify="flex-end">
-            <Grid item>
-              <NumberOfItemsSelect first={first} setFirst={setFirst} label={typeLabel} />
-            </Grid>
-            <Grid item>{settingGroups.length > 0 && <SettingsPanel panelId="cardGallerySettings" settingGroups={settingGroups} />}</Grid>
-          </RightAlignedGrid>
-        </Grid>
-        {setGalleryWidth && setCardsPerRow && galleryType === 'cards' && (
+        <GalleryPaginationDesktop
+          settingGroups={settingGroups}
+          startOfRange={startOfRange}
+          endOfRange={endOfRange}
+          totalResults={totalResults}
+          typeLabel={typeLabel}
+          galleryType={galleryType}
+          page={page}
+          first={first}
+          setFirst={setFirst}
+          setPage={setPage}
+          setSkip={setSkip}
+        />
+        <GalleryPaginationMobile
+          settingGroups={settingGroups}
+          startOfRange={startOfRange}
+          endOfRange={endOfRange}
+          totalResults={totalResults}
+          typeLabel={typeLabel}
+          galleryType={galleryType}
+          page={page}
+          first={first}
+          setFirst={setFirst}
+          setPage={setPage}
+          setSkip={setSkip}
+        />
+        {setGalleryWidth && setCardsPerRow && width >= breakpoints.sm && galleryType === 'cards' && (
           <Grid container item sm={12} spacing={2} justify="space-between" alignItems="center">
             <Grid item sm={6}>
               <Typography id="card-size-slider">Card size</Typography>
@@ -115,7 +133,9 @@ const handleGalleryWidthChange = (value, setGalleryWidth) => {
 };
 
 const handleCardsPerRowChange = (value, setCardsPerRow) => {
-  setCardsPerRow(value);
+  if (setCardsPerRow) {
+    setCardsPerRow(value);
+  }
   forceImagesToCheckIfTheyShouldLoad();
 };
 
@@ -126,5 +146,115 @@ const CenteredGrid = styled(Grid)({
 const RightAlignedGrid = styled(Grid)({
   textAlign: 'right',
 });
+
+interface GalleryPaginationDesktopProps {
+  settingGroups: SettingGroup[];
+  startOfRange: number;
+  endOfRange: number;
+  totalResults: number;
+  typeLabel: string;
+  galleryType: GalleryTypes;
+  page: number;
+  first: number;
+  setFirst: Dispatch<SetStateAction<number>>;
+  setPage: Dispatch<SetStateAction<number>>;
+  setSkip: Dispatch<SetStateAction<number>>;
+}
+
+const GalleryPaginationDesktop: React.FC<GalleryPaginationDesktopProps> = ({
+  startOfRange,
+  endOfRange,
+  totalResults,
+  typeLabel,
+  galleryType,
+  settingGroups,
+  page,
+  first,
+  setFirst,
+  setPage,
+  setSkip,
+}) => (
+  <StyledDesktopOnlyGrid
+    container
+    spacing={2}
+    justify="center"
+    alignItems="center"
+    style={{ marginBottom: galleryType === 'sets' ? '10px' : '0px' }}
+  >
+    <Grid item lg={3}>
+      <Typography>{`Showing ${startOfRange}-${endOfRange} of ${totalResults} ${typeLabel.toLowerCase()}`}</Typography>
+    </Grid>
+    <CenteredGrid item lg={6}>
+      <Pagination total={totalResults} page={page} first={first} setPage={setPage} setSkip={setSkip} />
+    </CenteredGrid>
+    <RightAlignedGrid container item lg={3} alignItems="center" justify="flex-end">
+      <Grid item>
+        <NumberOfItemsSelect first={first} setFirst={setFirst} label={typeLabel} />
+      </Grid>
+      <Grid item>{settingGroups.length > 0 && <SettingsPanel panelId="cardGallerySettings" settingGroups={settingGroups} />}</Grid>
+    </RightAlignedGrid>
+  </StyledDesktopOnlyGrid>
+);
+
+const StyledDesktopOnlyGrid = styled(Grid)(({ theme }) => ({
+  [theme.breakpoints.down('md')]: {
+    display: 'none',
+  },
+}));
+
+const GalleryPaginationMobile: React.FC<GalleryPaginationDesktopProps> = ({
+  startOfRange,
+  endOfRange,
+  totalResults,
+  typeLabel,
+  galleryType,
+  settingGroups,
+  page,
+  first,
+  setFirst,
+  setPage,
+  setSkip,
+}) => (
+  <StyledMobileOnlyGrid
+    container
+    spacing={0}
+    justify="center"
+    alignItems="center"
+    style={{ marginBottom: galleryType === 'sets' ? '10px' : '0px' }}
+  >
+    <StyledGridCenteredIfSmall item sm={3} xs={12}>
+      <Typography>{`Showing ${startOfRange}-${endOfRange} of ${totalResults} ${typeLabel.toLowerCase()}`}</Typography>
+    </StyledGridCenteredIfSmall>
+    <StyledGridLeftAlignedIfSmall item sm={6} xs={9}>
+      <Pagination total={totalResults} page={page} first={first} setPage={setPage} setSkip={setSkip} />
+    </StyledGridLeftAlignedIfSmall>
+    <RightAlignedGrid container item sm={3} xs={3} alignItems="center" justify="flex-end">
+      <Grid item>
+        <NumberOfItemsSelect first={first} setFirst={setFirst} label={typeLabel} />
+      </Grid>
+      <Grid item>{settingGroups.length > 0 && <SettingsPanel panelId="cardGallerySettings" settingGroups={settingGroups} />}</Grid>
+    </RightAlignedGrid>
+  </StyledMobileOnlyGrid>
+);
+
+const StyledMobileOnlyGrid = styled(Grid)(({ theme }) => ({
+  [theme.breakpoints.up('lg')]: {
+    display: 'none',
+  },
+}));
+
+const StyledGridCenteredIfSmall = styled(Grid)(({ theme }) => ({
+  textAlign: 'left',
+  [theme.breakpoints.down('xs')]: {
+    textAlign: 'center',
+  },
+}));
+
+const StyledGridLeftAlignedIfSmall = styled(Grid)(({ theme }) => ({
+  textAlign: 'center',
+  [theme.breakpoints.down('xs')]: {
+    textAlign: 'left',
+  },
+}));
 
 export default GalleryControls;

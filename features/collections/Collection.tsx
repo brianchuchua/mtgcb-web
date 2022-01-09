@@ -1,11 +1,9 @@
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import Link from '../../components/Link';
+import { ResponsiveContainer } from '../../components/layout/ResponsiveContainer';
 import {
   useGetAllCardsMetaQuery,
   useGetAllCardsQuery,
@@ -168,20 +166,8 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
     }
   }, [expansionsSkip, totalExpansionsResults]);
 
-  // TODO: Make better Breadcrumbs component
   return (
-    <Container maxWidth="xl">
-      <Breadcrumbs separator=">" aria-label="breadcrumb">
-        <Link href="/" variant="body2" color="inherit">
-          MTG CB
-        </Link>
-        <Link href={`/collections/${userId}`} variant="body2" color="inherit">
-          Collections
-        </Link>
-        <Link href={`/collections/${userId}`} variant="body2" color="inherit">
-          {username}'s Collection
-        </Link>
-      </Breadcrumbs>
+    <ResponsiveContainer maxWidth="xl">
       {collectionDetails && <CollectionDetails collectionDetails={collectionDetails} />}
       <ContentWrapper>
         {viewSubject === 'cards' && viewMode === 'grid' && (
@@ -246,7 +232,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
           />
         )}
       </ContentWrapper>
-    </Container>
+    </ResponsiveContainer>
   );
 };
 
@@ -276,11 +262,15 @@ interface CollectionDetailsProps {
 
 const CollectionDetails: React.FC<CollectionDetailsProps> = ({ collectionDetails }) => (
   <CollectionDetailsWrapper>
-    <CollectionDetailsTitle variant="h3">{collectionDetails.username}'s Collection</CollectionDetailsTitle>
+    <StyledCollectionDetailsTitleDesktop variant="h3">{collectionDetails.username}'s Collection</StyledCollectionDetailsTitleDesktop>
+    <StyledCollectionDetailsTitleMobile variant="h5">{collectionDetails.username}'s Collection</StyledCollectionDetailsTitleMobile>
     <CollectionDetailsBody>
-      <Typography variant="h5" color="textSecondary" component="div">
+      <StyledCollectionDetailsTitleDesktop variant="h4" color="textSecondary">
         {collectionDetails.uniquePrintingsCollected}/{collectionDetails.numberOfCardsInMagic}
-      </Typography>
+      </StyledCollectionDetailsTitleDesktop>
+      <StyledCollectionDetailsTitleMobile variant="h6" color="textSecondary">
+        {collectionDetails.uniquePrintingsCollected}/{collectionDetails.numberOfCardsInMagic}
+      </StyledCollectionDetailsTitleMobile>
       <Typography variant="body2" color="textSecondary" component="div">
         <em>({collectionDetails.totalCardsCollected} total cards collected)</em>
       </Typography>
@@ -306,6 +296,18 @@ const CollectionDetailsWrapper = styled.div(() => ({
 const CollectionDetailsTitle = styled(Typography)({
   textAlign: 'center',
 });
+
+const StyledCollectionDetailsTitleMobile = styled(CollectionDetailsTitle)(({ theme }) => ({
+  [theme.breakpoints.up('lg')]: {
+    display: 'none',
+  },
+}));
+
+const StyledCollectionDetailsTitleDesktop = styled(CollectionDetailsTitle)(({ theme }) => ({
+  [theme.breakpoints.down('md')]: {
+    display: 'none',
+  },
+}));
 
 const CollectionDetailsBody = styled.div({
   textAlign: 'center',

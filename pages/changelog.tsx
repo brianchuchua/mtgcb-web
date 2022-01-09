@@ -1,10 +1,20 @@
-import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import { ResponsiveContainer } from '../components/layout/ResponsiveContainer';
 
 const ChangelogPage: React.FC = () => (
-  <Container maxWidth="xl">
+  <ResponsiveContainer maxWidth="xl">
     <Typography variant="h3" component="h1" align="center">
       Changelog
+    </Typography>
+    <Typography variant="h5" component="h2">
+      2022-01-09 (v0.33.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Made the site usable on mobile devices with a dozen related UI changes.</li>
+        <li>Reverted the browse view to default to viewing sets first.</li>
+        <li>Removed breadcrumbs from the top of pages -- they were just taking up space redundantly.</li>
+      </ul>
     </Typography>
     <Typography variant="h5" component="h2">
       2022-01-03 (v0.32.2)
@@ -42,7 +52,7 @@ const ChangelogPage: React.FC = () => (
         <li>Set up a redirect from the old domain to the new domain.</li>
       </ul>
     </Typography>
-  </Container>
+  </ResponsiveContainer>
 );
 
 export default ChangelogPage;

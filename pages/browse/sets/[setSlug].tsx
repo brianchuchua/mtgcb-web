@@ -1,5 +1,5 @@
-import Container from '@material-ui/core/Container';
 import { useRouter } from 'next/router';
+import { ResponsiveContainer } from '../../../components/layout/ResponsiveContainer';
 import { Set } from '../../../features/sets/Set';
 
 const SetPage: React.FC = () => {
@@ -8,9 +8,9 @@ const SetPage: React.FC = () => {
   const slug = setSlug as string;
 
   return (
-    <Container component="main" maxWidth="xl">
+    <ResponsiveContainer maxWidth="xl">
       <Set setSlug={slug} />
-    </Container>
+    </ResponsiveContainer>
   );
 };
 

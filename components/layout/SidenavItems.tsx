@@ -11,20 +11,36 @@ import { useRouter } from 'next/router';
 import { useAuthentication } from '../../auth/AuthenticationProvider';
 import Link from '../Link';
 
-const SidenavItems: React.FC = () => {
+interface SidenavItemsProps {
+  handleSidenavClose?: () => void;
+}
+
+const SidenavItems: React.FC<SidenavItemsProps> = ({ handleSidenavClose = null }) => {
   const router = useRouter();
   const { isAuthenticated, user } = useAuthentication();
   const currentPath = router.asPath;
 
+  const handleRouteChange = () => {
+    if (handleSidenavClose) {
+      handleSidenavClose();
+    }
+  };
   return (
     <div>
-      <ListItem button component={Link} href="/" color="inherit" selected={currentPath === '/'}>
+      <ListItem button component={Link} href="/" color="inherit" selected={currentPath === '/'} onClick={handleRouteChange}>
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
         <ListItemText primary="Home" />
       </ListItem>
-      <ListItem button component={Link} href="/browse" color="inherit" selected={currentPath.startsWith('/browse')}>
+      <ListItem
+        button
+        component={Link}
+        href="/browse"
+        color="inherit"
+        selected={currentPath.startsWith('/browse')}
+        onClick={handleRouteChange}
+      >
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
@@ -37,6 +53,7 @@ const SidenavItems: React.FC = () => {
           href={`/collections/${user.id}`}
           color="inherit"
           selected={currentPath?.startsWith(`/collections/${user.id}`)}
+          onClick={handleRouteChange}
         >
           <ListItemIcon>
             <LibraryIcon />
@@ -56,7 +73,14 @@ const SidenavItems: React.FC = () => {
         </ListItemIcon>
         <ListItemText primary="Patrons (In Development)" />
       </ListItem>
-      <ListItem button component={Link} href="/changelog" color="inherit" selected={currentPath === '/changelog'}>
+      <ListItem
+        button
+        component={Link}
+        href="/changelog"
+        color="inherit"
+        selected={currentPath === '/changelog'}
+        onClick={handleRouteChange}
+      >
         <ListItemIcon>
           <ListAltIcon />
         </ListItemIcon>

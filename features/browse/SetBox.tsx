@@ -57,7 +57,7 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
                   <em>1x all cards: {formatter.format(costsToPurchaseInSet[priceType].oneOfEachCard)}</em>
                 </Typography>
               </td>
-              <td>
+              <td style={{ minWidth: '145px' }}>
                 <BuyThisButton setId={set.id} count={1} countType="all" userId={userId} />
                 <BuyThisButton setId={set.id} count={4} countType="all" userId={userId} />
               </td>

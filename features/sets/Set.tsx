@@ -1,9 +1,7 @@
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Link from '../../components/Link';
+import { ResponsiveContainer } from '../../components/layout/ResponsiveContainer';
 import { useGetAllCardsMetaQuery, useGetAllCardsQuery, useGetSetBySlugQuery } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
 import useDebounce, { searchFieldDebounceTimeMs } from '../../util/useDebounce';
@@ -100,23 +98,8 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
   // TODO: Add buy links here and come up with a good interface, similar to how Scryfall does card pages perhaps
   // TODO: Add charts/analysis/something cool here
 
-  // TODO: Make better Breadcrumbs component
   return (
-    <Container maxWidth="xl">
-      <Breadcrumbs separator=">" aria-label="breadcrumb">
-        <Link href="/" variant="body2" color="inherit">
-          MTG CB
-        </Link>
-        <Link href="/browse" variant="body2" color="inherit">
-          Browse
-        </Link>
-        <Link href="/browse" variant="body2" color="inherit">
-          Sets
-        </Link>
-        <Link href={`/browse/sets/${set?.slug}`} variant="body2" color="inherit">
-          {set?.name ?? 'Unknown Set'}
-        </Link>
-      </Breadcrumbs>
+    <ResponsiveContainer maxWidth="xl">
       <div>
         {set ? (
           <div>
@@ -175,7 +158,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
           <p>No set found</p>
         )}
       </div>
-    </Container>
+    </ResponsiveContainer>
   );
 };
 

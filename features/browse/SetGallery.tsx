@@ -71,9 +71,24 @@ interface SetGalleryWrapperProps {
   galleryWidth: number;
 }
 
-const SetGalleryWrapper = styled.div<SetGalleryWrapperProps>(({ setsPerRow = 4, galleryWidth = 100 }) => ({
+const SetGalleryWrapper = styled.div<SetGalleryWrapperProps>(({ setsPerRow = 4, galleryWidth = 100, theme }) => ({
   display: 'grid',
-  gridTemplateColumns: `repeat(${setsPerRow}, minmax(0, 1fr))`,
+  [theme.breakpoints.up('xs')]: {
+    gridTemplateColumns: `repeat(1, minmax(0, 1fr))`,
+  },
+  [theme.breakpoints.up('sm')]: {
+    gridTemplateColumns: `repeat(2, minmax(0, 1fr))`,
+  },
+  [theme.breakpoints.up('md')]: {
+    gridTemplateColumns: `repeat(2, minmax(0, 1fr))`,
+  },
+  [theme.breakpoints.up('lg')]: {
+    gridTemplateColumns: `repeat(3, minmax(0, 1fr))`,
+  },
+  [theme.breakpoints.up('xl')]: {
+    gridTemplateColumns: `repeat(${setsPerRow}, minmax(0, 1fr))`,
+  },
+
   gridTemplateRows: 'repeat(3, 1fr)',
   gap: `10px 10px`,
   width: `${galleryWidth}%`,

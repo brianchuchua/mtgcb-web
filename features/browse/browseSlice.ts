@@ -20,7 +20,7 @@ const initialState: BrowseState = {
   sortBy: 'releasedAt',
   sortByDirection: 'ASC',
   isFormVisible: false,
-  viewSubject: 'cards',
+  viewSubject: 'sets',
   viewMode: 'grid',
   priceType: 'market',
   expansionSearchQuery: '',

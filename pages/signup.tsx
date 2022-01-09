@@ -1,10 +1,10 @@
-import Container from '@material-ui/core/Container';
+import { ResponsiveContainer } from '../components/layout/ResponsiveContainer';
 import { SignUp } from '../features/signup/SignUp';
 
 const SignUpPage: React.FC = () => (
-  <Container component="main" maxWidth="xs">
+  <ResponsiveContainer maxWidth="xs">
     <SignUp />
-  </Container>
+  </ResponsiveContainer>
 );
 
 export default SignUpPage;

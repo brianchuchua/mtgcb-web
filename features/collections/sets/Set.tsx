@@ -1,10 +1,9 @@
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { ResponsiveContainer } from '../../../components/layout/ResponsiveContainer';
 import Link from '../../../components/Link';
 import {
   useGetAllCardsMetaQuery,
@@ -136,26 +135,8 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
 
   // TODO: Add buy links here and come up with a good interface, similar to how Scryfall does card pages perhaps
 
-  // TODO: Make better Breadcrumbs component
   return (
-    <Container maxWidth="xl">
-      <Breadcrumbs separator=">" aria-label="breadcrumb">
-        <Link href="/" variant="body2" color="inherit">
-          MTG CB
-        </Link>
-        <Link href={`/collections/${userId}`} variant="body2" color="inherit">
-          Collections
-        </Link>
-        <Link href={`/collections/${userId}`} variant="body2" color="inherit">
-          {username}'s Collection
-        </Link>
-        <Link href={`/collections/${userId}`} variant="body2" color="inherit">
-          Sets
-        </Link>
-        <Link href={`/collections/${userId}/sets/${set?.slug}`} variant="body2" color="inherit">
-          {set?.name ?? 'Unknown Set'}
-        </Link>
-      </Breadcrumbs>
+    <ResponsiveContainer maxWidth="xl">
       <>
         {set ? (
           <>
@@ -196,7 +177,7 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
           <p>No set found</p>
         )}
       </>
-    </Container>
+    </ResponsiveContainer>
   );
 };
 
@@ -225,7 +206,8 @@ interface SetCollectionDetails {
 
 const SetCollectionDetails: React.FC<SetCollectionDetails> = ({ collectionDetails, priceType }) => (
   <CollectionDetailsWrapper>
-    <CollectionDetailsTitle variant="h4">{collectionDetails.setName}</CollectionDetailsTitle>
+    <StyledCollectionDetailsTitleDesktop variant="h3">{collectionDetails.setName}</StyledCollectionDetailsTitleDesktop>
+    <StyledCollectionDetailsTitleMobile variant="h5">{collectionDetails.setName}</StyledCollectionDetailsTitleMobile>
     <CollectionDetailsSubtitle variant="body1" color="textSecondary">
       <em>
         <Link href={`/collections/${collectionDetails.userId}`} color="inherit">
@@ -290,3 +272,15 @@ const LinearProgressLabel = styled.div({
   margin: '0 auto',
   width: '100%',
 });
+
+const StyledCollectionDetailsTitleMobile = styled(CollectionDetailsTitle)(({ theme }) => ({
+  [theme.breakpoints.up('lg')]: {
+    display: 'none',
+  },
+}));
+
+const StyledCollectionDetailsTitleDesktop = styled(CollectionDetailsTitle)(({ theme }) => ({
+  [theme.breakpoints.down('md')]: {
+    display: 'none',
+  },
+}));

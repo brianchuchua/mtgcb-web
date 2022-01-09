@@ -5,6 +5,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useState } from 'react';
+import styled from 'styled-components';
 import { SearchForm } from '../../features/browse/forms';
 import CollectionSearchForm from '../../features/collections/forms/CollectionSearchForm';
 import { SetCollectionSearchForm } from '../../features/collections/sets/forms';
@@ -20,11 +21,15 @@ import SidenavItems from './SidenavItems';
 
 const Header: React.FC = () => {
   const [isSidenavOpen, setSidenavOpen] = useState(true);
+  const [isMobileSidenavOpen, setMobileSidenavOpen] = useState(false);
+
   const handleSidenavOpen = () => {
     setSidenavOpen(true);
+    setMobileSidenavOpen(true);
   };
   const handleSidenavClose = () => {
     setSidenavOpen(false);
+    setMobileSidenavOpen(false);
   };
 
   const [menuAnchorElement, setMenuAnchorElement] = useState<null | HTMLElement>(null);
@@ -37,7 +42,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <HeaderBar position="fixed" color="inherit" open={isSidenavOpen}>
+      <HeaderBarMobile position="fixed" color="inherit" open={isMobileSidenavOpen}>
         <HeaderToolbar>
           <HeaderSidenavButton edge="start" color="inherit" aria-label="Open Side Menu" onClick={handleSidenavOpen}>
             <MenuIcon />
@@ -50,8 +55,40 @@ const Header: React.FC = () => {
           </IconButton>
           <AccountMenu anchorEl={menuAnchorElement} handleClose={handleAccountMenuClose} />
         </HeaderToolbar>
-      </HeaderBar>
-      <Sidenav variant="permanent" open={isSidenavOpen} anchor="left">
+      </HeaderBarMobile>
+      <HeaderBarDesktop position="fixed" color="inherit" open={isSidenavOpen}>
+        <HeaderToolbar>
+          <HeaderSidenavButton edge="start" color="inherit" aria-label="Open Side Menu" onClick={handleSidenavOpen}>
+            <MenuIcon />
+          </HeaderSidenavButton>
+          <HeaderTitle component="h1" variant="h6" color="inherit" noWrap>
+            MTG Collection Builder
+          </HeaderTitle>
+          <IconButton color="inherit" aria-controls="account-menu" aria-haspopup="true" onClick={handleAccountMenuOpen}>
+            <AccountCircleIcon />
+          </IconButton>
+          <AccountMenu anchorEl={menuAnchorElement} handleClose={handleAccountMenuClose} />
+        </HeaderToolbar>
+      </HeaderBarDesktop>
+      <SidenavMobile variant="temporary" open={isMobileSidenavOpen} anchor="left" disableScrollLock>
+        <SidenavHeader>
+          <IconButton onClick={handleSidenavClose}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </SidenavHeader>
+        <Divider />
+        <List>
+          <SidenavItems handleSidenavClose={handleSidenavClose} />
+        </List>
+        <Divider />
+        <List>
+          <SearchForm />
+          <SetSearchForm />
+          <CollectionSearchForm />
+          <SetCollectionSearchForm />
+        </List>
+      </SidenavMobile>
+      <SidenavDesktop variant="permanent" open={isSidenavOpen} anchor="left" disableScrollLock>
         <SidenavHeader>
           <IconButton onClick={handleSidenavClose}>
             <ChevronLeftIcon />
@@ -68,9 +105,33 @@ const Header: React.FC = () => {
           <CollectionSearchForm />
           <SetCollectionSearchForm />
         </List>
-      </Sidenav>
+      </SidenavDesktop>
     </>
   );
 };
+
+const SidenavMobile = styled(Sidenav)(({ theme }) => ({
+  [theme.breakpoints.up('sm')]: {
+    display: 'none',
+  },
+}));
+
+const SidenavDesktop = styled(Sidenav)(({ theme }) => ({
+  [theme.breakpoints.down('xs')]: {
+    display: 'none',
+  },
+}));
+
+const HeaderBarMobile = styled(HeaderBar)(({ theme }) => ({
+  [theme.breakpoints.up('sm')]: {
+    display: 'none',
+  },
+}));
+
+const HeaderBarDesktop = styled(HeaderBar)(({ theme }) => ({
+  [theme.breakpoints.down('xs')]: {
+    display: 'none',
+  },
+}));
 
 export default Header;

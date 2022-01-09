@@ -1,10 +1,10 @@
-import Container from '@material-ui/core/Container';
+import { ResponsiveContainer } from '../components/layout/ResponsiveContainer';
 import { Login } from '../features/login/Login';
 
 const LoginPage: React.FC = () => (
-  <Container component="main" maxWidth="xs">
+  <ResponsiveContainer maxWidth="xs">
     <Login />
-  </Container>
+  </ResponsiveContainer>
 );
 
 export default LoginPage;

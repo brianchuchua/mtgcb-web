@@ -1,13 +1,13 @@
-import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import { ResponsiveContainer } from '../components/layout/ResponsiveContainer';
 
 const HomePage: React.FC = () => (
-  <Container maxWidth="xl">
+  <ResponsiveContainer maxWidth="xl">
     <Typography variant="h3" component="h1" align="center">
-      MTG CB Limited Edition Alpha - Build v0.32.2 👷‍♂️
+      MTG CB Limited Edition Alpha - Build v0.33.0 👷‍♂️
     </Typography>
     <Typography paragraph align="center">
-      <em>Last updated: 2022-01-03</em>
+      <em>Last updated: 2022-01-09</em>
     </Typography>
     <br />
     <br />
@@ -101,7 +101,7 @@ const HomePage: React.FC = () => (
     </Typography>
     This page will eventually be a snazzy homepage, but for now, you can use it to see what's new in the latest build and what's coming up
     next. Feel free to send me any feedback via Discord or Patreon! <em>There will be bugs. 🐛</em>
-  </Container>
+  </ResponsiveContainer>
 );
 
 export default HomePage;

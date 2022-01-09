@@ -1,10 +1,10 @@
-import Container from '@material-ui/core/Container';
+import { ResponsiveContainer } from '../components/layout/ResponsiveContainer';
 import { Browse } from '../features/browse/Browse';
 
 const BrowsePage: React.FC = () => (
-  <Container component="main" maxWidth="xl">
+  <ResponsiveContainer maxWidth="xl">
     <Browse />
-  </Container>
+  </ResponsiveContainer>
 );
 
 export default BrowsePage;

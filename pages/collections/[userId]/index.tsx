@@ -1,5 +1,5 @@
-import Container from '@material-ui/core/Container';
 import { useRouter } from 'next/router';
+import { ResponsiveContainer } from '../../../components/layout/ResponsiveContainer';
 import { Collection } from '../../../features/collections/Collection';
 
 const CollectionPage: React.FC = () => {
@@ -7,11 +7,7 @@ const CollectionPage: React.FC = () => {
   const { userId } = router.query;
   const id = userId as string;
 
-  return (
-    <Container component="main" maxWidth="xl">
-      {id ? <Collection userId={id} /> : <></>}
-    </Container>
-  );
+  return <ResponsiveContainer maxWidth="xl">{id ? <Collection userId={id} /> : <></>}</ResponsiveContainer>;
 };
 
 export default CollectionPage;
