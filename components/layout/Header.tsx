@@ -70,7 +70,7 @@ const Header: React.FC = () => {
           <AccountMenu anchorEl={menuAnchorElement} handleClose={handleAccountMenuClose} />
         </HeaderToolbar>
       </HeaderBarDesktop>
-      <SidenavMobile variant="temporary" open={isMobileSidenavOpen} anchor="left" disableScrollLock>
+      <SidenavMobile variant="temporary" open={isMobileSidenavOpen} anchor="left" disableScrollLock onClose={handleSidenavClose}>
         <SidenavHeader>
           <IconButton onClick={handleSidenavClose}>
             <ChevronLeftIcon />

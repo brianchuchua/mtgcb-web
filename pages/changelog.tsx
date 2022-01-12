@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-01-11 (v0.34.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Allowed mobile sidenav to close when the user presses the region outside of it.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-01-09 (v0.33.0)
     </Typography>
     <Typography paragraph>

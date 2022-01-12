@@ -4,10 +4,10 @@ import { ResponsiveContainer } from '../components/layout/ResponsiveContainer';
 const HomePage: React.FC = () => (
   <ResponsiveContainer maxWidth="xl">
     <Typography variant="h3" component="h1" align="center">
-      MTG CB Limited Edition Alpha - Build v0.33.0 👷‍♂️
+      MTG CB Limited Edition Alpha - Build v0.34.0 👷‍♂️
     </Typography>
     <Typography paragraph align="center">
-      <em>Last updated: 2022-01-09</em>
+      <em>Last updated: 2022-01-11</em>
     </Typography>
     <br />
     <br />
