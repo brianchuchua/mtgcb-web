@@ -14,8 +14,9 @@ import styled from 'styled-components';
 import Link from '../../components/Link';
 import ManaCost, { sortByManaSymbols } from '../../components/symbols/mana/ManaCost';
 import { PriceTypes } from './browseSlice';
-import CardBox, { Card } from './CardBox';
+import CardBox from './CardBox';
 import GalleryControls from './GalleryControls';
+import { Card } from './types/Card';
 import { formatPrice } from './util/formatPrice';
 
 interface CardTableProps {

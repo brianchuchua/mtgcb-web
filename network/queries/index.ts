@@ -11,6 +11,7 @@ import setSummaryLegacy from './setSummaryLegacy';
 import setTypes from './setTypes';
 import tcgplayerMassImport from './tcgplayerMassImport';
 import tcgplayerMassImportForUserLegacy from './tcgplayerMassImportForUserLegacy';
+import updateCollectionLegacy from './updateCollectionLegacy';
 
 export {
   allCards,
@@ -26,4 +27,5 @@ export {
   tcgplayerMassImport,
   tcgplayerMassImportForUserLegacy,
   allSetNames,
+  updateCollectionLegacy,
 };

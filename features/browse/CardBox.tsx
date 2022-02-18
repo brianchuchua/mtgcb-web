@@ -4,6 +4,8 @@ import Link from '../../components/Link';
 import { PriceTypes } from './browseSlice';
 import CardPrice from './CardPrice';
 import CardQuantity from './CardQuantity';
+import CardQuantitySelector from './CardQuantitySelector';
+import { Card } from './types/Card';
 
 interface CardBoxProps {
   card: Card;
@@ -12,6 +14,7 @@ interface CardBoxProps {
   priceIsVisible?: boolean;
   setIsVisible?: boolean;
   userId?: string;
+  loggedInUserId?: string;
   quantityReg?: number;
   quantityFoil?: number;
 }
@@ -23,10 +26,12 @@ const CardBox: React.FC<CardBoxProps> = ({
   priceIsVisible = true,
   setIsVisible = true,
   userId = null,
+  loggedInUserId = null,
   quantityReg = null,
   quantityFoil = null,
 }) => {
   const imageUrl = `https://mtgcb-images.s3.amazonaws.com/cards/images/normal/${card.id}.jpg`;
+
   return (
     <CardWrapper key={card.id}>
       <CardAttributes>
@@ -35,13 +40,22 @@ const CardBox: React.FC<CardBoxProps> = ({
             <CardImage alt={card.name} title={card.name} src={imageUrl} set={card.set?.name} />
           </a>
         </LazyLoad>
+        {userId && userId === loggedInUserId && (
+          <CardQuantitySelector
+            cardId={card.id}
+            quantityReg={quantityReg}
+            quantityFoil={quantityFoil}
+            userId={userId}
+            setId={card.set?.id}
+          />
+        )}
         {nameIsVisible && <CardName title={card.name}>{card.name}</CardName>}
         {setIsVisible && (
           <Link href={userId ? `/collections/${userId}/sets/${card.set?.slug}` : `/browse/sets/${card.set?.slug}`}>
             <CardSet title={card.set?.name}>{card.set?.name ?? 'Unknown Set'}</CardSet>
           </Link>
         )}
-        {userId && <CardQuantity quantityReg={quantityReg} quantityFoil={quantityFoil} />}
+        {userId && userId !== loggedInUserId && <CardQuantity quantityReg={quantityReg} quantityFoil={quantityFoil} />}
         {priceIsVisible && <CardPrice card={card} priceType={priceType} />}
       </CardAttributes>
     </CardWrapper>
@@ -52,21 +66,6 @@ const generateCardUrl = (cardId: string | number, cardName) =>
   cardId
     ? `https://shop.tcgplayer.com/magic/product/productsearch?id=${cardId}&utm_campaign=affiliate&utm_medium=CTNBLDR&utm_source=CTNBLDR`
     : `https://www.tcgplayer.com/search/magic/product?productLineName=magic&q=${cardName}&utm_campaign=affiliate&utm_medium=CTNBLDR&utm_source=CTNBLDR`;
-
-export interface Card {
-  id: number;
-  name: string;
-  set: {
-    name: string;
-    slug: string;
-  };
-  low: number;
-  average: number;
-  high: number;
-  market: number;
-  foil: number;
-  tcgplayerId: number;
-}
 
 const CardWrapper = styled.div({
   display: 'inline-block',

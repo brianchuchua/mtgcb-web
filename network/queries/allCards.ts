@@ -3,6 +3,7 @@ const allCards = `query allCards($first: Int = 50, $skip: Int = 0, $sortBy: [Sor
     id
     name
     set:setId {
+      id
       name
       slug
     }

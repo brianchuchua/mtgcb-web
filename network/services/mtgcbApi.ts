@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { SetCategory, SetType } from '../../features/browse/browseSlice';
-import { Card } from '../../features/browse/CardBox';
 import { SetSummary } from '../../features/browse/SetBox';
+import { Card } from '../../features/browse/types/Card';
 import buildBrowseFilter from '../features/browse/buildBrowseFilter';
 import buildBrowseExpansionFilter from '../features/browse/buildExpansionBrowseFilter';
 import { SearchOptions } from '../features/browse/commonTypes';
@@ -19,16 +19,13 @@ import {
   setSummaryLegacy,
   setTypes as setTypesQuery,
   tcgplayerMassImportForUserLegacy,
+  updateCollectionLegacy,
 } from '../queries/index';
-
-// TODO: Use tagging system to set up dependencies of when calls caches need to be busted
-// Example: When a user's collection is updated, need to repull some of the collection analysis calls
-// TODO: Evaluate caching strategy for all queries
 
 export const mtgcbApi = createApi({
   reducerPath: 'mtgcb',
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_MTGCB_API_URL }),
-  tagTypes: ['Sets', 'Cards'],
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_MTGCB_API_URL, credentials: 'include' }),
+  tagTypes: ['Sets', 'Cards', 'Collections'],
   endpoints: (builder) => ({
     getAllSets: builder.query<AxiosResponse<SetResponse>, AllSetsVariables>({
       query: ({ first, skip, name, sortBy = 'releasedAt', sortByDirection = 'DESC', setTypes, setCategories }) => ({
@@ -173,6 +170,7 @@ export const mtgcbApi = createApi({
           },
         },
       }),
+      providesTags: ['Collections'],
     }),
     getTcgplayerMassImportForUserLegacy: builder.query<
       // TODO: Remove me, not a great fit for redux query
@@ -203,6 +201,7 @@ export const mtgcbApi = createApi({
           },
         },
       }),
+      providesTags: ['Collections'],
     }),
     getCollectionByCardIdLegacy: builder.query<AxiosResponse<CollectionByCardIdLegacyResponse>, CollectionByCardIdLegacyVariables>({
       query: ({ cardIds, userId }) => ({
@@ -216,6 +215,44 @@ export const mtgcbApi = createApi({
           },
         },
       }),
+      providesTags: ['Collections'],
+    }),
+    updateCollectionLegacy: builder.mutation<AxiosResponse<UpdateCollectionLegacyResponse>, UpdateCollectionLegacyVariables>({
+      query: ({ cardId, mode, quantityRegular, quantityFoil, setId, userId }) => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: updateCollectionLegacy,
+          variables: {
+            cardId: Number(cardId),
+            mode,
+            quantityRegular: Number(quantityRegular),
+            quantityFoil: Number(quantityFoil),
+          },
+        },
+      }),
+      invalidatesTags: ['Collections'],
+      async onQueryStarted({ cardId, mode, quantityRegular, quantityFoil, setId, userId }, { dispatch, queryFulfilled }) {
+        dispatch(
+          mtgcbApi.util.updateQueryData('getSetSummaryLegacy', { setId, userId }, (draft) => {
+            const card = draft.data.setSummaryLegacy.collection.find((c) => Number(c.cardID) === Number(cardId));
+            if (card) {
+              if (mode === 'set') {
+                card.quantityReg = quantityRegular;
+                card.quantityFoil = quantityFoil;
+              } else {
+                card.quantityReg += quantityRegular;
+                card.quantityFoil += quantityFoil;
+              }
+            }
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          dispatch(mtgcbApi.util.invalidateTags(['Collections']));
+        }
+      },
     }),
   }),
 });
@@ -233,6 +270,7 @@ export const {
   useGetCollectionSummaryLegacyQuery,
   useGetTcgplayerMassImportForUserLegacyQuery,
   useGetSetSummaryLegacyQuery,
+  useUpdateCollectionLegacyMutation,
 } = mtgcbApi;
 
 // TODO: Code split these types for readability
@@ -410,5 +448,22 @@ interface CollectionByCardIdLegacyResponse {
         quantityFoil: number;
       }
     ];
+  };
+}
+
+interface UpdateCollectionLegacyVariables {
+  cardId: number;
+  mode: 'set' | 'increment';
+  quantityRegular: number;
+  quantityFoil: number;
+  setId: string;
+  userId: string;
+}
+
+interface UpdateCollectionLegacyResponse {
+  updateCollectionLegacy: {
+    cardId: number;
+    quantityRegular: number;
+    quantityFoil: number;
   };
 }

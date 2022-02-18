@@ -2,9 +2,11 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { Dispatch, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
+import { useAuthentication } from '../../auth/AuthenticationProvider';
 import { PriceTypes } from './browseSlice';
-import CardBox, { Card } from './CardBox';
+import CardBox from './CardBox';
 import GalleryControls from './GalleryControls';
+import { Card } from './types/Card';
 
 interface CardGalleryProps {
   cards: Card[];
@@ -45,6 +47,8 @@ const CardGallery: React.FC<CardGalleryProps> = ({
   const [nameIsVisible, setNameIsVisible] = useState(true);
   const [setIsVisible, setSetIsVisible] = useState(true);
   const [priceIsVisible, setPriceIsVisible] = useState(true);
+
+  const { user } = useAuthentication();
 
   const atLeastOneCardToShow = totalResults > 0;
 
@@ -104,6 +108,7 @@ const CardGallery: React.FC<CardGalleryProps> = ({
               setIsVisible={setIsVisible}
               priceIsVisible={priceIsVisible}
               userId={userId}
+              loggedInUserId={user?.id}
               quantityReg={collectionByCardId?.[card.id]?.quantityReg ?? 0}
               quantityFoil={collectionByCardId?.[card.id]?.quantityFoil ?? 0}
             />
