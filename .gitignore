@@ -35,3 +35,5 @@ debug.log
 .vercel
 # Sentry
 .sentryclirc
+
+tsconfig.tsbuildinfo
