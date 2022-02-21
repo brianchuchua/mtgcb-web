@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-02-20 (v0.35.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Added ability to update collection in set and collection views.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-01-11 (v0.34.0)
     </Typography>
     <Typography paragraph>

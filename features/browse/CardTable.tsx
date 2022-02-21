@@ -11,10 +11,12 @@ import Typography from '@material-ui/core/Typography';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 import { useSortBy, useTable } from 'react-table';
 import styled from 'styled-components';
+import { useAuthentication } from '../../auth/AuthenticationProvider';
 import Link from '../../components/Link';
 import ManaCost, { sortByManaSymbols } from '../../components/symbols/mana/ManaCost';
 import { PriceTypes } from './browseSlice';
 import CardBox from './CardBox';
+import CardQuantitySelector from './CardQuantitySelector';
 import GalleryControls from './GalleryControls';
 import { Card } from './types/Card';
 import { formatPrice } from './util/formatPrice';
@@ -56,6 +58,9 @@ const CardTable: React.FC<CardTableProps> = ({
 }) => {
   const atLeastOneCardToShow = totalResults > 0;
 
+  const { user } = useAuthentication();
+  const loggedInUser = user?.id;
+
   const cardsTableColumns = useMemo(
     () => [
       {
@@ -75,6 +80,40 @@ const CardTable: React.FC<CardTableProps> = ({
           </Link>
         ),
         sortType: (a, b) => (a?.values?.set?.name ?? '').localeCompare(b?.values?.set?.name ?? ''),
+      },
+      {
+        accessor: 'quantityReg',
+        Header: 'Qt.',
+        Cell: ({ cell: { value, row } }) =>
+          loggedInUser === userId ? (
+            <CardQuantitySelector
+              cardId={row?.values?.id}
+              userId={userId}
+              setId={row?.values?.set?.id}
+              quantityReg={value}
+              quantityFoil={row?.values?.quantityFoil}
+              renderFoil={false}
+            />
+          ) : (
+            value ?? ''
+          ),
+      },
+      {
+        accessor: 'quantityFoil',
+        Header: 'Foil Qt.',
+        Cell: ({ cell: { value, row } }) =>
+          loggedInUser === userId ? (
+            <CardQuantitySelector
+              cardId={row?.values?.id}
+              userId={userId}
+              setId={row?.values?.set?.id}
+              quantityReg={row?.values?.quantityReg}
+              quantityFoil={value}
+              renderNormal={false}
+            />
+          ) : (
+            value ?? ''
+          ),
       },
       {
         accessor: 'rarity',
@@ -129,14 +168,6 @@ const CardTable: React.FC<CardTableProps> = ({
         sortMethod: (a: string, b: string) => String(a).localeCompare(String(b), 'en', { numeric: true, sensitivity: 'base' }),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         Cell: ({ value }: any) => (value === '0' ? '' : value),
-      },
-      {
-        accessor: 'quantityReg',
-        Header: 'Qt.',
-      },
-      {
-        accessor: 'quantityFoil',
-        Header: 'Foil Qt.',
       },
       {
         accessor: 'market',
@@ -231,38 +262,38 @@ const CardTable: React.FC<CardTableProps> = ({
           getToggleHiddenProps: allColumns[2].getToggleHiddenProps,
         },
         {
-          key: 'rarity',
-          label: 'Rarity',
-          getToggleHiddenProps: allColumns[3].getToggleHiddenProps,
-        },
-        {
-          key: 'manaCost',
-          label: 'Mana Cost',
-          getToggleHiddenProps: allColumns[4].getToggleHiddenProps,
-        },
-        {
-          key: 'convertedManaCost',
-          label: 'CMC',
-          getToggleHiddenProps: allColumns[5].getToggleHiddenProps,
-        },
-        {
-          key: 'oracleTypeLine',
-          label: 'Type',
-          getToggleHiddenProps: allColumns[6].getToggleHiddenProps,
-        },
-        {
-          key: 'collectorNumber',
-          label: 'Collector Number',
-          getToggleHiddenProps: allColumns[7].getToggleHiddenProps,
-        },
-        {
           key: 'quantityReg',
           label: 'Quantity (Regular)',
-          getToggleHiddenProps: allColumns[8].getToggleHiddenProps,
+          getToggleHiddenProps: allColumns[3].getToggleHiddenProps,
         },
         {
           key: 'quantityFoil',
           label: 'Quantity (Foil)',
+          getToggleHiddenProps: allColumns[4].getToggleHiddenProps,
+        },
+        {
+          key: 'rarity',
+          label: 'Rarity',
+          getToggleHiddenProps: allColumns[5].getToggleHiddenProps,
+        },
+        {
+          key: 'manaCost',
+          label: 'Mana Cost',
+          getToggleHiddenProps: allColumns[6].getToggleHiddenProps,
+        },
+        {
+          key: 'convertedManaCost',
+          label: 'CMC',
+          getToggleHiddenProps: allColumns[7].getToggleHiddenProps,
+        },
+        {
+          key: 'oracleTypeLine',
+          label: 'Type',
+          getToggleHiddenProps: allColumns[8].getToggleHiddenProps,
+        },
+        {
+          key: 'collectorNumber',
+          label: 'Collector Number',
           getToggleHiddenProps: allColumns[9].getToggleHiddenProps,
         },
         {
@@ -347,7 +378,7 @@ const CardTable: React.FC<CardTableProps> = ({
                                 card={{
                                   id: row.values.id,
                                   name: row.values.name,
-                                  set: { name: row.values.set?.name || '', slug: row.values.set?.slug || '' },
+                                  set: { name: row.values.set?.name || '', slug: row.values.set?.slug || '', id: row.values.set?.id || '' },
                                   low: row.values.low,
                                   average: row.values.average,
                                   high: row.values.high,

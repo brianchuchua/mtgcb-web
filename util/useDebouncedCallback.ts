@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 import debounce from 'lodash.debounce';
 import { useCallback, useRef } from 'react';
 
@@ -7,7 +9,7 @@ const useDebouncedCallback = (callback, delay) => {
   const callbackRef = useRef();
   callbackRef.current = callback;
   return useCallback(
-    debounce((...args) => callbackRef.current(...args), delay),
+    debounce((...args) => callbackRef?.current?.(...args), delay), // https://github.com/microsoft/TypeScript/issues/41371
     []
   );
 };

@@ -12,6 +12,8 @@ interface CardQuantitySelectorProps {
   quantityFoil?: number;
   userId: string;
   setId: string;
+  renderNormal?: boolean;
+  renderFoil?: boolean;
 }
 
 const CardQuantitySelector: React.FC<CardQuantitySelectorProps> = ({
@@ -20,6 +22,8 @@ const CardQuantitySelector: React.FC<CardQuantitySelectorProps> = ({
   quantityFoil = 0,
   userId = null,
   setId = null,
+  renderNormal = true,
+  renderFoil = true,
 }) => {
   const [isUpdatingNormal, setIsUpdatingNormal] = useState(false);
   const [isUpdatingFoil, setIsUpdatingFoil] = useState(false);
@@ -108,54 +112,58 @@ const CardQuantitySelector: React.FC<CardQuantitySelectorProps> = ({
 
   return (
     <Grid container spacing={1}>
-      <Grid item xs={6}>
-        <TextField
-          type="number"
-          label={
-            <>
-              <>Regular</>{' '}
+      {renderNormal && (
+        <Grid item xs={renderNormal && renderFoil ? 6 : 12}>
+          <TextField
+            type="number"
+            label={
               <>
-                {isLoading && isUpdatingNormal && isLoadingSlowly && <CircularProgress size={10} variant="indeterminate" />}
-                {isSuccess && wasUpdatingNormal && <CheckCircleIcon style={{ fontSize: '12px' }} />}
+                <>Regular</>{' '}
+                <>
+                  {isLoading && isUpdatingNormal && isLoadingSlowly && <CircularProgress size={10} variant="indeterminate" />}
+                  {isSuccess && wasUpdatingNormal && <CheckCircleIcon style={{ fontSize: '12px' }} />}
+                </>
               </>
-            </>
-          }
-          value={internalQuantityReg}
-          onChange={handleQuantityRegChange}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          margin="dense"
-          variant="outlined"
-          fullWidth
-          error={isError && isUpdatingNormal}
-          helperText={isError && isUpdatingNormal && 'Error -- please try again'}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <TextField
-          type="number"
-          label={
-            <>
-              <>Foils</>{' '}
+            }
+            value={internalQuantityReg}
+            onChange={handleQuantityRegChange}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            margin="dense"
+            variant="outlined"
+            fullWidth
+            error={isError && isUpdatingNormal}
+            helperText={isError && isUpdatingNormal && 'Error -- please try again'}
+          />
+        </Grid>
+      )}
+      {renderFoil && (
+        <Grid item xs={renderNormal && renderFoil ? 6 : 12}>
+          <TextField
+            type="number"
+            label={
               <>
-                {isLoading && isUpdatingFoil && isLoadingSlowly && <CircularProgress size={10} variant="indeterminate" />}
-                {isSuccess && wasUpdatingFoil && <CheckCircleIcon style={{ fontSize: '12px' }} />}
+                <>Foils</>{' '}
+                <>
+                  {isLoading && isUpdatingFoil && isLoadingSlowly && <CircularProgress size={10} variant="indeterminate" />}
+                  {isSuccess && wasUpdatingFoil && <CheckCircleIcon style={{ fontSize: '12px' }} />}
+                </>
               </>
-            </>
-          }
-          value={internalQuantityFoil}
-          onChange={handleQuantityFoilChange}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          margin="dense"
-          variant="outlined"
-          fullWidth
-          error={isError && isUpdatingFoil}
-          helperText={isError && isUpdatingFoil && 'Error -- please try again'}
-        />
-      </Grid>
+            }
+            value={internalQuantityFoil}
+            onChange={handleQuantityFoilChange}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            margin="dense"
+            variant="outlined"
+            fullWidth
+            error={isError && isUpdatingFoil}
+            helperText={isError && isUpdatingFoil && 'Error -- please try again'}
+          />
+        </Grid>
+      )}
     </Grid>
   );
 };

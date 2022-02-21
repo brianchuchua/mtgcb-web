@@ -236,9 +236,20 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
   );
 };
 
+const tableShouldNotRerender = (prevProps, nextProps) => {
+  if (prevProps?.cards?.length !== nextProps?.cards?.length) {
+    return false;
+  }
+  const idsAreTheSame = prevProps?.cards?.map((card) => card.id).join(',') === nextProps?.cards?.map((card) => card.id).join(',');
+  if (idsAreTheSame) {
+    return true;
+  }
+  return false;
+};
+
 const MemoizedSetGallery = memo(SetGallery);
 const MemoizedCardGallery = memo(CardGallery);
-const MemoizedCardTable = memo(CardTable);
+const MemoizedCardTable = memo(CardTable, tableShouldNotRerender);
 const MemoizedSetTable = memo(SetTable);
 
 const ContentWrapper = styled.div(({ theme }) => ({

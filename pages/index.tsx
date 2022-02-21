@@ -4,10 +4,10 @@ import { ResponsiveContainer } from '../components/layout/ResponsiveContainer';
 const HomePage: React.FC = () => (
   <ResponsiveContainer maxWidth="xl">
     <Typography variant="h3" component="h1" align="center">
-      MTG CB Limited Edition Alpha - Build v0.34.0 👷‍♂️
+      MTG CB Limited Edition Alpha - Build v0.35.0 👷‍♂️
     </Typography>
     <Typography paragraph align="center">
-      <em>Last updated: 2022-01-11</em>
+      <em>Last updated: 2022-02-20</em>
     </Typography>
     <br />
     <br />
@@ -27,41 +27,6 @@ const HomePage: React.FC = () => (
         <li>
           Check out the <u>Browse</u> section on the left, even if you're not logged in, to browse every card and set in Magic with a brand
           new set of filters and viewing options.
-          <br />
-          🧙‍♂️
-          <Typography component="em" color="textSecondary">
-            "The previous MTG CB didn't let you browse cards outside the context of a collection so I think this is pretty neat!"
-          </Typography>
-          <br />
-          👷‍♂️
-          <Typography component="em" color="textSecondary">
-            "Caveat: Please focus your testing for tablets and desktop devices -- mobile views will be optimized as a separate pass."
-          </Typography>
-        </li>
-        <li>
-          Log in (top-right) using your existing MTG CB account and check out the <u>Collection</u> section to browse your collection.
-          <br />
-          🧙‍♂️
-          <Typography component="em" color="textSecondary">
-            "This is similar to the Browse experience but you additionally get stats about your collection."
-          </Typography>
-          <br />
-          👷‍♂️
-          <Typography component="em" color="textSecondary">
-            "Caveat: Collections are in <u>read-only mode</u> right now pending a database migration, but you'll soon be able to update them
-            here too. The updates will sync between both sites!"
-          </Typography>
-        </li>
-        <li>
-          🧙‍♂️
-          <Typography component="em" color="textSecondary">
-            "Some of the other pages are placeholders for now."
-          </Typography>
-          <br />
-          👷
-          <Typography component="em" color="textSecondary">
-            "What he said!"
-          </Typography>
         </li>
       </ul>
     </Typography>
@@ -70,7 +35,7 @@ const HomePage: React.FC = () => (
     </Typography>
     <Typography paragraph>
       <ul>
-        <li>Disabling read-only mode so you can edit your collections here too.</li>
+        <li>Add Cards page</li>
         <li>Database data fixes -- sets missing release dates, cards missing sets, etc.</li>
         <li>Collection-based filters and sorting</li>
         <li>The Great Subset Split™ and subset interfaces</li>
