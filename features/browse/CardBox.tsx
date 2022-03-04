@@ -1,3 +1,4 @@
+import Grid from '@material-ui/core/Grid';
 import LazyLoad from 'react-lazyload';
 import styled from 'styled-components';
 import Link from '../../components/Link';
@@ -41,13 +42,20 @@ const CardBox: React.FC<CardBoxProps> = ({
           </a>
         </LazyLoad>
         {userId && userId === loggedInUserId && (
-          <CardQuantitySelector
-            cardId={card.id}
-            quantityReg={quantityReg}
-            quantityFoil={quantityFoil}
-            userId={userId}
-            setId={card.set?.id}
-          />
+          <Grid container spacing={1}>
+            <Grid item xs={6}>
+              <CardQuantitySelector cardId={card.id} quantityReg={quantityReg} userId={userId} setId={card.set?.id} renderFoil={false} />
+            </Grid>
+            <Grid item xs={6}>
+              <CardQuantitySelector
+                cardId={card.id}
+                quantityFoil={quantityFoil}
+                userId={userId}
+                setId={card.set?.id}
+                renderNormal={false}
+              />
+            </Grid>
+          </Grid>
         )}
         {nameIsVisible && <CardName title={card.name}>{card.name}</CardName>}
         {setIsVisible && (

@@ -22,6 +22,8 @@ import {
   updateCollectionLegacy,
 } from '../queries/index';
 
+// TODO: Split these up for readability
+
 export const mtgcbApi = createApi({
   reducerPath: 'mtgcb',
   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_MTGCB_API_URL, credentials: 'include' }),
@@ -238,11 +240,19 @@ export const mtgcbApi = createApi({
             const card = draft.data.setSummaryLegacy.collection.find((c) => Number(c.cardID) === Number(cardId));
             if (card) {
               if (mode === 'set') {
-                card.quantityReg = quantityRegular;
-                card.quantityFoil = quantityFoil;
+                if (quantityRegular !== null && quantityRegular !== undefined) {
+                  card.quantityReg = quantityRegular;
+                }
+                if (quantityFoil !== null && quantityFoil !== undefined) {
+                  card.quantityFoil = quantityFoil;
+                }
               } else {
-                card.quantityReg += quantityRegular;
-                card.quantityFoil += quantityFoil;
+                if (quantityRegular !== null && quantityRegular !== undefined) {
+                  card.quantityReg += quantityRegular;
+                }
+                if (quantityFoil !== null && quantityFoil !== undefined) {
+                  card.quantityFoil += quantityFoil;
+                }
               }
             }
           })

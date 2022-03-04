@@ -8,8 +8,8 @@ import useDebouncedCallback, { cardQuantityInputFieldDebounceTimeMs } from '../.
 
 interface CardQuantitySelectorProps {
   cardId: number;
-  quantityReg?: number;
-  quantityFoil?: number;
+  quantityReg?: number | '';
+  quantityFoil?: number | '';
   userId: string;
   setId: string;
   renderNormal?: boolean;
@@ -25,18 +25,19 @@ const CardQuantitySelector: React.FC<CardQuantitySelectorProps> = ({
   renderNormal = true,
   renderFoil = true,
 }) => {
-  const [isUpdatingNormal, setIsUpdatingNormal] = useState(false);
-  const [isUpdatingFoil, setIsUpdatingFoil] = useState(false);
   const [isLoadingSlowly, setIsLoadingSlowly] = useState(false);
-  const [wasUpdatingNormal, setWasUpdatingNormal] = useState(false);
-  const [wasUpdatingFoil, setWasUpdatingFoil] = useState(false);
 
   const [internalQuantityReg, setInternalQuantityReg] = useState(quantityReg);
   const [internalQuantityFoil, setInternalQuantityFoil] = useState(quantityFoil);
 
-  const [updateCollection, { isLoading, isSuccess, isError }] = useUpdateCollectionLegacyMutation();
+  const [updateCollectionRegular, { isLoading, isSuccess, isError }] = useUpdateCollectionLegacyMutation({});
+  const updateCollectionRegularDebounced = useDebouncedCallback(updateCollectionRegular, cardQuantityInputFieldDebounceTimeMs);
 
-  const updateCollectionDebounced = useDebouncedCallback(updateCollection, cardQuantityInputFieldDebounceTimeMs);
+  const [
+    updateCollectionFoil,
+    { isLoading: isLoadingFoil, isSuccess: isSuccessFoil, isError: isErrorFoil },
+  ] = useUpdateCollectionLegacyMutation({});
+  const updateCollectionFoilDebounced = useDebouncedCallback(updateCollectionFoil, cardQuantityInputFieldDebounceTimeMs);
 
   useEffect(() => {
     setInternalQuantityReg(quantityReg);
@@ -53,38 +54,22 @@ const CardQuantitySelector: React.FC<CardQuantitySelectorProps> = ({
     }
   }, [isLoading]);
 
-  useEffect(() => {
-    if (isSuccess) {
-      if (isUpdatingNormal) {
-        setIsUpdatingNormal(false);
-        setWasUpdatingNormal(true);
-        setTimeout(() => {
-          setWasUpdatingNormal(false);
-        }, 3000);
-      }
-      if (isUpdatingFoil) {
-        setIsUpdatingFoil(false);
-        setWasUpdatingFoil(true);
-        setTimeout(() => {
-          setWasUpdatingFoil(false);
-        }, 3000);
-      }
-    }
-  }, [isSuccess]);
-
   const handleQuantityRegChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value === '') {
+      setInternalQuantityReg('');
+      return;
+    }
+
     let newQuantityReg = parseInt(event.target.value, 10);
+
     if (newQuantityReg < 0) {
       newQuantityReg = 0;
     }
     setInternalQuantityReg(newQuantityReg);
-    setWasUpdatingNormal(false);
-    setIsUpdatingNormal(true);
 
-    updateCollectionDebounced({
+    updateCollectionRegularDebounced({
       cardId,
       quantityRegular: newQuantityReg,
-      quantityFoil,
       mode: 'set',
       setId,
       userId,
@@ -92,17 +77,20 @@ const CardQuantitySelector: React.FC<CardQuantitySelectorProps> = ({
   };
 
   const handleQuantityFoilChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value === '') {
+      setInternalQuantityFoil('');
+      return;
+    }
+
     let newQuantityFoil = parseInt(event.target.value, 10);
+
     if (newQuantityFoil < 0) {
       newQuantityFoil = 0;
     }
     setInternalQuantityFoil(newQuantityFoil);
-    setWasUpdatingFoil(false);
-    setIsUpdatingFoil(true);
 
-    updateCollectionDebounced({
+    updateCollectionFoilDebounced({
       cardId,
-      quantityRegular: quantityReg,
       quantityFoil: newQuantityFoil,
       mode: 'set',
       setId,
@@ -120,21 +108,33 @@ const CardQuantitySelector: React.FC<CardQuantitySelectorProps> = ({
               <>
                 <>Regular</>{' '}
                 <>
-                  {isLoading && isUpdatingNormal && isLoadingSlowly && <CircularProgress size={10} variant="indeterminate" />}
-                  {isSuccess && wasUpdatingNormal && <CheckCircleIcon style={{ fontSize: '12px' }} />}
+                  {isLoading && isLoadingSlowly && <CircularProgress size={10} variant="indeterminate" />}
+                  {isSuccess && <CheckCircleIcon style={{ fontSize: '12px' }} />}
                 </>
               </>
             }
             value={internalQuantityReg}
             onChange={handleQuantityRegChange}
+            onBlur={() => {
+              if (internalQuantityReg === '') {
+                setInternalQuantityReg(0);
+                updateCollectionRegularDebounced({
+                  cardId,
+                  quantityRegular: 0,
+                  mode: 'set',
+                  setId,
+                  userId,
+                });
+              }
+            }}
             InputLabelProps={{
               shrink: true,
             }}
             margin="dense"
             variant="outlined"
             fullWidth
-            error={isError && isUpdatingNormal}
-            helperText={isError && isUpdatingNormal && 'Error -- please try again'}
+            error={isError}
+            helperText={isError && 'Error -- please try again'}
           />
         </Grid>
       )}
@@ -146,21 +146,33 @@ const CardQuantitySelector: React.FC<CardQuantitySelectorProps> = ({
               <>
                 <>Foils</>{' '}
                 <>
-                  {isLoading && isUpdatingFoil && isLoadingSlowly && <CircularProgress size={10} variant="indeterminate" />}
-                  {isSuccess && wasUpdatingFoil && <CheckCircleIcon style={{ fontSize: '12px' }} />}
+                  {isLoadingFoil && isLoadingSlowly && <CircularProgress size={10} variant="indeterminate" />}
+                  {isSuccessFoil && <CheckCircleIcon style={{ fontSize: '12px' }} />}
                 </>
               </>
             }
             value={internalQuantityFoil}
             onChange={handleQuantityFoilChange}
+            onBlur={() => {
+              if (internalQuantityFoil === '') {
+                setInternalQuantityFoil(0);
+                updateCollectionFoilDebounced({
+                  cardId,
+                  quantityFoil: 0,
+                  mode: 'set',
+                  setId,
+                  userId,
+                });
+              }
+            }}
             InputLabelProps={{
               shrink: true,
             }}
             margin="dense"
             variant="outlined"
             fullWidth
-            error={isError && isUpdatingFoil}
-            helperText={isError && isUpdatingFoil && 'Error -- please try again'}
+            error={isErrorFoil}
+            helperText={isErrorFoil && 'Error -- please try again'}
           />
         </Grid>
       )}
