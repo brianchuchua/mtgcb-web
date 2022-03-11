@@ -4,7 +4,7 @@ import { SetSummary } from '../../features/browse/SetBox';
 import { Card } from '../../features/browse/types/Card';
 import buildBrowseFilter from '../features/browse/buildBrowseFilter';
 import buildBrowseExpansionFilter from '../features/browse/buildExpansionBrowseFilter';
-import { SearchOptions } from '../features/browse/commonTypes';
+import { CardAutocompleteOptions, SearchOptions } from '../features/browse/commonTypes';
 import determineDistinctClause from '../features/browse/determineDistinctClause';
 import { determineSortFilter } from '../features/browse/filters';
 import {
@@ -13,6 +13,7 @@ import {
   allSetNames,
   allSets,
   allSetsMeta,
+  cardAutocomplete,
   collectionByCardIdLegacy,
   collectionSummaryLegacy,
   costToPurchaseAll,
@@ -264,6 +265,18 @@ export const mtgcbApi = createApi({
         }
       },
     }),
+    getCardAutocomplete: builder.query<AxiosResponse<CardAutocompleteResponse>, CardAutocompleteOptions>({
+      query: ({ name }) => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: cardAutocomplete,
+          variables: {
+            name,
+          },
+        },
+      }),
+    }),
   }),
 });
 
@@ -281,6 +294,7 @@ export const {
   useGetTcgplayerMassImportForUserLegacyQuery,
   useGetSetSummaryLegacyQuery,
   useUpdateCollectionLegacyMutation,
+  useGetCardAutocompleteQuery,
 } = mtgcbApi;
 
 // TODO: Code split these types for readability
@@ -476,4 +490,24 @@ interface UpdateCollectionLegacyResponse {
     quantityRegular: number;
     quantityFoil: number;
   };
+}
+
+interface CardAutocompleteResponse {
+  allCards: [
+    {
+      name: string;
+      id: number;
+      low: number;
+      average: number;
+      high: number;
+      market: number;
+      foil: number;
+      tcgplayerId: number;
+      set: {
+        id: string;
+        name: string;
+        slug: string;
+      };
+    }
+  ];
 }

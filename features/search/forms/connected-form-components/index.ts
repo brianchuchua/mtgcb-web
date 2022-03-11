@@ -1,3 +1,4 @@
+import ConnectedCardEditingModeSelector from './ConnectedCardEditingModeSelector';
 import ConnectedCardNameSearch from './ConnectedCardNameSearch';
 import ConnectedCardStatSearch from './ConnectedCardStatSearch';
 import ConnectedColorSelector from './ConnectedColorSelector';
@@ -16,6 +17,7 @@ import ConnectedViewModeSelector from './ConnectedViewModeSelector';
 
 export {
   ConnectedCardNameSearch as CardNameSearch,
+  ConnectedCardEditingModeSelector as CardEditingModeSelector,
   ConnectedCardStatSearch as CardStatSearch,
   ConnectedColorSelector as ColorSelector,
   ConnectedOracleTextSearch as OracleTextSearch,

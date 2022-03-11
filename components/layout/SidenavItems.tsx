@@ -1,3 +1,4 @@
+import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -6,8 +7,10 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import HomeIcon from '@material-ui/icons/Home';
 import LibraryIcon from '@material-ui/icons/ImportContacts';
+import IsoIcon from '@material-ui/icons/Iso';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { useAuthentication } from '../../auth/AuthenticationProvider';
 import Link from '../Link';
 
@@ -20,13 +23,15 @@ const SidenavItems: React.FC<SidenavItemsProps> = ({ handleSidenavClose = null }
   const { isAuthenticated, user } = useAuthentication();
   const currentPath = router.asPath;
 
+  const [isCollectionMenuOpen, setCollectionMenuOpen] = useState(false);
+
   const handleRouteChange = () => {
     if (handleSidenavClose) {
       handleSidenavClose();
     }
   };
   return (
-    <div>
+    <List disablePadding>
       <ListItem button component={Link} href="/" color="inherit" selected={currentPath === '/'} onClick={handleRouteChange}>
         <ListItemIcon>
           <HomeIcon />
@@ -61,6 +66,23 @@ const SidenavItems: React.FC<SidenavItemsProps> = ({ handleSidenavClose = null }
           <ListItemText primary="Collection" />
         </ListItem>
       )}
+      {isAuthenticated && currentPath?.startsWith(`/collections`) && (
+        <List component="div" disablePadding>
+          <ListItem
+            button
+            component={Link}
+            href="/collections/edit-cards"
+            color="inherit"
+            selected={currentPath?.startsWith(`/collections/edit-cards`)}
+            onClick={handleRouteChange}
+          >
+            <ListItemIcon style={{ marginLeft: '1.5em' }}>
+              <IsoIcon />
+            </ListItemIcon>
+            <ListItemText primary="Edit Cards" />
+          </ListItem>
+        </List>
+      )}
       <ListItem button>
         <ListItemIcon>
           <BarChartIcon />
@@ -86,7 +108,7 @@ const SidenavItems: React.FC<SidenavItemsProps> = ({ handleSidenavClose = null }
         </ListItemIcon>
         <ListItemText primary="Changelog" />
       </ListItem>
-    </div>
+    </List>
   );
 };
 

@@ -4,10 +4,10 @@ import { ResponsiveContainer } from '../components/layout/ResponsiveContainer';
 const HomePage: React.FC = () => (
   <ResponsiveContainer maxWidth="xl">
     <Typography variant="h3" component="h1" align="center">
-      MTG CB Limited Edition Alpha - Build v0.35.1 👷‍♂️
+      MTG CB Limited Edition Alpha - Build v0.36.0 👷‍♂️
     </Typography>
     <Typography paragraph align="center">
-      <em>Last updated: 2022-03-03</em>
+      <em>Last updated: 2022-03-10</em>
     </Typography>
     <br />
     <br />
@@ -35,9 +35,9 @@ const HomePage: React.FC = () => (
     </Typography>
     <Typography paragraph>
       <ul>
-        <li>Add Cards page</li>
-        <li>Database data fixes -- sets missing release dates, cards missing sets, etc.</li>
         <li>Collection-based filters and sorting</li>
+        <li>Database data fixes -- sets missing release dates, cards missing sets, etc.</li>
+        <li>Table improvements, including possibly embedded exporters</li>
         <li>The Great Subset Split™ and subset interfaces</li>
         <li>Bug fixes</li>
       </ul>
@@ -50,7 +50,7 @@ const HomePage: React.FC = () => (
         <li>⏳ Limited Edition Alpha (In Progress): Feature parity with the current MTG CB. This is being moved one piece at a time.</li>
         <li>
           Limited Edition Beta (March): As many of the new MTG CB features that can be squeezed in here (Tokens, Custom Collection Goals,
-          and Foreign Cards).
+          and Foreign Cards), although they'll be deferred if more current feature improvements are needed.
         </li>
         <li>Unlimited Edition (June): Full release of the new MTG CB.</li>
         <li>

@@ -43,3 +43,7 @@ export interface TcgplayerMassImportForUserLegacyOptions {
   commonCount?: number;
   draftCubeCount?: number;
 }
+
+export interface CardAutocompleteOptions {
+  name?: string;
+}

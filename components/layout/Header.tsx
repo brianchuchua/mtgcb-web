@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { SearchForm } from '../../features/browse/forms';
 import CollectionSearchForm from '../../features/collections/forms/CollectionSearchForm';
 import { SetCollectionSearchForm } from '../../features/collections/sets/forms';
+import EditCardsForm from '../../features/edit-cards/forms/EditCardsForm';
 import { SetSearchForm } from '../../features/sets/forms';
 import AccountMenu from './AccountMenu';
 import HeaderBar from './HeaderBar';
@@ -86,6 +87,7 @@ const Header: React.FC = () => {
           <SetSearchForm />
           <CollectionSearchForm />
           <SetCollectionSearchForm />
+          <EditCardsForm />
         </List>
       </SidenavMobile>
       <SidenavDesktop variant="permanent" open={isSidenavOpen} anchor="left" disableScrollLock>
@@ -104,6 +106,7 @@ const Header: React.FC = () => {
           <SetSearchForm />
           <CollectionSearchForm />
           <SetCollectionSearchForm />
+          <EditCardsForm />
         </List>
       </SidenavDesktop>
     </>

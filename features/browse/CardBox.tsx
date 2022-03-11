@@ -18,6 +18,7 @@ interface CardBoxProps {
   loggedInUserId?: string;
   quantityReg?: number;
   quantityFoil?: number;
+  fixedHeight?: string;
 }
 
 const CardBox: React.FC<CardBoxProps> = ({
@@ -30,15 +31,16 @@ const CardBox: React.FC<CardBoxProps> = ({
   loggedInUserId = null,
   quantityReg = null,
   quantityFoil = null,
+  fixedHeight = null,
 }) => {
   const imageUrl = `https://mtgcb-images.s3.amazonaws.com/cards/images/normal/${card.id}.jpg`;
 
   return (
-    <CardWrapper key={card.id}>
+    <CardWrapper key={card.id} fixedHeight={fixedHeight}>
       <CardAttributes>
         <LazyLoad key={`lazy-${card.id}`} once resize height={50}>
           <a href={generateCardUrl(card.tcgplayerId, card.name)} target="_blank" rel="noreferrer">
-            <CardImage alt={card.name} title={card.name} src={imageUrl} set={card.set?.name} />
+            <CardImage alt={card.name} title={card.name} src={imageUrl} set={card.set?.name} fixedHeight={fixedHeight} />
           </a>
         </LazyLoad>
         {userId && userId === loggedInUserId && (
@@ -75,13 +77,17 @@ const generateCardUrl = (cardId: string | number, cardName) =>
     ? `https://shop.tcgplayer.com/magic/product/productsearch?id=${cardId}&utm_campaign=affiliate&utm_medium=CTNBLDR&utm_source=CTNBLDR`
     : `https://www.tcgplayer.com/search/magic/product?productLineName=magic&q=${cardName}&utm_campaign=affiliate&utm_medium=CTNBLDR&utm_source=CTNBLDR`;
 
-const CardWrapper = styled.div({
+interface CardWrapperProps {
+  fixedHeight?: string;
+}
+
+const CardWrapper = styled.div<CardWrapperProps>(({ fixedHeight }) => ({
   display: 'inline-block',
   fontSize: 'clamp(16px, 1.0vw, 22px)',
-  height: 'auto',
+  height: fixedHeight || 'auto',
   minHeight: '50px',
   lineHeight: 1.43,
-});
+}));
 
 const CardAttributes = styled.div({ textAlign: 'center', maxWidth: '100%' });
 
@@ -97,11 +103,12 @@ const CardSet = styled.em(({ theme }) => ({
 
 interface CardImageProps {
   set?: string;
+  fixedHeight?: string;
 }
 
-const CardImage = styled.img<CardImageProps>(({ set }) => ({
-  width: '100%',
-  height: 'auto',
+const CardImage = styled.img<CardImageProps>(({ set, fixedHeight }) => ({
+  width: fixedHeight ? 'auto' : '100%',
+  height: fixedHeight || 'auto',
   borderRadius: set === 'Limited Edition Alpha' ? '7%' : '5%',
 }));
 

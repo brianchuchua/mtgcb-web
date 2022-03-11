@@ -3,6 +3,7 @@ import allCardsMeta from './allCardsMeta';
 import allSetNames from './allSetNames';
 import allSets from './allSets';
 import allSetsMeta from './allSetsMeta';
+import cardAutocomplete from './cardAutocomplete';
 import cardTypes from './cardTypes';
 import collectionByCardIdLegacy from './collectionByCardIdLegacy';
 import collectionSummaryLegacy from './collectionSummaryLegacy';
@@ -18,6 +19,7 @@ export {
   allCardsMeta,
   allSets,
   allSetsMeta,
+  cardAutocomplete,
   cardTypes,
   collectionByCardIdLegacy,
   collectionSummaryLegacy,
