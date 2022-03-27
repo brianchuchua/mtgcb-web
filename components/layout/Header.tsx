@@ -71,7 +71,7 @@ const Header: React.FC = () => {
           <AccountMenu anchorEl={menuAnchorElement} handleClose={handleAccountMenuClose} />
         </HeaderToolbar>
       </HeaderBarDesktop>
-      <SidenavMobile variant="temporary" open={isMobileSidenavOpen} anchor="left" disableScrollLock onClose={handleSidenavClose}>
+      <SidenavMobile variant="temporary" open={isMobileSidenavOpen} anchor="left" onClose={handleSidenavClose}>
         <SidenavHeader>
           <IconButton onClick={handleSidenavClose}>
             <ChevronLeftIcon />
@@ -89,6 +89,7 @@ const Header: React.FC = () => {
           <SetCollectionSearchForm />
           <EditCardsForm />
         </List>
+        <MobileSidenavSpacer />
       </SidenavMobile>
       <SidenavDesktop variant="permanent" open={isSidenavOpen} anchor="left" disableScrollLock>
         <SidenavHeader>
@@ -136,5 +137,9 @@ const HeaderBarDesktop = styled(HeaderBar)(({ theme }) => ({
     display: 'none',
   },
 }));
+
+const MobileSidenavSpacer = styled.div({
+  minHeight: '300px',
+});
 
 export default Header;
