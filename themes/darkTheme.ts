@@ -4,6 +4,14 @@ import breakpoints from './breakpoints';
 
 const darkTheme = createMuiTheme({
   props: {
+    MuiInputBase: {
+      inputProps: {
+        spellCheck: 'false',
+        autoCapitalize: 'off',
+        autoCorrect: 'off',
+        autoComplete: 'off',
+      },
+    },
     MuiInput: {
       inputProps: {
         spellCheck: 'false',
