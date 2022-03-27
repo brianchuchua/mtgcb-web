@@ -3,6 +3,16 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import breakpoints from './breakpoints';
 
 const darkTheme = createMuiTheme({
+  props: {
+    MuiInput: {
+      inputProps: {
+        spellCheck: 'false',
+        autoCapitalize: 'off',
+        autoCorrect: 'off',
+        autoComplete: 'off',
+      },
+    },
+  },
   palette: {
     type: 'dark',
     primary: { main: '#8a85ff' },
