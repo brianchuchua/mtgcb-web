@@ -1,6 +1,6 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { ResponsiveContainer } from '../../components/layout/ResponsiveContainer';
@@ -133,10 +133,14 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
     { skip: cardIds == null }
   );
 
-  const collectionByCardId = collectionByCardIdResponse?.data?.collectionByCardIdLegacy?.collection?.reduce((acc, curr) => {
-    acc[curr.cardID] = curr;
-    return acc;
-  }, {} as any); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const collectionByCardId = useMemo(
+    () =>
+      collectionByCardIdResponse?.data?.collectionByCardIdLegacy?.collection?.reduce((acc, curr) => {
+        acc[curr.cardID] = curr;
+        return acc;
+      }, {} as any),
+    [collectionByCardIdResponse]
+  ); // eslint-disable-line @typescript-eslint/no-explicit-any
 
   const { data: allSetsResponse } = useGetAllSetsQuery({
     first: expansionsFirst,
