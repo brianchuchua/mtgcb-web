@@ -148,9 +148,7 @@ export const Login: React.FC = () => {
                   autoComplete="nickname"
                   autoFocus
                   error={touched.username && Boolean(errors.username)}
-                  helperText={
-                    touched.username ? `${errors.username} -- note that this field is case sensitive!` : 'Note that this is case sensitive!'
-                  }
+                  helperText={touched.username ? errors?.username : 'Note that this is case sensitive!'}
                   inputProps={{ maxLength: 255 }}
                   {...field}
                 />
