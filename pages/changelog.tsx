@@ -7,6 +7,15 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-04-03 (v0.37.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Changed some components to use native versions on mobile! (More of these to come.)</li>
+        <li>Made the MTG CB beta public!</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-03-10 (v0.36.0)
     </Typography>
     <Typography paragraph>

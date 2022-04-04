@@ -48,19 +48,25 @@ export const Account: React.FC = () => {
         </AppBar>
         <TabPanel activeTabIndex={activeTabIndex} index={0}>
           <UserProfileForm user={user} setUser={setUser} />
+          <div style={{ textAlign: 'center', marginTop: '5px' }}>
+            <em>Changes here will only take place on the new MTG CB.</em>
+          </div>
         </TabPanel>
         <TabPanel activeTabIndex={activeTabIndex} index={1}>
           <UserPasswordForm user={user} setUser={setUser} />
+          <div style={{ textAlign: 'center', marginTop: '5px' }}>
+            <em>Changes here will only take place on the new MTG CB.</em>
+          </div>
         </TabPanel>
         <TabPanel activeTabIndex={activeTabIndex} index={2}>
           <Card>
             <CardHeader title="Patreon" titleTypographyProps={{ variant: 'h6' }} />
             <Divider />
             <CardContent>
-              I need to someday include Patreon information, like my patreon email address and supporter card, or integrate with their new
-              widget.
+              This section is in progress. :) Immortal/Reserved List tier patrons will get the ability to customize a card to represent
+              their collection in a hall of fame.
             </CardContent>
-            <CardActions>Placeholder</CardActions>
+            <CardActions />
           </Card>
         </TabPanel>
       </ContentWrapper>

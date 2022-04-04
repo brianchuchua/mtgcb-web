@@ -1,19 +1,19 @@
-import { useRouter } from 'next/router';
-import { Form, Formik, Field } from 'formik';
-import * as Yup from 'yup';
-import styled from 'styled-components';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
-import SentimentVerySatisfied from '@material-ui/icons/SentimentVerySatisfied';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import SentimentVerySatisfied from '@material-ui/icons/SentimentVerySatisfied';
+import { Field, Form, Formik } from 'formik';
+import { useRouter } from 'next/router';
+import styled from 'styled-components';
+import * as Yup from 'yup';
+import { useAuthentication } from '../../auth/AuthenticationProvider';
 import Button from '../../components/Button';
 import Link from '../../components/Link';
 import { signUp } from '../../network/features/signup';
-import { useAuthentication } from '../../auth/AuthenticationProvider';
-import { logIntoMtgCb, convertQueryToString } from '../login/Login';
+import { convertQueryToString, logIntoMtgCb } from '../login/Login';
 
 const SignUpWrapper = styled.div(({ theme }) => ({
   marginTop: theme.spacing(8),
@@ -97,6 +97,15 @@ export const SignUp: React.FC = () => {
       <Typography component="h1" variant="h5">
         Sign Up
       </Typography>
+      <div style={{ textAlign: 'center', marginTop: '10px' }}>
+        <em>
+          This form is disabled for now during the beta -- just{' '}
+          <Link href="/login" variant="body2">
+            log in
+          </Link>{' '}
+          to the site using your existing MTG CB account.
+        </em>
+      </div>
       <Formik
         initialValues={{ username: '', email: '', password: '', passwordConfirmation: '' }}
         validationSchema={SignUpSchema}
@@ -123,6 +132,7 @@ export const SignUp: React.FC = () => {
             <Field id="username" name="username">
               {({ field }) => (
                 <TextField
+                  disabled
                   label="Username"
                   type="text"
                   variant="outlined"
@@ -142,6 +152,7 @@ export const SignUp: React.FC = () => {
             <Field id="email" name="email">
               {({ field }) => (
                 <TextField
+                  disabled
                   label="Email"
                   type="text"
                   variant="outlined"
@@ -160,6 +171,7 @@ export const SignUp: React.FC = () => {
             <Field name="password" id="password">
               {({ field }) => (
                 <TextField
+                  disabled
                   label="Password"
                   variant="outlined"
                   margin="normal"
@@ -178,6 +190,7 @@ export const SignUp: React.FC = () => {
             <Field name="passwordConfirmation" id="passwordConfirmation">
               {({ field }) => (
                 <TextField
+                  disabled
                   label="Confirm Password"
                   variant="outlined"
                   margin="normal"
@@ -198,7 +211,7 @@ export const SignUp: React.FC = () => {
             </Box>
 
             <SubmitButtonWrapper>
-              <Button type="submit" fullWidth variant="contained" color="primary" isSubmitting={isSubmitting}>
+              <Button disabled type="submit" fullWidth variant="contained" color="primary" isSubmitting={isSubmitting}>
                 Sign Up
               </Button>
             </SubmitButtonWrapper>

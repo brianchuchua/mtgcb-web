@@ -148,7 +148,9 @@ export const Login: React.FC = () => {
                   autoComplete="nickname"
                   autoFocus
                   error={touched.username && Boolean(errors.username)}
-                  helperText={touched.username ? errors.username : ''}
+                  helperText={
+                    touched.username ? `${errors.username} -- note that this field is case sensitive!` : 'Note that this is case sensitive!'
+                  }
                   inputProps={{ maxLength: 255 }}
                   {...field}
                 />
@@ -186,6 +188,8 @@ export const Login: React.FC = () => {
               <Grid item xs>
                 <Link href="#" variant="body2">
                   Forgot password?
+                  <br />
+                  (In Progress)
                 </Link>
               </Grid>
               <Grid item>
