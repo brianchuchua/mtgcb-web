@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-04-04 (v0.37.2)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Fixed a bug with case-sensivity during account migration.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-04-03 (v0.37.1)
     </Typography>
     <Typography paragraph>

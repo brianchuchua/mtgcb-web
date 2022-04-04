@@ -72,7 +72,8 @@ export const logIntoMtgCb: LogIntoMtgCbFunction = async (username, password) => 
     const invalidLogin = errorMessage?.match(/passwordAuth:failure/);
     const isApiFailure = result?.status !== 200;
     if (invalidLogin) {
-      response.error = 'Invalid username or password. Please try again. Note your username is probably not your email address.';
+      response.error =
+        'Invalid username or password. Please try again. Note your username is probably not your email address and should exactly match case-sensitivity.';
     } else if (isApiFailure) {
       response.error = 'There was a problem trying to login. Please try again in a moment.';
     } else {
