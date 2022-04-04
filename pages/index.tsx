@@ -5,7 +5,7 @@ import Link from '../components/Link';
 const HomePage: React.FC = () => (
   <ResponsiveContainer maxWidth="xl">
     <Typography variant="h3" component="h1" align="center">
-      MTG CB Limited Edition Beta - Build v0.37.0 👷‍♂️
+      MTG CB Limited Edition Beta - Build v0.37.1 👷‍♂️
     </Typography>
     <Typography paragraph align="center">
       <em>Last updated: 2022-04-03</em>
@@ -23,24 +23,24 @@ const HomePage: React.FC = () => (
     <Typography variant="h5" component="h2">
       Important
     </Typography>
-    <Typography paragraph>
+    <Typography paragraph component="div">
       <ul>
         <li>
           <strong>
             <em>This beta is a work in progress!</em>
           </strong>{' '}
           All the features from the old MTG CB are still being brought over one at a time, along with improved interfaces.
-          <li>Changes made to your collection here are also reflected on the old MTG CB.</li>
-          <li>If something is missing, it's most likely still being worked on.</li>
-          <li>We'll soon move on to adding tokens, custom collection goals, and foreign cards.</li>
-          <li>Best experienced on desktop, but mobile optimizations are in progress.</li>
         </li>
+        <li>Changes made to your collection here are also reflected on the old MTG CB.</li>
+        <li>If something is missing, it's most likely still being worked on.</li>
+        <li>We'll soon move on to adding tokens, custom collection goals, and foreign cards.</li>
+        <li>Best experienced on desktop, but mobile optimizations are in progress.</li>
       </ul>
     </Typography>
     <Typography variant="h5" component="h2">
       Getting Started
     </Typography>
-    <Typography paragraph>
+    <Typography paragraph component="div">
       <ul>
         <li>
           Check out the <u>Browse</u> section on the left, even if you're not logged in, to browse every card and set in Magic with a brand
@@ -56,7 +56,7 @@ const HomePage: React.FC = () => (
     <Typography variant="h5" component="h2">
       Feedback
     </Typography>
-    <Typography paragraph>
+    <Typography paragraph component="div">
       <ul>
         <li>
           Feel free to reach out to me via{' '}
@@ -81,7 +81,7 @@ const HomePage: React.FC = () => (
     <Typography variant="h5" component="h2">
       Coming Up Next
     </Typography>
-    <Typography paragraph>
+    <Typography paragraph component="div">
       <ul>
         <li>Finishing mobile optimizations</li>
         <li>Collection-based filters and sorting</li>
@@ -99,7 +99,7 @@ const HomePage: React.FC = () => (
     <Typography variant="h5" component="h2">
       Roadmap
     </Typography>
-    <Typography paragraph>
+    <Typography paragraph component="div">
       <ul>
         <li>
           Limited Edition Alpha (Complete): Initial feature parity progress with the current MTG CB. This is being moved one piece at a
