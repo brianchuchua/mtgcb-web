@@ -1,6 +1,8 @@
+import isMobile from 'is-mobile';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
+import NativeMultiselect from '../../../../components/NativeMultiselect';
 import { RootState } from '../../../../redux/rootReducer';
 import { expansionCategoryOptions, SetCategory } from '../../../browse/browseSlice';
 import { ConnectedSearchFormComponentProps } from './types';
@@ -18,14 +20,26 @@ const ConnectedSetCategorySelector: React.FC<ConnectedSetCategorySelectorProps> 
 
   const { expansionCategories } = useSelector((state: RootState) => state[reduxSlice]);
 
+  const isMobileBrowser = isMobile();
+
   return (
     <StyledSetCategorySelector>
-      <AutocompleteWithNegation
-        label="Set Categories"
-        options={expansionCategoryOptions}
-        selectedOptions={expansionCategories}
-        setSelectedOptionsRemotely={updateSetCategories}
-      />
+      {!isMobileBrowser && (
+        <AutocompleteWithNegation
+          label="Set Categories"
+          options={expansionCategoryOptions}
+          selectedOptions={expansionCategories}
+          setSelectedOptionsRemotely={updateSetCategories}
+        />
+      )}
+      {isMobileBrowser && (
+        <NativeMultiselect
+          label="Set Categories"
+          multiselectOptions={expansionCategoryOptions}
+          selectedOptions={expansionCategories}
+          updateSelectedOptions={updateSetCategories}
+        />
+      )}
     </StyledSetCategorySelector>
   );
 };

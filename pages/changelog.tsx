@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-04-10 (v0.37.3)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Full mobile optimization pass for every site component.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-04-04 (v0.37.2)
     </Typography>
     <Typography paragraph>
