@@ -1,6 +1,8 @@
+import isMobile from 'is-mobile';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
+import NativeMultiselect from '../../../../components/NativeMultiselect';
 import { useGetSetTypesQuery } from '../../../../network/services/mtgcbApi';
 import { RootState } from '../../../../redux/rootReducer';
 import { SetType } from '../../../browse/browseSlice';
@@ -26,14 +28,26 @@ const ConnectedSetTypeSelector: React.FC<ConnectedSetTypeSelectorProps> = ({ red
     exclude: false,
   }));
 
+  const isMobileBrowser = isMobile();
+
   return setTypes?.length ? (
     <StyledSetTypeSelector>
-      <AutocompleteWithNegation
-        label="Set Types"
-        options={setTypesWithExclude}
-        selectedOptions={expansionTypes}
-        setSelectedOptionsRemotely={updateSetTypes}
-      />
+      {!isMobileBrowser && (
+        <AutocompleteWithNegation
+          label="Set Types"
+          options={setTypesWithExclude}
+          selectedOptions={expansionTypes}
+          setSelectedOptionsRemotely={updateSetTypes}
+        />
+      )}
+      {isMobileBrowser && (
+        <NativeMultiselect
+          label="Set Types"
+          multiselectOptions={setTypesWithExclude}
+          selectedOptions={expansionTypes}
+          updateSelectedOptions={updateSetTypes}
+        />
+      )}
     </StyledSetTypeSelector>
   ) : null;
 };
