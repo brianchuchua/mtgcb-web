@@ -1,6 +1,8 @@
+import isMobile from 'is-mobile';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
+import NativeMultiselect from '../../../../components/NativeMultiselect';
 import { useGetAllSetNamesQuery } from '../../../../network/services/mtgcbApi';
 import { RootState } from '../../../../redux/rootReducer';
 import { CardSet } from '../../../browse/browseSlice';
@@ -24,10 +26,17 @@ const ConnectedSetSelector: React.FC<ConnectedSetSelectorProps> = ({ reduxSlice,
   const allSetNames = allSetsMetaResponse?.data?.allSets;
   const sets = mapCardSets(allSetNames || []);
 
+  const isMobileBrowser = isMobile();
+
   return (
     sets && (
       <StyledSetSelector>
-        <AutocompleteWithNegation label="Card Sets" options={sets} selectedOptions={cardSets} setSelectedOptionsRemotely={updateSets} />
+        {!isMobileBrowser && (
+          <AutocompleteWithNegation label="Card Sets" options={sets} selectedOptions={cardSets} setSelectedOptionsRemotely={updateSets} />
+        )}
+        {isMobileBrowser && (
+          <NativeMultiselect label="Card Sets" multiselectOptions={sets} selectedOptions={cardSets} updateSelectedOptions={updateSets} />
+        )}
       </StyledSetSelector>
     )
   );
