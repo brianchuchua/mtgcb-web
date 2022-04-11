@@ -83,7 +83,6 @@ const HomePage: React.FC = () => (
     </Typography>
     <Typography paragraph component="div">
       <ul>
-        <li>Finishing mobile optimizations</li>
         <li>Collection-based filters and sorting</li>
         <li>
           Database data fixes -- sets missing release dates, cards missing sets and collector numbers, better naming for variants, etc.
