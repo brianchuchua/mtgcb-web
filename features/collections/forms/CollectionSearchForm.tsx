@@ -8,6 +8,7 @@ import {
   PriceTypeSelector,
   RaritySelector,
   SetCategorySelector,
+  SetCompletionStatusSelector,
   SetNameSearch,
   SetSelector,
   SetSortSelector,
@@ -37,6 +38,7 @@ import {
   setPriceType,
   setSearchAttribute,
   setSearchQuery,
+  setSetCompletionStatuses,
   setViewMode,
   setViewSubject,
 } from '../collectionSlice';
@@ -73,6 +75,7 @@ const CollectionSearchForm: React.FC = () => {
         <>
           <ViewModeSelector reduxSlice={reduxSlice} setViewMode={setViewMode} setViewSubject={setViewSubject} />
           <PriceTypeSelector reduxSlice={reduxSlice} setPriceType={setPriceType} />
+          <SetCompletionStatusSelector reduxSlice={reduxSlice} setCompletionStatuses={setSetCompletionStatuses} />
           <SetNameSearch reduxSlice={reduxSlice} setExpansionSearchQuery={setExpansionSearchQuery} />
           <SetCategorySelector reduxSlice={reduxSlice} setExpansionCategories={setExpansionCategories} />
           <SetTypeSelector reduxSlice={reduxSlice} setExpansionTypes={setExpansionTypes} />

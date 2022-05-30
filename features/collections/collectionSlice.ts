@@ -28,6 +28,7 @@ const initialState: CollectionState = {
   sortExpansionByDirection: 'DESC',
   expansionTypes: [],
   expansionCategories: [],
+  setCompletionStatuses: ['all'],
 };
 
 const collectionSlice = createSlice({
@@ -130,6 +131,10 @@ const collectionSlice = createSlice({
       const { setCategories } = action.payload;
       state.expansionCategories = setCategories;
     },
+    setSetCompletionStatuses(state, action: PayloadAction<SetCompletionStatuses>) {
+      const { setCompletionStatuses } = action.payload;
+      state.setCompletionStatuses = setCompletionStatuses;
+    },
   },
 });
 
@@ -158,6 +163,7 @@ export const {
   setExpansionSortDirection,
   setExpansionTypes,
   setExpansionCategories,
+  setSetCompletionStatuses,
 } = collectionSlice.actions;
 
 export const searchAttributeOptions = [
@@ -230,6 +236,13 @@ interface CollectionState {
   sortExpansionByDirection: 'ASC' | 'DESC';
   expansionTypes: SetType[];
   expansionCategories: SetCategory[];
+  setCompletionStatuses: SetCompletionStatus[];
+}
+
+export type SetCompletionStatus = 'all' | 'complete' | 'partial' | 'empty';
+
+interface SetCompletionStatuses {
+  setCompletionStatuses?: SetCompletionStatus[];
 }
 
 export type PriceTypes = 'low' | 'average' | 'high' | 'market' | 'foil';

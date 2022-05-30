@@ -8,6 +8,7 @@ import cardTypes from './cardTypes';
 import collectionByCardIdLegacy from './collectionByCardIdLegacy';
 import collectionSummaryLegacy from './collectionSummaryLegacy';
 import costToPurchaseAll from './costToPurchaseAll';
+import filteredCollectionSummaryLegacy from './filteredCollectionSummaryLegacy';
 import setSummaryLegacy from './setSummaryLegacy';
 import setTypes from './setTypes';
 import tcgplayerMassImport from './tcgplayerMassImport';
@@ -30,4 +31,5 @@ export {
   tcgplayerMassImportForUserLegacy,
   allSetNames,
   updateCollectionLegacy,
+  filteredCollectionSummaryLegacy,
 };

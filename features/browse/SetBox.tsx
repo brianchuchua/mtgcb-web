@@ -246,7 +246,7 @@ interface SetBoxProps {
 }
 
 export interface SetSummary {
-  setId: number;
+  setId: number | string;
   cardsInSet?: number;
   totalCardsCollectedInSet?: number;
   uniquePrintingsCollectedInSet?: number;

@@ -3,6 +3,10 @@ interface DetermineSortFilterFunction {
 }
 
 const determineSortFilter: DetermineSortFilterFunction = (sortBy, sortByDirection) => {
+  if (sortBy === 'currentValue' || sortBy === 'costToComplete' || sortBy === 'percentageCollected') {
+    return ['name_ASC'];
+  }
+
   if (sortBy === 'collectorNumber') {
     return [`collectorNumberNumeric_${sortByDirection}`, `collectorNumber_${sortByDirection}`, 'name_ASC', 'releasedAt_ASC'];
   }

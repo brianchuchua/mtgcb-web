@@ -3,7 +3,7 @@ import Select from '@material-ui/core/Select';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { RootState } from '../../../../redux/rootReducer';
-import { expansionSortByOptions } from '../../../browse/browseSlice';
+import { expansionSortByOptions, expansionSortByOptionsForCollectors } from '../../../browse/browseSlice';
 import { ConnectedSearchFormComponentProps } from './types';
 
 interface ConnectedSetSortSelectorProps extends ConnectedSearchFormComponentProps {
@@ -23,10 +23,12 @@ const ConnectedSetSortSelector: React.FC<ConnectedSetSortSelectorProps> = ({ red
     dispatch(setExpansionSortDirection(event.target.value));
   };
 
+  const isCollectorMode = reduxSlice === 'collection' || reduxSlice === 'setCollection';
+  const sortOptions = !isCollectorMode ? expansionSortByOptions : expansionSortByOptions.concat(expansionSortByOptionsForCollectors);
   return (
     <StyledSortSelector>
       <SortByOption value={sortExpansionBy} onChange={handleSortByChange} variant="outlined">
-        {expansionSortByOptions.map((sortByOption) => (
+        {sortOptions.map((sortByOption) => (
           <MenuItem key={sortByOption.label} value={sortByOption.value}>
             Sort by {sortByOption.label}
           </MenuItem>

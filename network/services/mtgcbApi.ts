@@ -2,11 +2,12 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { SetCategory, SetType } from '../../features/browse/browseSlice';
 import { SetSummary } from '../../features/browse/SetBox';
 import { Card } from '../../features/browse/types/Card';
+import { SetCompletionStatus } from '../../features/collections/collectionSlice';
 import buildBrowseFilter from '../features/browse/buildBrowseFilter';
 import buildBrowseExpansionFilter from '../features/browse/buildExpansionBrowseFilter';
 import { CardAutocompleteOptions, SearchOptions } from '../features/browse/commonTypes';
 import determineDistinctClause from '../features/browse/determineDistinctClause';
-import { determineSortFilter } from '../features/browse/filters';
+import { determineAdditionalSortFilter, determineSortFilter } from '../features/browse/filters';
 import {
   allCards,
   allCardsMeta,
@@ -17,6 +18,7 @@ import {
   collectionByCardIdLegacy,
   collectionSummaryLegacy,
   costToPurchaseAll,
+  filteredCollectionSummaryLegacy,
   setSummaryLegacy,
   setTypes as setTypesQuery,
   tcgplayerMassImportForUserLegacy,
@@ -56,6 +58,44 @@ export const mtgcbApi = createApi({
             sortBy: determineSortFilter(sortBy, sortByDirection),
             name: name ? name.trim() : '',
             where: buildBrowseExpansionFilter({ setTypes, setCategories }),
+          },
+        },
+      }),
+    }),
+    getFilteredCollectionSummaryLegacy: builder.query<
+      AxiosResponse<FilteredCollectionSummaryLegacyResponse>,
+      FilteredCollectionSummaryLegacyVariables
+    >({
+      query: ({
+        userId,
+        priceType = 'market',
+        first = 50,
+        skip = 0,
+        name = '',
+        sortBy = 'releasedAt',
+        sortByDirection = 'DESC',
+        additionalSortBy,
+        whereSetCompletionStatus,
+        setTypes,
+        setCategories,
+      }) => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: filteredCollectionSummaryLegacy,
+          variables: {
+            userId: Number(userId),
+            priceType,
+            first,
+            skip,
+            search: name,
+            sortBy: determineSortFilter(sortBy, sortByDirection),
+            additionalSortBy: determineAdditionalSortFilter(sortBy, sortByDirection),
+            whereSetCompletionStatus,
+            where: buildBrowseExpansionFilter({
+              setTypes,
+              setCategories,
+            }),
           },
         },
       }),
@@ -309,6 +349,7 @@ export const {
   useGetSetSummaryLegacyQuery,
   useUpdateCollectionLegacyMutation,
   useGetCardAutocompleteQuery,
+  useGetFilteredCollectionSummaryLegacyQuery,
 } = mtgcbApi;
 
 // TODO: Code split these types for readability
@@ -524,4 +565,73 @@ interface CardAutocompleteResponse {
       };
     }
   ];
+}
+
+interface CostToCompleteFiltered {
+  oneOfEachCard: number;
+  oneOfEachMythic: number;
+  oneOfEachRare: number;
+  oneOfEachUncommon: number;
+  oneOfEachCommon: number;
+  fourOfEachCard?: number;
+  fourOfEachMythic?: number;
+  fourOfEachRare?: number;
+  fourOfEachUncommon?: number;
+  fourOfEachCommon?: number;
+  draftCube?: number;
+}
+interface CollectionSummaryFiltered {
+  id: string;
+  setId: string;
+  totalCardsCollectedInSet: number;
+  uniquePrintingsCollectedInSet: number;
+  cardsInSet: number;
+  percentageCollected: number;
+  market: CostToCompleteFiltered;
+  low: CostToCompleteFiltered;
+  average: CostToCompleteFiltered;
+  high: CostToCompleteFiltered;
+  name: string;
+  slug: string;
+  code: string;
+  setType: string;
+  cardCount: number;
+  category: string;
+  releasedAt: string;
+  sealedProductUrl: string;
+  isDraftable: boolean;
+}
+
+interface FilteredCollectionSummaryLegacyResponse {
+  filteredCollectionSummaryLegacy: {
+    userId: number;
+    username: string;
+    numberOfCardsInMagic: number;
+    totalCardsCollected: number;
+    uniquePrintingsCollected: number;
+    percentageCollected: number;
+    totalValue: number;
+    collectionSummary: CollectionSummaryFiltered[];
+    count: number;
+  };
+}
+
+interface FilteredCollectionSummaryLegacyVariables {
+  userId: string;
+  priceType?: 'market' | 'low' | 'average' | 'high' | 'foil';
+  first?: number;
+  skip?: number;
+  name?: string;
+  sortBy?: string;
+  sortByDirection?: 'ASC' | 'DESC';
+  additionalSortBy?:
+    | 'currentValue_ASC'
+    | 'currentValue_DESC'
+    | 'costToComplete_ASC'
+    | 'costToComplete_DESC'
+    | 'percentageCollected_ASC'
+    | 'percentageCollected_DESC';
+  whereSetCompletionStatus?: SetCompletionStatus[];
+  setTypes: SetType[];
+  setCategories: SetCategory[];
 }

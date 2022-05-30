@@ -195,6 +195,12 @@ export const expansionSortByOptions = [
   { value: 'cardCount', label: 'Cards In Set' },
 ];
 
+export const expansionSortByOptionsForCollectors = [
+  { value: 'currentValue', label: 'Current Value' },
+  { value: 'costToComplete', label: 'Cost to Complete' },
+  { value: 'percentageCollected', label: '% Collected' },
+];
+
 export const rarityOptions = [
   { category: 'Rarities', value: 'common', label: 'Common', exclude: false },
   { category: 'Rarities', value: 'uncommon', label: 'Uncommon', exclude: false },

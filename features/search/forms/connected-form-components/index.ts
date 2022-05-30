@@ -6,6 +6,7 @@ import ConnectedOracleTextSearch from './ConnectedOracleTextSearch';
 import ConnectedPriceTypeSelector from './ConnectedPriceTypeSelector';
 import ConnectedRaritySelector from './ConnectedRaritySelector';
 import ConnectedSetCategorySelector from './ConnectedSetCategorySelector';
+import ConnectedSetCompletionStatusSelector from './ConnectedSetCompletionStatusSelector';
 import ConnectedSetNameSearch from './ConnectedSetNameSearch';
 import ConnectedSetSelector from './ConnectedSetSelector';
 import ConnectedSetSortSelector from './ConnectedSetSortSelector';
@@ -32,4 +33,5 @@ export {
   ConnectedTypeSelector as TypeSelector,
   ConnectedViewModeSelector as ViewModeSelector,
   ConnectedPriceTypeSelector as PriceTypeSelector,
+  ConnectedSetCompletionStatusSelector as SetCompletionStatusSelector,
 };

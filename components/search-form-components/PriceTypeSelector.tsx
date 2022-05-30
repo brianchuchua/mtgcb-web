@@ -39,7 +39,7 @@ const PriceTypeSelector: React.FC<PriceTypeSelectorProps> = ({ priceType, setPri
   );
 };
 
-const ToggleGroupWrapper = styled(Paper)(() => ({ margin: '10px', marginTop: '0px', marginBottom: '15px' }));
+const ToggleGroupWrapper = styled(Paper)(() => ({ margin: '10px', marginTop: '0px', marginBottom: '10px' }));
 const StyledToggleButton = styled(ToggleButton)(() => ({ alignItems: 'end', justifyContent: 'center', width: '100%' }));
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(() => ({ width: '100%' }));
 

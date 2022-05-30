@@ -6,6 +6,7 @@ import addCardTypeFilter from './addCardTypeFilter';
 import addOracleTextFilter from './addOracleTextFilter';
 import addSetCategoryFilter from './addSetCategoryFilter';
 import addSetTypeFilter from './addSetTypeFilter';
+import determineAdditionalSortFilter from './determineAdditionalSortFilter';
 import determineSortFilter from './determineSortFilter';
 
 export {
@@ -18,4 +19,5 @@ export {
   addSetCategoryFilter,
   addSetTypeFilter,
   determineSortFilter,
+  determineAdditionalSortFilter,
 };

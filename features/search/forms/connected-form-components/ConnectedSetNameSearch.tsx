@@ -44,6 +44,7 @@ const ConnectedSetNameSearch: React.FC<ConnectedSetNameSearchProps> = ({ reduxSl
 };
 
 const StyledSetNameSearch = styled(FormControl)(() => ({
+  marginTop: '5px',
   paddingLeft: '8px',
   paddingRight: '8px',
   paddingBottom: '10px',

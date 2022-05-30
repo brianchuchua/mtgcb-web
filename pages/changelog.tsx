@@ -7,6 +7,27 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-05-30 (v0.38.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Added collection set filters and sorting.</li>
+        <li>New filtering options:</li>
+        <ul>
+          <li>All - Show all sets.</li>
+          <li>Complete - Show sets at 100% completion.</li>
+          <li>Partial - Show sets between 1% and 99% completion.</li>
+          <li>Empty - Show sets at 0% completion.</li>
+        </ul>
+        <li>New sorting options:</li> {/* current value, cost to complete, % collected */}
+        <ul>
+          <li>Current Value - Sort by current value.</li>
+          <li>Cost to Complete - Sort by cost to complete.</li>
+          <li>% Collected - Sort by % collected.</li>
+        </ul>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-04-10 (v0.37.3)
     </Typography>
     <Typography paragraph>
