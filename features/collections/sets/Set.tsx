@@ -1,22 +1,16 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { ResponsiveContainer } from '../../../components/layout/ResponsiveContainer';
 import Link from '../../../components/Link';
-import {
-  useGetAllCardsMetaQuery,
-  useGetAllCardsQuery,
-  useGetSetBySlugQuery,
-  useGetSetSummaryLegacyQuery,
-} from '../../../network/services/mtgcbApi';
+import { useGetSetBySlugQuery, useGetSetSummaryLegacyQuery } from '../../../network/services/mtgcbApi';
 import { RootState } from '../../../redux/rootReducer';
-import useDebounce, { searchFieldDebounceTimeMs } from '../../../util/useDebounce';
-import CardGallery from '../../browse/CardGallery';
-import CardTable from '../../browse/CardTable';
 import { SetIcon } from '../../browse/SetBox';
 import { formatter } from '../../browse/util/formatPrice';
+import { ConnectedCollectionCardGallery } from '../ConnectedCollectionCardGallery';
+import { ConnectedCollectionCardTable } from '../ConnectedCollectionCardTable';
 import { setFormVisibility } from './setCollectionSlice';
 
 interface SetProps {
@@ -25,20 +19,7 @@ interface SetProps {
 }
 
 export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
-  const {
-    searchQuery,
-    oracleTextQuery,
-    cardTypes,
-    cardRarities,
-    cardColors,
-    showAllPrintings,
-    cardStatSearches,
-    sortBy,
-    sortByDirection,
-    viewSubject,
-    viewMode,
-    priceType,
-  } = useSelector((state: RootState) => state.setCollection);
+  const { searchQuery, oracleTextQuery, viewSubject, viewMode, priceType } = useSelector((state: RootState) => state.setCollection);
 
   const dispatch = useDispatch();
 
@@ -49,56 +30,11 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
     };
   }, []);
 
-  const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
-  const debouncedOracleTextQuery = useDebounce(oracleTextQuery, searchFieldDebounceTimeMs);
-
   const [skip, setSkip] = useState(0);
   const [first, setFirst] = useState(50);
   const [page, setPage] = useState(1);
 
   const { data: setData, isLoading: isSetLoading, error: setError } = useGetSetBySlugQuery({ slug: setSlug }, { skip: setSlug == null });
-
-  const { data: cardData, isLoading: isCardDataLoading, error: cardError } = useGetAllCardsQuery({
-    first,
-    skip,
-    sortBy,
-    name: debouncedSearchQuery,
-    oracleTextQuery: debouncedOracleTextQuery,
-    cardSets: [
-      {
-        category: 'Sets',
-        value: setData?.data?.allSets?.[0]?.id,
-        label: setData?.data?.allSets?.[0]?.name,
-        exclude: false,
-      },
-    ],
-    cardRarities,
-    cardTypes,
-    cardColors,
-    showAllPrintings,
-    cardStatSearches,
-    sortByDirection,
-  });
-
-  const { data: cardMetaData, isLoading: isCardMetaDataLoading, error: cardMetaError } = useGetAllCardsMetaQuery({
-    sortBy,
-    name: debouncedSearchQuery,
-    oracleTextQuery: debouncedOracleTextQuery,
-    cardSets: [
-      {
-        category: 'Sets',
-        value: setData?.data?.allSets?.[0]?.id,
-        label: setData?.data?.allSets?.[0]?.name,
-        exclude: false,
-      },
-    ],
-    cardRarities,
-    cardTypes,
-    cardColors,
-    showAllPrintings,
-    cardStatSearches,
-    sortByDirection,
-  });
 
   const setId = setData?.data?.allSets?.[0]?.id;
   const { data: setSummaryData, isLoading: isSetSummaryLoading, error: setSummaryError } = useGetSetSummaryLegacyQuery(
@@ -110,16 +46,8 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   );
 
   const set = setData?.data?.allSets?.[0];
-  const cards = cardData?.data?.allCards;
-  const totalResults = cardMetaData?.data?._allCardsMeta?.count;
   const setSummary = setSummaryData?.data?.setSummaryLegacy;
   const username = setSummary?.username ?? '';
-  const collection = setSummary?.collection;
-
-  const collectionByCardId = collection?.reduce((acc, curr) => {
-    acc[curr.cardID] = curr;
-    return acc;
-  }, {} as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
   const collectionDetails = {
     setName: set?.name,
@@ -142,34 +70,27 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
           <>
             <SetCollectionDetails collectionDetails={collectionDetails} priceType={priceType} />
             {viewSubject === 'cards' && viewMode === 'grid' && (
-              <MemoizedCardGallery
-                cards={cards}
-                totalResults={totalResults}
+              <ConnectedCollectionCardGallery
+                userId={userId}
+                setId={setData?.data?.allSets?.[0]?.id}
                 first={first}
                 skip={skip}
                 page={page}
                 setSkip={setSkip}
                 setFirst={setFirst}
                 setPage={setPage}
-                priceType={priceType}
-                collectionByCardId={collectionByCardId}
-                userId={userId}
               />
             )}
             {viewSubject === 'cards' && viewMode === 'table' && (
-              <MemoizedCardTable
-                cards={cards}
-                totalResults={totalResults}
+              <ConnectedCollectionCardTable
+                userId={userId}
+                setId={setData?.data?.allSets?.[0]?.id}
                 first={first}
                 skip={skip}
                 page={page}
                 setSkip={setSkip}
                 setFirst={setFirst}
                 setPage={setPage}
-                priceType={priceType}
-                collectionByCardId={collectionByCardId}
-                userId={userId}
-                isShowingSingleSet
               />
             )}
           </>
@@ -180,9 +101,6 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
     </ResponsiveContainer>
   );
 };
-
-const MemoizedCardGallery = memo(CardGallery);
-const MemoizedCardTable = memo(CardTable);
 
 interface SetCollectionDetails {
   collectionDetails: {

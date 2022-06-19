@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { SetCategory, SetType } from '../../features/browse/browseSlice';
+import { CardColors, CardRarity, CardSet, CardStatSearch, CardType, SetCategory, SetType } from '../../features/browse/browseSlice';
 import { SetSummary } from '../../features/browse/SetBox';
 import { Card } from '../../features/browse/types/Card';
 import { SetCompletionStatus } from '../../features/collections/collectionSlice';
-import buildBrowseFilter from '../features/browse/buildBrowseFilter';
+import buildBrowseFilter, { buildAdditionalWhereFilter } from '../features/browse/buildBrowseFilter';
 import buildBrowseExpansionFilter from '../features/browse/buildExpansionBrowseFilter';
 import { CardAutocompleteOptions, SearchOptions } from '../features/browse/commonTypes';
 import determineDistinctClause from '../features/browse/determineDistinctClause';
@@ -18,6 +18,7 @@ import {
   collectionByCardIdLegacy,
   collectionSummaryLegacy,
   costToPurchaseAll,
+  filteredCardsSummaryLegacy,
   filteredCollectionSummaryLegacy,
   setSummaryLegacy,
   setTypes as setTypesQuery,
@@ -71,7 +72,7 @@ export const mtgcbApi = createApi({
         priceType = 'market',
         first = 50,
         skip = 0,
-        name = '',
+        search = '',
         sortBy = 'releasedAt',
         sortByDirection = 'DESC',
         additionalSortBy,
@@ -88,7 +89,7 @@ export const mtgcbApi = createApi({
             priceType,
             first,
             skip,
-            search: name,
+            search,
             sortBy: determineSortFilter(sortBy, sortByDirection),
             additionalSortBy: determineAdditionalSortFilter(sortBy, sortByDirection),
             whereSetCompletionStatus,
@@ -96,6 +97,51 @@ export const mtgcbApi = createApi({
               setTypes,
               setCategories,
             }),
+          },
+        },
+      }),
+    }),
+    getFilteredCardsSummaryLegacy: builder.query<AxiosResponse<FilteredCardsSummaryLegacyResponse>, FilteredCardsSummaryLegacyVariables>({
+      providesTags: ['Collections'],
+      query: ({
+        userId,
+        setId,
+        first,
+        skip,
+        sortBy,
+        sortByDirection,
+        name,
+        oracleTextQuery,
+        cardSets,
+        cardRarities,
+        cardTypes,
+        cardColors,
+        showAllPrintings,
+        cardStatSearches,
+        additionalSortBy,
+        additionalWhere,
+      }) => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: filteredCardsSummaryLegacy,
+          variables: {
+            userId: Number(userId),
+            setId: Number(setId),
+            where: buildBrowseFilter({
+              cardSets,
+              cardRarities,
+              cardTypes,
+              cardColors,
+              oracleTextQuery: oracleTextQuery ? oracleTextQuery.trim() : '',
+              cardStatSearches,
+            }),
+            search: name ? name.trim() : '',
+            sortBy: determineSortFilter(sortBy, sortByDirection),
+            first,
+            skip,
+            additionalSortBy: determineAdditionalSortFilter(sortBy, sortByDirection),
+            additionalWhere: buildAdditionalWhereFilter({ cardStatSearches }),
           },
         },
       }),
@@ -350,6 +396,7 @@ export const {
   useUpdateCollectionLegacyMutation,
   useGetCardAutocompleteQuery,
   useGetFilteredCollectionSummaryLegacyQuery,
+  useGetFilteredCardsSummaryLegacyQuery,
 } = mtgcbApi;
 
 // TODO: Code split these types for readability
@@ -621,7 +668,7 @@ interface FilteredCollectionSummaryLegacyVariables {
   priceType?: 'market' | 'low' | 'average' | 'high' | 'foil';
   first?: number;
   skip?: number;
-  name?: string;
+  search?: string;
   sortBy?: string;
   sortByDirection?: 'ASC' | 'DESC';
   additionalSortBy?:
@@ -634,4 +681,58 @@ interface FilteredCollectionSummaryLegacyVariables {
   whereSetCompletionStatus?: SetCompletionStatus[];
   setTypes: SetType[];
   setCategories: SetCategory[];
+}
+
+interface FilteredCardsSummaryLegacyVariables {
+  userId: string;
+  setId: string;
+  first?: number;
+  skip?: number;
+  sortBy?: string;
+  sortByDirection?: 'ASC' | 'DESC';
+  name?: string;
+  oracleTextQuery?: string;
+  cardTypes?: CardType[];
+  cardSets?: CardSet[];
+  cardRarities?: CardRarity[];
+  cardColors: CardColors;
+  showAllPrintings?: boolean;
+  cardStatSearches: CardStatSearch[];
+  additionalSortBy?:
+    | 'currentValue_ASC'
+    | 'currentValue_DESC'
+    | 'costToComplete_ASC'
+    | 'costToComplete_DESC'
+    | 'percentageCollected_ASC'
+    | 'percentageCollected_DESC';
+  additionalWhere: string;
+}
+
+interface FilteredCardsSummaryLegacyResponse {
+  filteredCardsSummaryLegacy: {
+    userId: string;
+    cards: {
+      id: number;
+      name: string;
+      set: {
+        id: string;
+        name: string;
+        slug: string;
+      };
+      rarity: string;
+      manaCost: string;
+      convertedManaCost: number;
+      oracleTypeLine: string;
+      collectorNumber: string;
+      tcgplayerId: number;
+      low: number;
+      average: number;
+      high: number;
+      market: number;
+      foil: number;
+      quantityReg: number;
+      quantityFoil: number;
+    }[];
+    count: number;
+  };
 }

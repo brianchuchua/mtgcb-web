@@ -27,7 +27,7 @@ export const ConnectedCollectionDetails: React.FC<ConnectedCollectionDetailsProp
     priceType,
     first: expansionsFirst,
     skip: expansionsSkip,
-    name: debouncedExpansionSearchQuery,
+    search: debouncedExpansionSearchQuery,
     sortBy: sortExpansionBy,
     sortByDirection: sortExpansionByDirection,
     additionalSortBy: null,

@@ -45,7 +45,7 @@ export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
     priceType,
     first: expansionsFirst,
     skip: expansionsSkip,
-    name: debouncedExpansionSearchQuery,
+    search: debouncedExpansionSearchQuery,
     sortBy: sortExpansionBy,
     sortByDirection: sortExpansionByDirection,
     additionalSortBy: null,

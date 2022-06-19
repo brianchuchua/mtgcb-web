@@ -3,7 +3,14 @@ interface DetermineAdditionalSortFilterFunction {
 }
 
 const determineAdditionalSortFilter: DetermineAdditionalSortFilterFunction = (sortBy, sortByDirection) => {
-  if (sortBy === 'currentValue' || sortBy === 'costToComplete' || sortBy === 'percentageCollected') {
+  if (
+    sortBy === 'currentValue' ||
+    sortBy === 'costToComplete' ||
+    sortBy === 'percentageCollected' ||
+    sortBy === 'quantityAll' ||
+    sortBy === 'quantityNormal' ||
+    sortBy === 'quantityFoil'
+  ) {
     return `${sortBy}_${sortByDirection}`;
   }
   return null;

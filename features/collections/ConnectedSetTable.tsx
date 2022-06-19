@@ -39,7 +39,7 @@ export const ConnectedSetTable: React.FC<ConnectedSetTableProps> = ({
     priceType,
     first: expansionsFirst,
     skip: expansionsSkip,
-    name: debouncedExpansionSearchQuery,
+    search: debouncedExpansionSearchQuery,
     sortBy: sortExpansionBy,
     sortByDirection: sortExpansionByDirection,
     additionalSortBy: null,

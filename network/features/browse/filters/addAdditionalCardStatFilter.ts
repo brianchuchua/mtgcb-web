@@ -1,16 +1,16 @@
 import { CardStatSearch } from '../../../../features/browse/browseSlice';
 
-interface AddCardStatFilterFunction {
+interface AddAdditionalCardStatFilterFunction {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (cardStatSearches: CardStatSearch[], where: { AND: any[] }): any;
 }
 
-const addCardStatFilter: AddCardStatFilterFunction = (cardStatSearches, where) => {
+const addAdditionalCardStatFilter: AddAdditionalCardStatFilterFunction = (cardStatSearches, where) => {
   if (cardStatSearches.length) {
     const cardStatSearchConditions = { AND: [] };
     for (const cardStatSearch of cardStatSearches) {
       const { searchAttribute, comparator, value } = cardStatSearch;
-      if (searchAttribute === 'cardsAll' || searchAttribute === 'cardsNormal' || searchAttribute === 'cardsFoil') {
+      if (!(searchAttribute === 'cardsAll' || searchAttribute === 'cardsNormal' || searchAttribute === 'cardsFoil')) {
         // eslint-disable-next-line no-continue
         continue;
       }
@@ -21,17 +21,17 @@ const addCardStatFilter: AddCardStatFilterFunction = (cardStatSearches, where) =
             equalitySearchAttribute = searchAttribute.replace('Numeric', '');
           }
           cardStatSearchConditions.AND.push({
-            [equalitySearchAttribute]: value,
+            [equalitySearchAttribute]: Number(value),
           });
         } else {
           cardStatSearchConditions.AND.push({
-            [`${searchAttribute}_${comparator}`]: value,
+            [`${searchAttribute}_${comparator}`]: Number(value),
           });
         }
       }
     }
     if (cardStatSearchConditions.AND.length > 0) {
-      where.AND.push(cardStatSearchConditions);
+      where.AND = cardStatSearchConditions.AND;
     }
   }
 };
@@ -41,4 +41,4 @@ const valueIsNotNumeric = (value) => {
   return Number.isNaN(possiblyNumericValue);
 };
 
-export default addCardStatFilter;
+export default addAdditionalCardStatFilter;

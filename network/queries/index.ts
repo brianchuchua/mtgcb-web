@@ -8,6 +8,7 @@ import cardTypes from './cardTypes';
 import collectionByCardIdLegacy from './collectionByCardIdLegacy';
 import collectionSummaryLegacy from './collectionSummaryLegacy';
 import costToPurchaseAll from './costToPurchaseAll';
+import filteredCardsSummaryLegacy from './filteredCardsSummaryLegacy';
 import filteredCollectionSummaryLegacy from './filteredCollectionSummaryLegacy';
 import setSummaryLegacy from './setSummaryLegacy';
 import setTypes from './setTypes';
@@ -32,4 +33,5 @@ export {
   allSetNames,
   updateCollectionLegacy,
   filteredCollectionSummaryLegacy,
+  filteredCardsSummaryLegacy,
 };

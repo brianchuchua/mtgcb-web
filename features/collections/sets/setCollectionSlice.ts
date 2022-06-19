@@ -164,6 +164,9 @@ export const searchAttributeOptions = [
   { value: 'average', label: 'Price (Average)' },
   { value: 'high', label: 'Price (High)' },
   { value: 'foil', label: 'Price (Foil)' },
+  { value: 'cardsAll', label: 'Quantity (All)' },
+  { value: 'cardsNormal', label: 'Quantity (Normal)' },
+  { value: 'cardsFoil', label: 'Quantity (Foil)' },
 ];
 
 export const sortByOptions = [
@@ -180,6 +183,9 @@ export const sortByOptions = [
   { value: 'average', label: 'Price (Average)' },
   { value: 'high', label: 'Price (High)' },
   { value: 'foil', label: 'Price (Foil)' },
+  { value: 'quantityAll', label: 'Quantity (All)' },
+  { value: 'quantityNormal', label: 'Quantity (Normal)' },
+  { value: 'quantityFoil', label: 'Quantity (Foil)' },
 ];
 
 export const expansionSortByOptions = [

@@ -3,13 +3,13 @@ const filteredCollectionSummaryLegacy = `query filteredCollectionSummaryLegacy(
   $priceType: PriceType = market, 
   $first: Int = 50, 
   $skip: Int = 0, 
-  $name: String = "", 
+  $search: String = "", 
   $sortBy: [SortSetsBy!] = releasedAt_DESC, 
   $additionalSortBy: AdditionalSortSetsBy, 
   $whereSetCompletionStatus: [SetCompletionWhereInput],
   $where: SetWhereInput = {}) {
   filteredCollectionSummaryLegacy(userId: $userId, priceType: $priceType, first: $first, skip: $skip, 
-    search: $name, sortBy: $sortBy, additionalSortBy: $additionalSortBy, whereSetCompletionStatus: $whereSetCompletionStatus, where: $where) {
+    search: $search, sortBy: $sortBy, additionalSortBy: $additionalSortBy, whereSetCompletionStatus: $whereSetCompletionStatus, where: $where) {
       userId
       username
       totalCardsCollected

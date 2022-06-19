@@ -10,6 +10,7 @@ interface ConnectedCardStatSearchProps extends ConnectedSearchFormComponentProps
   setCardStatSearches: any;
   setComparator: any;
   setSearchAttribute: any;
+  searchAttributeOptionsOverride?: any;
 }
 
 const ConnectedCardStatSearch: React.FC<ConnectedCardStatSearchProps> = ({
@@ -19,6 +20,7 @@ const ConnectedCardStatSearch: React.FC<ConnectedCardStatSearchProps> = ({
   setCardStatSearches,
   setComparator,
   setSearchAttribute,
+  searchAttributeOptionsOverride,
 }) => {
   const dispatch = useDispatch();
   const { cardStatSearches } = useSelector((state: RootState) => state[reduxSlice]);
@@ -54,6 +56,7 @@ const ConnectedCardStatSearch: React.FC<ConnectedCardStatSearchProps> = ({
       updateCardStatSearches={updateCardStatSearches}
       handleAddCardStatSearch={handleAddCardStatSearch}
       handleRemoveCardStatSearch={handleRemoveCardStatSearch}
+      searchAttributeOptionsOverride={searchAttributeOptionsOverride}
     />
   );
 };

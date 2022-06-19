@@ -6,9 +6,10 @@ import { ConnectedSearchFormComponentProps } from './types';
 interface ConnectedSortSelectorProps extends ConnectedSearchFormComponentProps {
   setCardSort: any;
   setCardSortDirection: any;
+  sortByOptions?: any;
 }
 
-const ConnectedSortSelector: React.FC<ConnectedSortSelectorProps> = ({ reduxSlice, setCardSort, setCardSortDirection }) => {
+const ConnectedSortSelector: React.FC<ConnectedSortSelectorProps> = ({ reduxSlice, sortByOptions, setCardSort, setCardSortDirection }) => {
   const dispatch = useDispatch();
   const { sortBy, sortByDirection } = useSelector((state: RootState) => state[reduxSlice]);
 
@@ -24,6 +25,7 @@ const ConnectedSortSelector: React.FC<ConnectedSortSelectorProps> = ({ reduxSlic
     <SortSelector
       sortBy={sortBy}
       sortByDirection={sortByDirection}
+      sortByOptions={sortByOptions}
       handleSortByChange={handleSortByChange}
       handleSortByDirectionChange={handleSortByDirectionChange}
     />

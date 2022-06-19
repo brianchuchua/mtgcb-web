@@ -16,6 +16,7 @@ interface CardStatSearchProps {
   updateCardStatSearches: (value: string, index: number) => void;
   handleAddCardStatSearch: () => void;
   handleRemoveCardStatSearch: () => void;
+  searchAttributeOptionsOverride?: any;
 }
 
 const CardStatSearch: React.FC<CardStatSearchProps> = ({
@@ -25,6 +26,7 @@ const CardStatSearch: React.FC<CardStatSearchProps> = ({
   updateCardStatSearches,
   handleAddCardStatSearch,
   handleRemoveCardStatSearch,
+  searchAttributeOptionsOverride,
 }) => {
   const handleSearchAttributeChange = (event: React.ChangeEvent<{ value: unknown }>, index: number) => {
     updateSearchAttribute(event.target.value as SearchAttribute, index);
@@ -38,6 +40,7 @@ const CardStatSearch: React.FC<CardStatSearchProps> = ({
     updateCardStatSearches(event.target.value as ColorTypes, index);
   };
 
+  const searchAttributesToUse = searchAttributeOptionsOverride || searchAttributeOptions;
   return (
     <CardStatSearchGroup>
       {cardStatSearches.map((cardStatSearch, index) => (
@@ -48,7 +51,7 @@ const CardStatSearch: React.FC<CardStatSearchProps> = ({
             onChange={(event) => handleSearchAttributeChange(event, index)}
             variant="outlined"
           >
-            {searchAttributeOptions.map((searchAttribute) => (
+            {searchAttributesToUse.map((searchAttribute) => (
               <MenuItem key={searchAttribute.label} value={searchAttribute.value}>
                 {searchAttribute.label}
               </MenuItem>
