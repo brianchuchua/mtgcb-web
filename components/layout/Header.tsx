@@ -24,12 +24,18 @@ const Header: React.FC = () => {
   const [isSidenavOpen, setSidenavOpen] = useState(true);
   const [isMobileSidenavOpen, setMobileSidenavOpen] = useState(false);
 
-  const handleSidenavOpen = () => {
+  const handleSidenavOpenDesktop = () => {
     setSidenavOpen(true);
+  };
+  const handleSidenavCloseDesktop = () => {
+    setSidenavOpen(false);
+  };
+
+  const handleSidenavOpenMobile = () => {
     setMobileSidenavOpen(true);
   };
-  const handleSidenavClose = () => {
-    setSidenavOpen(false);
+
+  const handleSidenavCloseMobile = () => {
     setMobileSidenavOpen(false);
   };
 
@@ -45,7 +51,7 @@ const Header: React.FC = () => {
     <>
       <HeaderBarMobile position="fixed" color="inherit" open={isMobileSidenavOpen}>
         <HeaderToolbar>
-          <HeaderSidenavButton edge="start" color="inherit" aria-label="Open Side Menu" onClick={handleSidenavOpen}>
+          <HeaderSidenavButton edge="start" color="inherit" aria-label="Open Side Menu" onClick={handleSidenavOpenMobile}>
             <MenuIcon />
           </HeaderSidenavButton>
           <HeaderTitle component="h1" variant="h6" color="inherit" noWrap>
@@ -59,7 +65,7 @@ const Header: React.FC = () => {
       </HeaderBarMobile>
       <HeaderBarDesktop position="fixed" color="inherit" open={isSidenavOpen}>
         <HeaderToolbar>
-          <HeaderSidenavButton edge="start" color="inherit" aria-label="Open Side Menu" onClick={handleSidenavOpen}>
+          <HeaderSidenavButton edge="start" color="inherit" aria-label="Open Side Menu" onClick={handleSidenavOpenDesktop}>
             <MenuIcon />
           </HeaderSidenavButton>
           <HeaderTitle component="h1" variant="h6" color="inherit" noWrap>
@@ -71,15 +77,15 @@ const Header: React.FC = () => {
           <AccountMenu anchorEl={menuAnchorElement} handleClose={handleAccountMenuClose} />
         </HeaderToolbar>
       </HeaderBarDesktop>
-      <SidenavMobile variant="temporary" open={isMobileSidenavOpen} anchor="left" onClose={handleSidenavClose}>
+      <SidenavMobile variant="temporary" open={isMobileSidenavOpen} anchor="left" onClose={handleSidenavCloseMobile}>
         <SidenavHeader>
-          <IconButton onClick={handleSidenavClose}>
+          <IconButton onClick={handleSidenavCloseMobile}>
             <ChevronLeftIcon />
           </IconButton>
         </SidenavHeader>
         <Divider />
         <List>
-          <SidenavItems handleSidenavClose={handleSidenavClose} />
+          <SidenavItems handleSidenavClose={handleSidenavCloseMobile} />
         </List>
         <Divider />
         <List>
@@ -93,7 +99,7 @@ const Header: React.FC = () => {
       </SidenavMobile>
       <SidenavDesktop variant="permanent" open={isSidenavOpen} anchor="left" disableScrollLock>
         <SidenavHeader>
-          <IconButton onClick={handleSidenavClose}>
+          <IconButton onClick={handleSidenavCloseDesktop}>
             <ChevronLeftIcon />
           </IconButton>
         </SidenavHeader>
