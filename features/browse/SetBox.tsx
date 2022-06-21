@@ -5,142 +5,150 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { useState } from 'react';
 import styled from 'styled-components';
+import uaParser from 'ua-parser-js';
 import Link from '../../components/Link';
 import { tcgplayerMassImport, tcgplayerMassImportForUserLegacy } from '../../network/features/browse';
 import { PriceTypes } from './browseSlice';
 import { formatter } from './util/formatPrice';
 import titleCase from './util/titleCase';
 
-const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, isComplete = false, userId = null }) => (
-  <SetBoxWrapper variant="outlined">
-    <SetName>
-      <Link href={userId ? `/collections/${userId}/sets/${set.slug}` : `/browse/sets/${set.slug}`}>
-        {set.name} ({set.code})
-      </Link>
-    </SetName>
-    <Typography variant="body2" color="textSecondary" component="div">
-      {set.category} Set
-      {set.setType ? ` - ${titleCase(set.setType)}` : ''}
-    </Typography>
-    <Typography variant="body2" color="textSecondary" component="div">
-      {set.releasedAt?.slice(0, 10)}
-    </Typography>
-    {costsToPurchaseInSet && userId ? (
-      <>
-        <SetIconWithRadialProgress percentage={costsToPurchaseInSet.percentageCollected} setCode={set.code} />
-        <SetStatisticsInCollection
-          cardCount={costsToPurchaseInSet?.cardsInSet}
-          totalCardsCollectedInSet={costsToPurchaseInSet?.totalCardsCollectedInSet}
-          uniquePrintingsCollectedInSet={costsToPurchaseInSet?.uniquePrintingsCollectedInSet}
-        />
-        <Typography variant="body2" color="textSecondary" component="div">
-          <em>Current set value: {formatter.format(costsToPurchaseInSet[priceType].totalValue)}</em>
-        </Typography>
-      </>
-    ) : (
-      <>
-        <SetIcon setCode={set.code} />
-        <SetStatistics cardCount={set.cardCount} />
-      </>
-    )}
-    {costsToPurchaseInSet && (
-      <div style={{ marginTop: '10px' }}>
-        <Typography variant="body2" color="textSecondary" component="div">
-          {userId ? 'Costs to complete:' : 'Costs to purchase:'}
-        </Typography>
+const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, isComplete = false, userId = null }) => {
+  const userAgentString = window?.navigator?.userAgent;
+  const parsedUserAgent = userAgentString ? uaParser(userAgentString) : null;
+  const isSafari = parsedUserAgent?.browser?.name === 'Safari' || parsedUserAgent?.browser?.name === 'Mobile Safari';
+  const formTarget = isSafari ? '_self' : '_blank';
 
-        <table style={{ display: 'inline-block', textAlign: 'center' }}>
-          <tbody>
-            <tr>
-              <td style={{ textAlign: 'right' }}>
-                <Typography variant="body2" color="textSecondary">
-                  <em>1x all cards: {formatter.format(costsToPurchaseInSet[priceType].oneOfEachCard)}</em>
-                </Typography>
-              </td>
-              <td style={{ minWidth: '145px' }}>
-                <BuyThisButton setId={set.id} count={1} countType="all" userId={userId} />
-                <BuyThisButton setId={set.id} count={4} countType="all" userId={userId} />
-              </td>
-            </tr>
-            <tr>
-              <td style={{ textAlign: 'right' }}>
-                <Typography variant="body2" color="textSecondary">
-                  <em>1x mythics: {formatter.format(costsToPurchaseInSet[priceType].oneOfEachMythic)}</em>
-                </Typography>
-              </td>
-              <td>
-                <BuyThisButton setId={set.id} count={1} countType="mythic" userId={userId} />
-                <BuyThisButton setId={set.id} count={4} countType="mythic" userId={userId} />
-              </td>
-            </tr>
-            <tr>
-              <td style={{ textAlign: 'right' }}>
-                <Typography variant="body2" color="textSecondary">
-                  <em>1x rares: {formatter.format(costsToPurchaseInSet[priceType].oneOfEachRare)}</em>
-                </Typography>
-              </td>
-              <td>
-                <BuyThisButton setId={set.id} count={1} countType="rare" userId={userId} />
-                <BuyThisButton setId={set.id} count={4} countType="rare" userId={userId} />
-              </td>
-            </tr>
-            <tr>
-              <td style={{ textAlign: 'right' }}>
-                <Typography variant="body2" color="textSecondary">
-                  <em>1x uncommons: {formatter.format(costsToPurchaseInSet[priceType].oneOfEachUncommon)}</em>
-                </Typography>
-              </td>
-              <td>
-                <BuyThisButton setId={set.id} count={1} countType="uncommon" userId={userId} />
-                <BuyThisButton setId={set.id} count={4} countType="uncommon" userId={userId} />
-              </td>
-            </tr>
-            <tr>
-              <td style={{ textAlign: 'right' }}>
-                <Typography variant="body2" color="textSecondary">
-                  <em>1x commons: {formatter.format(costsToPurchaseInSet[priceType].oneOfEachCommon)}</em>
-                </Typography>
-              </td>
-              <td>
-                <BuyThisButton setId={set.id} count={1} countType="common" userId={userId} />
-                <BuyThisButton setId={set.id} count={4} countType="common" userId={userId} />
-              </td>
-            </tr>
-            {set.sealedProductUrl ? (
+  return (
+    <SetBoxWrapper variant="outlined">
+      <SetName>
+        <Link href={userId ? `/collections/${userId}/sets/${set.slug}` : `/browse/sets/${set.slug}`}>
+          {set.name} ({set.code})
+        </Link>
+      </SetName>
+      <Typography variant="body2" color="textSecondary" component="div">
+        {set.category} Set
+        {set.setType ? ` - ${titleCase(set.setType)}` : ''}
+      </Typography>
+      <Typography variant="body2" color="textSecondary" component="div">
+        {set.releasedAt?.slice(0, 10)}
+      </Typography>
+      {costsToPurchaseInSet && userId ? (
+        <>
+          <SetIconWithRadialProgress percentage={costsToPurchaseInSet.percentageCollected} setCode={set.code} />
+          <SetStatisticsInCollection
+            cardCount={costsToPurchaseInSet?.cardsInSet}
+            totalCardsCollectedInSet={costsToPurchaseInSet?.totalCardsCollectedInSet}
+            uniquePrintingsCollectedInSet={costsToPurchaseInSet?.uniquePrintingsCollectedInSet}
+          />
+          <Typography variant="body2" color="textSecondary" component="div">
+            <em>Current set value: {formatter.format(costsToPurchaseInSet[priceType].totalValue)}</em>
+          </Typography>
+        </>
+      ) : (
+        <>
+          <SetIcon setCode={set.code} />
+          <SetStatistics cardCount={set.cardCount} />
+        </>
+      )}
+      {costsToPurchaseInSet && (
+        <div style={{ marginTop: '10px' }}>
+          <Typography variant="body2" color="textSecondary" component="div">
+            {userId ? 'Costs to complete:' : 'Costs to purchase:'}
+          </Typography>
+
+          <table style={{ display: 'inline-block', textAlign: 'center' }}>
+            <tbody>
               <tr>
-                <td colSpan={3}>
-                  <Button
-                    style={{ textTransform: 'capitalize', marginTop: '3px' }}
-                    variant="outlined"
-                    size="small"
-                    href={`${set.sealedProductUrl}&partner=CTNBLDR&utm_campaign=affiliate&utm_medium=CTNBLDR&utm_source=CTNBLDR&ProductTypeName=Sealed`}
-                    target="_blank"
-                    fullWidth
-                  >
-                    Buy this set sealed
-                  </Button>
+                <td style={{ textAlign: 'right' }}>
+                  <Typography variant="body2" color="textSecondary">
+                    <em>1x all cards: {formatter.format(costsToPurchaseInSet[priceType].oneOfEachCard)}</em>
+                  </Typography>
+                </td>
+                <td style={{ minWidth: '145px' }}>
+                  <BuyThisButton setId={set.id} count={1} countType="all" userId={userId} formTarget={formTarget} />
+                  <BuyThisButton setId={set.id} count={4} countType="all" userId={userId} formTarget={formTarget} />
                 </td>
               </tr>
-            ) : null}
-            {set.isDraftable ? (
               <tr>
-                <td colSpan={3}>
-                  <BuyThisButton
-                    setId={set.id}
-                    count={1}
-                    countType="draftcube"
-                    price={formatter.format(costsToPurchaseInSet[priceType].draftCube)}
-                    userId={userId}
-                  />
+                <td style={{ textAlign: 'right' }}>
+                  <Typography variant="body2" color="textSecondary">
+                    <em>1x mythics: {formatter.format(costsToPurchaseInSet[priceType].oneOfEachMythic)}</em>
+                  </Typography>
+                </td>
+                <td>
+                  <BuyThisButton setId={set.id} count={1} countType="mythic" userId={userId} formTarget={formTarget} />
+                  <BuyThisButton setId={set.id} count={4} countType="mythic" userId={userId} formTarget={formTarget} />
                 </td>
               </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </div>
-    )}
-  </SetBoxWrapper>
-);
+              <tr>
+                <td style={{ textAlign: 'right' }}>
+                  <Typography variant="body2" color="textSecondary">
+                    <em>1x rares: {formatter.format(costsToPurchaseInSet[priceType].oneOfEachRare)}</em>
+                  </Typography>
+                </td>
+                <td>
+                  <BuyThisButton setId={set.id} count={1} countType="rare" userId={userId} formTarget={formTarget} />
+                  <BuyThisButton setId={set.id} count={4} countType="rare" userId={userId} formTarget={formTarget} />
+                </td>
+              </tr>
+              <tr>
+                <td style={{ textAlign: 'right' }}>
+                  <Typography variant="body2" color="textSecondary">
+                    <em>1x uncommons: {formatter.format(costsToPurchaseInSet[priceType].oneOfEachUncommon)}</em>
+                  </Typography>
+                </td>
+                <td>
+                  <BuyThisButton setId={set.id} count={1} countType="uncommon" userId={userId} formTarget={formTarget} />
+                  <BuyThisButton setId={set.id} count={4} countType="uncommon" userId={userId} formTarget={formTarget} />
+                </td>
+              </tr>
+              <tr>
+                <td style={{ textAlign: 'right' }}>
+                  <Typography variant="body2" color="textSecondary">
+                    <em>1x commons: {formatter.format(costsToPurchaseInSet[priceType].oneOfEachCommon)}</em>
+                  </Typography>
+                </td>
+                <td>
+                  <BuyThisButton setId={set.id} count={1} countType="common" userId={userId} formTarget={formTarget} />
+                  <BuyThisButton setId={set.id} count={4} countType="common" userId={userId} formTarget={formTarget} />
+                </td>
+              </tr>
+              {set.sealedProductUrl ? (
+                <tr>
+                  <td colSpan={3}>
+                    <Button
+                      style={{ textTransform: 'capitalize', marginTop: '3px' }}
+                      variant="outlined"
+                      size="small"
+                      href={`${set.sealedProductUrl}&partner=CTNBLDR&utm_campaign=affiliate&utm_medium=CTNBLDR&utm_source=CTNBLDR&ProductTypeName=Sealed`}
+                      target="_blank"
+                      fullWidth
+                    >
+                      Buy this set sealed
+                    </Button>
+                  </td>
+                </tr>
+              ) : null}
+              {set.isDraftable ? (
+                <tr>
+                  <td colSpan={3}>
+                    <BuyThisButton
+                      setId={set.id}
+                      count={1}
+                      countType="draftcube"
+                      price={formatter.format(costsToPurchaseInSet[priceType].draftCube)}
+                      userId={userId}
+                    />
+                  </td>
+                </tr>
+              ) : null}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </SetBoxWrapper>
+  );
+};
 
 type CountType = 'all' | 'mythic' | 'rare' | 'uncommon' | 'common' | 'draftcube';
 
@@ -150,16 +158,17 @@ interface BuyThisButtonProps {
   count: number;
   countType: CountType;
   price?: string;
+  formTarget?: string;
 }
 
-const BuyThisButton = ({ setId, count, countType, price, userId = null }: BuyThisButtonProps) => {
+const BuyThisButton = ({ setId, count, countType, price, userId = null, formTarget = '_blank' }: BuyThisButtonProps) => {
   const [tcgplayerMassImportString, setTcgplayerMassImportString] = useState('');
 
   return (
     <form
       method="post"
       action="https://store.tcgplayer.com/massentry?partner=CTNBLDR"
-      target="_blank"
+      target={formTarget}
       id={`tcgplayer-mass-import-form-${setId}-${count}-${countType}`}
       onSubmit={(e) => handleBuyThisSubmit(e, setId, count, countType, setTcgplayerMassImportString, userId)}
       style={{ display: 'inline-block', width: countType === 'draftcube' ? '100%' : 'auto' }}
@@ -184,6 +193,7 @@ const BuyThisButton = ({ setId, count, countType, price, userId = null }: BuyThi
 };
 
 const handleBuyThisSubmit = async (e, setId, count, countType, setTcgplayerMassImportString, userId = null) => {
+  console.log('handleBuyThisSubmit', setId, count, countType, setTcgplayerMassImportString, userId);
   e.preventDefault();
   const options: any = { setId: parseInt(setId, 10) }; // eslint-disable-line @typescript-eslint/no-explicit-any
 
@@ -210,7 +220,9 @@ const handleBuyThisSubmit = async (e, setId, count, countType, setTcgplayerMassI
     : (await tcgplayerMassImport(options))?.data?.data?.tcgplayerMassImport?.tcgplayerMassImport;
   setTcgplayerMassImportString(tcgplayerMassImportString);
   const buyThisForm: any = document.getElementById(`tcgplayer-mass-import-form-${setId}-${count}-${countType}`); // eslint-disable-line @typescript-eslint/no-explicit-any
+  console.log('buyThisForm', buyThisForm);
   buyThisForm.submit();
+  console.log('buyThisForm.submit()');
 };
 
 const SetBoxWrapper = styled(Paper)({
