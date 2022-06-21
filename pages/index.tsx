@@ -5,10 +5,10 @@ import Link from '../components/Link';
 const HomePage: React.FC = () => (
   <ResponsiveContainer maxWidth="xl">
     <Typography variant="h3" component="h1" align="center">
-      MTG CB Limited Edition Beta - Build v0.39.2 👷‍♂️
+      MTG CB Limited Edition Beta - Build v0.39.3 👷‍♂️
     </Typography>
     <Typography paragraph align="center">
-      <em>Last updated: 2022-06-20</em>
+      <em>Last updated: 2022-06-21</em>
     </Typography>
     <br />
     <br />
@@ -83,11 +83,10 @@ const HomePage: React.FC = () => (
     </Typography>
     <Typography paragraph component="div">
       <ul>
-        <li>More bug fixes -- especially in Safari</li>
+        <li>Quality of life fixes</li>
         <li>
           Database data fixes -- sets missing release dates, cards missing sets and collector numbers, better naming for variants, etc.
         </li>
-        <li>Quality of life fixes</li>
         <li>Table improvements, including possibly embedded exporters and proper server/client sorting</li>
         <li>The Great Subset Split™ and subset interfaces</li>
         <li>Tokens</li>
