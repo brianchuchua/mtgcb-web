@@ -67,6 +67,7 @@ export const mtgcbApi = createApi({
       AxiosResponse<FilteredCollectionSummaryLegacyResponse>,
       FilteredCollectionSummaryLegacyVariables
     >({
+      providesTags: ['Collections'],
       query: ({
         userId,
         priceType = 'market',
