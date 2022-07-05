@@ -18,6 +18,7 @@ export const ConnectedCollectionDetails: React.FC<ConnectedCollectionDetailsProp
 
   const debouncedExpansionSearchQuery = useDebounce(expansionSearchQuery, searchFieldDebounceTimeMs);
 
+  // Tech debt: We should switch to a different query for this component since it can mess with prefetching of other components since it doesn't consume all of the same inputs
   const {
     data: collectionSummary,
     isLoading: isFilteredCollectionSummaryLoading,
@@ -31,7 +32,7 @@ export const ConnectedCollectionDetails: React.FC<ConnectedCollectionDetailsProp
     sortBy: sortExpansionBy,
     sortByDirection: sortExpansionByDirection,
     additionalSortBy: null,
-    whereSetCompletionStatus: null,
+    whereSetCompletionStatus: ['all'],
     setTypes: expansionTypes,
     setCategories: expansionCategories,
   });
@@ -45,7 +46,7 @@ export const ConnectedCollectionDetails: React.FC<ConnectedCollectionDetailsProp
     totalValue: collectionSummary?.data?.filteredCollectionSummaryLegacy?.totalValue?.[priceType],
   };
 
-  return <MemoizedCollectionDetails collectionDetails={collectionDetails} />;
+  return <MemoizedCollectionDetails collectionDetails={collectionDetails} isLoading={isFilteredCollectionSummaryLoading} />;
 };
 
 const MemoizedCollectionDetails = memo(CollectionDetails);

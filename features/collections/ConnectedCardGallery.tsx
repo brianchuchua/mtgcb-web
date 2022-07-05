@@ -1,6 +1,11 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo, useCallback, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { useGetAllCardsMetaQuery, useGetAllCardsQuery, useGetCollectionByCardIdLegacyQuery } from '../../network/services/mtgcbApi';
+import {
+  useGetAllCardsMetaQuery,
+  useGetAllCardsQuery,
+  useGetCollectionByCardIdLegacyQuery,
+  usePrefetch,
+} from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
 import useDebounce, { searchFieldDebounceTimeMs } from '../../util/useDebounce';
 import CardGallery from '../browse/CardGallery';
@@ -33,7 +38,7 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
   const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
   const debouncedOracleTextQuery = useDebounce(oracleTextQuery, searchFieldDebounceTimeMs);
 
-  const { data: cardData, isLoading: isCardDataLoading, error: cardError } = useGetAllCardsQuery({
+  const { data: cardData, isLoading: isCardDataLoading, isFetching: isCardDataFetching, error: cardError } = useGetAllCardsQuery({
     first,
     skip,
     sortBy,
@@ -48,7 +53,12 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
     sortByDirection,
   });
 
-  const { data: cardMetaData, isLoading: isCardMetaDataLoading, error: cardMetaError } = useGetAllCardsMetaQuery({
+  const {
+    data: cardMetaData,
+    isLoading: isCardMetaDataLoading,
+    isFetching: isCardMetaDataFetching,
+    error: cardMetaError,
+  } = useGetAllCardsMetaQuery({
     sortBy,
     name: debouncedSearchQuery,
     oracleTextQuery: debouncedOracleTextQuery,
@@ -68,6 +78,7 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
   const {
     data: collectionByCardIdResponse,
     isLoading: isCollectionByCardIdLoading,
+    isFetching: isCollectionByCardIdFetching,
     error: collectionByCardIdError,
   } = useGetCollectionByCardIdLegacyQuery(
     {
@@ -86,6 +97,51 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
     [collectionByCardIdResponse]
   ); // eslint-disable-line @typescript-eslint/no-explicit-any
 
+  const isLoading = isCardDataLoading || isCardMetaDataLoading || isCollectionByCardIdLoading;
+  const isFetching = isCardDataFetching || isCardMetaDataFetching || isCollectionByCardIdFetching;
+
+  const prefetchAllCards = usePrefetch('getAllCards');
+
+  const prefetchNextAllCards = useCallback(() => {
+    if (skip + first < totalResults) {
+      prefetchAllCards({
+        first,
+        skip: skip + first,
+        sortBy,
+        name: debouncedSearchQuery,
+        oracleTextQuery: debouncedOracleTextQuery,
+        cardSets,
+        cardRarities,
+        cardTypes,
+        cardColors,
+        showAllPrintings,
+        cardStatSearches,
+        sortByDirection,
+      });
+    }
+  }, [
+    prefetchAllCards,
+    skip,
+    first,
+    totalResults,
+    sortBy,
+    debouncedSearchQuery,
+    debouncedOracleTextQuery,
+    cardSets,
+    cardRarities,
+    cardTypes,
+    cardColors,
+    showAllPrintings,
+    cardStatSearches,
+    sortByDirection,
+  ]);
+
+  useEffect(() => {
+    if (skip + first < totalResults) {
+      prefetchNextAllCards();
+    }
+  }, [skip, first, totalResults, prefetchNextAllCards]);
+
   return (
     <MemoizedCardGallery
       cards={cards}
@@ -99,6 +155,8 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
       priceType={priceType}
       userId={userId}
       collectionByCardId={collectionByCardId}
+      isLoading={isLoading}
+      isFetching={isFetching}
     />
   );
 };

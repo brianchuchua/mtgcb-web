@@ -60,7 +60,7 @@ export const Browse: React.FC = () => {
     };
   }, []);
 
-  const { data: cardData, isLoading: isCardDataLoading, error: cardError } = useGetAllCardsQuery({
+  const { data: cardData, isLoading: isCardDataLoading, isFetching: isCardDataFetching, error: cardError } = useGetAllCardsQuery({
     first,
     skip,
     sortBy,
@@ -75,7 +75,12 @@ export const Browse: React.FC = () => {
     sortByDirection,
   });
 
-  const { data: cardMetaData, isLoading: isCardMetaDataLoading, error: cardMetaError } = useGetAllCardsMetaQuery({
+  const {
+    data: cardMetaData,
+    isLoading: isCardMetaDataLoading,
+    isFetching: isCardMetaDataFetching,
+    error: cardMetaError,
+  } = useGetAllCardsMetaQuery({
     sortBy,
     name: debouncedSearchQuery,
     oracleTextQuery: debouncedOracleTextQuery,
@@ -88,7 +93,12 @@ export const Browse: React.FC = () => {
     sortByDirection,
   });
 
-  const { data: costToPurchaseAll, isLoading: isCostsToPurchaseLoading, error: costsToPurchaseError } = useGetCostToPurchaseAllQuery();
+  const {
+    data: costToPurchaseAll,
+    isLoading: isCostsToPurchaseLoading,
+    isFetching: isCostsToPurchaseFetching,
+    error: costsToPurchaseError,
+  } = useGetCostToPurchaseAllQuery();
   const costsToPurchase = costToPurchaseAll?.data?.costToPurchaseAll?.costToPurchaseAll;
   const cards = cardData?.data?.allCards;
   const totalResults = cardMetaData?.data?._allCardsMeta?.count;
@@ -100,7 +110,7 @@ export const Browse: React.FC = () => {
     }
   }, [skip, totalResults]);
 
-  const { data: allSetsResponse } = useGetAllSetsQuery({
+  const { data: allSetsResponse, isLoading: isGetAllSetsLoading, isFetching: isGetAllSetsFetching } = useGetAllSetsQuery({
     first: expansionsFirst,
     skip: expansionsSkip,
     name: debouncedExpansionSearchQuery,
@@ -111,7 +121,7 @@ export const Browse: React.FC = () => {
   });
   const expansions = allSetsResponse?.data?.allSets;
 
-  const { data: allSetsMetaResponse } = useGetAllSetsMetaQuery({
+  const { data: allSetsMetaResponse, isLoading: isAllSetsMetaLoading, isFetching: isAllSetsMetaFetching } = useGetAllSetsMetaQuery({
     name: debouncedExpansionSearchQuery,
     sortBy: sortExpansionBy,
     sortByDirection: sortExpansionByDirection,
@@ -120,6 +130,10 @@ export const Browse: React.FC = () => {
   });
   const allSetsMeta = allSetsMetaResponse?.data?._allSetsMeta;
   const totalExpansionsResults = allSetsMeta?.count || 0;
+
+  const isLoading = isCardDataLoading || isCardMetaDataLoading || isCostsToPurchaseLoading || isGetAllSetsLoading || isAllSetsMetaLoading;
+  const isFetching =
+    isCardDataFetching || isCardMetaDataFetching || isCostsToPurchaseFetching || isGetAllSetsFetching || isAllSetsMetaFetching;
 
   useEffect(() => {
     if (expansionsSkip > totalExpansionsResults) {
@@ -169,6 +183,8 @@ export const Browse: React.FC = () => {
             setFirst={setExpansionsFirst}
             setPage={setExpansionsPage}
             priceType={priceType}
+            isLoading={isLoading}
+            isFetching={isFetching}
           />
         )}
         {viewSubject === 'sets' && viewMode === 'table' && (

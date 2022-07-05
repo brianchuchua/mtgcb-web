@@ -42,7 +42,11 @@ export const ConnectedCollectionCardGallery: React.FC<ConnectedConnectionCardGal
   const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
   const debouncedOracleTextQuery = useDebounce(oracleTextQuery, searchFieldDebounceTimeMs);
 
-  const { data: filteredCardsSummary, isLoading: loadingFilteredCardsSummary } = useGetFilteredCardsSummaryLegacyQuery({
+  const {
+    data: filteredCardsSummary,
+    isLoading: loadingFilteredCardsSummary,
+    isFetching: fetchingFilteredCardsSummary,
+  } = useGetFilteredCardsSummaryLegacyQuery({
     userId,
     setId,
     first,
@@ -93,6 +97,8 @@ export const ConnectedCollectionCardGallery: React.FC<ConnectedConnectionCardGal
       priceType={priceType}
       userId={userId}
       collectionByCardId={collectionByCardId}
+      isLoading={loadingFilteredCardsSummary}
+      isFetching={fetchingFilteredCardsSummary}
     />
   );
 };

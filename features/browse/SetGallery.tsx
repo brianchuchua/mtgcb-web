@@ -1,5 +1,6 @@
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Skeleton from '@material-ui/lab/Skeleton';
 import { Dispatch, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import { PriceTypes } from './browseSlice';
@@ -18,12 +19,41 @@ const SetGallery: React.FC<SetGalleryProps> = ({
   setPage,
   priceType,
   userId = null,
+  isLoading,
+  isFetching,
 }) => {
   const [setsPerRow, setSetsPerRow] = useState(4);
   const [galleryWidth, setGalleryWidth] = useState(100);
 
   const atLeastOneSetToShow = totalResults > 0;
 
+  if (isLoading || isFetching) {
+    return (
+      <>
+        <GalleryControls
+          items={sets}
+          first={first}
+          page={page}
+          setCardsPerRow={setSetsPerRow}
+          setFirst={setFirst}
+          setGalleryWidth={setGalleryWidth}
+          setPage={setPage}
+          setSkip={setSkip}
+          skip={skip}
+          totalResults={totalResults}
+          cardsPerRow={setsPerRow}
+          galleryType="sets"
+          isLoading={isLoading}
+          isFetching={isFetching}
+        />{' '}
+        <SetGalleryWrapper setsPerRow={setsPerRow} galleryWidth={galleryWidth}>
+          {Array.from({ length: first }, (_, i) => (
+            <Skeleton key={i} variant="rect" height={userId ? 500 : 422} animation="wave" />
+          ))}
+        </SetGalleryWrapper>
+      </>
+    );
+  }
   return atLeastOneSetToShow ? (
     <>
       <GalleryControls
@@ -107,6 +137,8 @@ interface SetGalleryProps {
   totalResults: number;
   priceType: PriceTypes;
   userId?: string;
+  isLoading: boolean;
+  isFetching: boolean;
 }
 
 export default SetGallery;

@@ -5,10 +5,10 @@ import Link from '../components/Link';
 const HomePage: React.FC = () => (
   <ResponsiveContainer maxWidth="xl">
     <Typography variant="h3" component="h1" align="center">
-      MTG CB Limited Edition Beta - Build v0.39.4 👷‍♂️
+      MTG CB Limited Edition Beta - Build v0.40.0 👷‍♂️
     </Typography>
     <Typography paragraph align="center">
-      <em>Last updated: 2022-06-22</em>
+      <em>Last updated: 2022-07-04</em>
     </Typography>
     <br />
     <br />

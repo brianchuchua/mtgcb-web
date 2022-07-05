@@ -27,6 +27,8 @@ interface CardGalleryProps {
     }
   ];
   userId?: string;
+  isLoading?: boolean;
+  isFetching?: boolean;
 }
 
 const CardGallery: React.FC<CardGalleryProps> = ({
@@ -41,6 +43,8 @@ const CardGallery: React.FC<CardGalleryProps> = ({
   priceType,
   collectionByCardId,
   userId,
+  isLoading,
+  isFetching,
 }) => {
   const [cardsPerRow, setCardsPerRow] = useState(4);
   const [galleryWidth, setGalleryWidth] = useState(100);
@@ -79,49 +83,79 @@ const CardGallery: React.FC<CardGalleryProps> = ({
     },
   ];
 
-  return atLeastOneCardToShow ? (
-    <>
-      <GalleryControls
-        items={cards}
-        first={first}
-        page={page}
-        setCardsPerRow={setCardsPerRow}
-        setFirst={setFirst}
-        setGalleryWidth={setGalleryWidth}
-        setPage={setPage}
-        setSkip={setSkip}
-        skip={skip}
-        totalResults={totalResults}
-        cardsPerRow={cardsPerRow}
-        settingGroups={settingGroups}
-        galleryType="cards"
-      />
+  if (isLoading) {
+    return (
+      <>
+        <GalleryControls
+          items={cards}
+          first={first}
+          page={page}
+          setCardsPerRow={setCardsPerRow}
+          setFirst={setFirst}
+          setGalleryWidth={setGalleryWidth}
+          setPage={setPage}
+          setSkip={setSkip}
+          skip={skip}
+          totalResults={totalResults}
+          cardsPerRow={cardsPerRow}
+          settingGroups={settingGroups}
+          galleryType="cards"
+          isLoading={isLoading}
+          isFetching={isFetching}
+        />
+      </>
+    );
+  }
 
-      <CardGalleryWrapper cardsPerRow={cardsPerRow} galleryWidth={galleryWidth}>
-        {cards &&
-          cards.map((card) => (
-            <CardBox
-              key={card.id}
-              card={card}
-              priceType={priceType}
-              nameIsVisible={nameIsVisible}
-              setIsVisible={setIsVisible}
-              priceIsVisible={priceIsVisible}
-              userId={userId}
-              loggedInUserId={user?.id}
-              quantityReg={collectionByCardId?.[card.id]?.quantityReg ?? 0}
-              quantityFoil={collectionByCardId?.[card.id]?.quantityFoil ?? 0}
-            />
-          ))}
-      </CardGalleryWrapper>
-    </>
-  ) : (
-    <Grid container alignItems="center" justify="center">
-      <Grid item>
-        <Typography variant="h6">No results found -- try another search!</Typography>
+  if (atLeastOneCardToShow) {
+    return (
+      <>
+        <GalleryControls
+          items={cards}
+          first={first}
+          page={page}
+          setCardsPerRow={setCardsPerRow}
+          setFirst={setFirst}
+          setGalleryWidth={setGalleryWidth}
+          setPage={setPage}
+          setSkip={setSkip}
+          skip={skip}
+          totalResults={totalResults}
+          cardsPerRow={cardsPerRow}
+          settingGroups={settingGroups}
+          galleryType="cards"
+        />
+
+        <CardGalleryWrapper cardsPerRow={cardsPerRow} galleryWidth={galleryWidth}>
+          {cards &&
+            cards.map((card) => (
+              <CardBox
+                key={card.id}
+                card={card}
+                priceType={priceType}
+                nameIsVisible={nameIsVisible}
+                setIsVisible={setIsVisible}
+                priceIsVisible={priceIsVisible}
+                userId={userId}
+                loggedInUserId={user?.id}
+                quantityReg={collectionByCardId?.[card.id]?.quantityReg ?? 0}
+                quantityFoil={collectionByCardId?.[card.id]?.quantityFoil ?? 0}
+              />
+            ))}
+        </CardGalleryWrapper>
+      </>
+    );
+  }
+  if (!isLoading && !isFetching && totalResults === 0 && cards?.length === 0)
+    return (
+      <Grid container alignItems="center" justify="center">
+        <Grid item>
+          <Typography variant="h6">No results found -- try another search!</Typography>
+        </Grid>
       </Grid>
-    </Grid>
-  );
+    );
+
+  return null;
 };
 
 interface CardGalleryWrapperProps {

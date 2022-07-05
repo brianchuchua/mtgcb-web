@@ -1,6 +1,6 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useGetFilteredCollectionSummaryLegacyQuery } from '../../network/services/mtgcbApi';
+import { useGetFilteredCollectionSummaryLegacyQuery, usePrefetch } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
 import useDebounce, { searchFieldDebounceTimeMs } from '../../util/useDebounce';
 import SetGallery from '../browse/SetGallery';
@@ -39,6 +39,7 @@ export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
   const {
     data: collectionSummary,
     isLoading: isFilteredCollectionSummaryLoading,
+    isFetching: isFilteredCollectionSummaryFetching,
     error: filteredCollectionSummaryError,
   } = useGetFilteredCollectionSummaryLegacyQuery({
     userId,
@@ -48,8 +49,8 @@ export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
     search: debouncedExpansionSearchQuery,
     sortBy: sortExpansionBy,
     sortByDirection: sortExpansionByDirection,
-    additionalSortBy: null,
-    whereSetCompletionStatus: setCompletionStatuses,
+    additionalSortBy: null, // TODO: Check me -- should I be null?
+    whereSetCompletionStatus: setCompletionStatuses ?? ['all'],
     setTypes: expansionTypes,
     setCategories: expansionCategories,
   });
@@ -57,6 +58,44 @@ export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
   const expansions = collectionSummary?.data?.filteredCollectionSummaryLegacy?.collectionSummary;
   const costsToPurchase = collectionSummary?.data?.filteredCollectionSummaryLegacy?.collectionSummary;
   const totalExpansionsResults = collectionSummary?.data?.filteredCollectionSummaryLegacy?.count ?? 0;
+
+  const prefetchPage = usePrefetch('getFilteredCollectionSummaryLegacy');
+
+  const prefetchNext = useCallback(() => {
+    if (expansionsSkip + expansionsFirst < totalExpansionsResults) {
+      prefetchPage({
+        userId,
+        priceType,
+        first: expansionsFirst,
+        skip: expansionsSkip + expansionsFirst,
+        search: debouncedExpansionSearchQuery,
+        sortBy: sortExpansionBy,
+        sortByDirection: sortExpansionByDirection,
+        additionalSortBy: null,
+        whereSetCompletionStatus: setCompletionStatuses ?? ['all'],
+        setTypes: expansionTypes,
+        setCategories: expansionCategories,
+      });
+    }
+  }, [
+    userId,
+    priceType,
+    expansionsFirst,
+    expansionsSkip,
+    debouncedExpansionSearchQuery,
+    sortExpansionBy,
+    sortExpansionByDirection,
+    setCompletionStatuses,
+    expansionTypes,
+    expansionCategories,
+    totalExpansionsResults,
+  ]);
+
+  useEffect(() => {
+    if (expansionsSkip + expansionsFirst < totalExpansionsResults) {
+      prefetchNext();
+    }
+  }, [expansionsSkip, expansionsFirst, totalExpansionsResults, prefetchNext]);
 
   return (
     <MemoizedSetGallery
@@ -71,6 +110,8 @@ export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
       setPage={setExpansionsPage}
       priceType={priceType}
       userId={userId}
+      isLoading={isFilteredCollectionSummaryLoading}
+      isFetching={isFilteredCollectionSummaryFetching}
     />
   );
 };

@@ -398,6 +398,7 @@ export const {
   useGetCardAutocompleteQuery,
   useGetFilteredCollectionSummaryLegacyQuery,
   useGetFilteredCardsSummaryLegacyQuery,
+  usePrefetch,
 } = mtgcbApi;
 
 // TODO: Code split these types for readability

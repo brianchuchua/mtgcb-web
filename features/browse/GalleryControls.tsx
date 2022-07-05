@@ -1,6 +1,7 @@
 import Grid from '@material-ui/core/Grid';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
+import Skeleton from '@material-ui/lab/Skeleton';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { forceCheck as forceImagesToCheckIfTheyShouldLoad } from 'react-lazyload';
 import styled from 'styled-components';
@@ -26,6 +27,8 @@ interface GalleryControlsProps {
   totalResults: number;
   settingGroups?: SettingGroup[];
   galleryType?: GalleryTypes;
+  isLoading?: boolean;
+  isFetching?: boolean;
 }
 
 const GalleryControls: React.FC<GalleryControlsProps> = ({
@@ -41,6 +44,8 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
   setGalleryWidth,
   galleryType,
   settingGroups = [],
+  isLoading,
+  isFetching,
 }) => {
   const startOfRange = 1 + skip;
   const numberOfCards = items?.length ?? 0;
@@ -63,6 +68,14 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
       handleCardsPerRowChange(4, setCardsPerRow);
     }
   }, [width]);
+
+  if (isLoading) {
+    return (
+      <div style={{ marginTop: '10px', marginBottom: '10px' }}>
+        <Skeleton variant="rect" width="100%" height={galleryType === 'sets' ? '54px' : '108px'} />
+      </div>
+    );
+  }
 
   return (
     atLeastOneItemToShow && (
@@ -130,6 +143,7 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
 const handleGalleryWidthChange = (value, setGalleryWidth) => {
   setGalleryWidth(value);
   forceImagesToCheckIfTheyShouldLoad();
+  triggerBrowserResizeEvent();
 };
 
 const handleCardsPerRowChange = (value, setCardsPerRow) => {
@@ -137,6 +151,18 @@ const handleCardsPerRowChange = (value, setCardsPerRow) => {
     setCardsPerRow(value);
   }
   forceImagesToCheckIfTheyShouldLoad();
+  triggerBrowserResizeEvent();
+};
+
+const triggerBrowserResizeEvent = () => {
+  const isNewerBrowser = typeof Event === 'function';
+  if (isNewerBrowser) {
+    window.dispatchEvent(new Event('resize'));
+  } else {
+    const evt = window.document.createEvent('UIEvents');
+    evt.initUIEvent('resize', true, false, window, 0);
+    window.dispatchEvent(evt);
+  }
 };
 
 const CenteredGrid = styled(Grid)({

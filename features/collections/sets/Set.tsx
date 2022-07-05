@@ -1,5 +1,6 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
+import Skeleton from '@material-ui/lab/Skeleton';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -34,10 +35,18 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   const [first, setFirst] = useState(50);
   const [page, setPage] = useState(1);
 
-  const { data: setData, isLoading: isSetLoading, error: setError } = useGetSetBySlugQuery({ slug: setSlug }, { skip: setSlug == null });
+  const { data: setData, isLoading: isSetLoading, isFetching: isSetFetching, error: setError } = useGetSetBySlugQuery(
+    { slug: setSlug },
+    { skip: setSlug == null }
+  );
 
   const setId = setData?.data?.allSets?.[0]?.id;
-  const { data: setSummaryData, isLoading: isSetSummaryLoading, error: setSummaryError } = useGetSetSummaryLegacyQuery(
+  const {
+    data: setSummaryData,
+    isLoading: isSetSummaryLoading,
+    isFetching: isSetSummaryFetching,
+    error: setSummaryError,
+  } = useGetSetSummaryLegacyQuery(
     {
       setId: setData?.data?.allSets?.[0]?.id,
       userId,
@@ -48,6 +57,9 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   const set = setData?.data?.allSets?.[0];
   const setSummary = setSummaryData?.data?.setSummaryLegacy;
   const username = setSummary?.username ?? '';
+
+  const isLoading = isSetLoading || isSetSummaryLoading;
+  const isFetching = isSetFetching || isSetSummaryFetching;
 
   const collectionDetails = {
     setName: set?.name,
@@ -66,9 +78,14 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   return (
     <ResponsiveContainer maxWidth="xl">
       <>
-        {set ? (
+        {set && (
           <>
-            <SetCollectionDetails collectionDetails={collectionDetails} priceType={priceType} />
+            <SetCollectionDetails
+              collectionDetails={collectionDetails}
+              priceType={priceType}
+              isLoading={isLoading}
+              isFetching={isFetching}
+            />
             {viewSubject === 'cards' && viewMode === 'grid' && (
               <ConnectedCollectionCardGallery
                 userId={userId}
@@ -94,9 +111,8 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
               />
             )}
           </>
-        ) : (
-          <p>No set found</p>
         )}
+        {((setData?.data?.allSets && setData?.data?.allSets.length === 0) || setSummaryError) && <p>No set found</p>}
       </>
     </ResponsiveContainer>
   );
@@ -120,41 +136,83 @@ interface SetCollectionDetails {
     };
   };
   priceType: string;
+  isLoading: boolean;
+  isFetching: boolean;
 }
 
-const SetCollectionDetails: React.FC<SetCollectionDetails> = ({ collectionDetails, priceType }) => (
-  <CollectionDetailsWrapper>
-    <StyledCollectionDetailsTitleDesktop variant="h3">{collectionDetails.setName}</StyledCollectionDetailsTitleDesktop>
-    <StyledCollectionDetailsTitleMobile variant="h5">{collectionDetails.setName}</StyledCollectionDetailsTitleMobile>
-    <CollectionDetailsSubtitle variant="body1" color="textSecondary">
-      <em>
-        <Link href={`/collections/${collectionDetails.userId}`} color="inherit">
-          (Part of {collectionDetails.username}'s collection)
-        </Link>
-      </em>
-    </CollectionDetailsSubtitle>
-    <CollectionDetailsBody>
-      <SetIcon setCode={collectionDetails.setCode} />
-      <Typography variant="h5" color="textSecondary" component="div">
-        {collectionDetails.uniquePrintingsCollectedInSet}/{collectionDetails.cardsInSet}
-      </Typography>
-      <Typography variant="body2" color="textSecondary" component="div">
-        <em>({collectionDetails.totalCardsCollectedInSet} total cards collected)</em>
-      </Typography>
-      <Typography variant="body2" color="textSecondary" component="div">
-        <em>Set value: {collectionDetails?.totalValue && formatter.format(collectionDetails?.totalValue?.[priceType])}</em>
-      </Typography>
-      <CollectionProgressWrapper>
-        <StyledLinearProgress variant="determinate" value={collectionDetails.percentageCollected ?? 0} color="secondary" />
-        <LinearProgressLabel>
-          <Typography variant="body2" color="textSecondary" component="div">
-            {collectionDetails.percentageCollected}% collected!
-          </Typography>
-        </LinearProgressLabel>
-      </CollectionProgressWrapper>
-    </CollectionDetailsBody>
-  </CollectionDetailsWrapper>
-);
+const SetCollectionDetails: React.FC<SetCollectionDetails> = ({ collectionDetails, priceType, isLoading, isFetching }) => {
+  if (isLoading) {
+    return (
+      <CenteredSkeleton variant="rect" width="100%">
+        <CollectionDetailsWrapper>
+          <StyledCollectionDetailsTitleDesktop variant="h3">{collectionDetails.setName}</StyledCollectionDetailsTitleDesktop>
+          <StyledCollectionDetailsTitleMobile variant="h5">{collectionDetails.setName}</StyledCollectionDetailsTitleMobile>
+          <CollectionDetailsSubtitle variant="body1" color="textSecondary">
+            <em>
+              <Link href={`/collections/${collectionDetails.userId}`} color="inherit">
+                (Part of {collectionDetails.username}'s collection)
+              </Link>
+            </em>
+          </CollectionDetailsSubtitle>
+          <CollectionDetailsBody>
+            <SetIcon setCode={collectionDetails.setCode} />
+            <Typography variant="h5" color="textSecondary" component="div">
+              {collectionDetails.uniquePrintingsCollectedInSet}/{collectionDetails.cardsInSet}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="div">
+              <em>({collectionDetails.totalCardsCollectedInSet} total cards collected)</em>
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="div">
+              <em>Set value: {collectionDetails?.totalValue && formatter.format(collectionDetails?.totalValue?.[priceType])}</em>
+            </Typography>
+            <CollectionProgressWrapper>
+              <StyledLinearProgress variant="determinate" value={collectionDetails.percentageCollected ?? 0} color="secondary" />
+              <LinearProgressLabel>
+                <Typography variant="body2" color="textSecondary" component="div">
+                  {collectionDetails.percentageCollected}% collected!
+                </Typography>
+              </LinearProgressLabel>
+            </CollectionProgressWrapper>
+          </CollectionDetailsBody>
+        </CollectionDetailsWrapper>
+      </CenteredSkeleton>
+    );
+  }
+
+  return (
+    <CollectionDetailsWrapper>
+      <StyledCollectionDetailsTitleDesktop variant="h3">{collectionDetails.setName}</StyledCollectionDetailsTitleDesktop>
+      <StyledCollectionDetailsTitleMobile variant="h5">{collectionDetails.setName}</StyledCollectionDetailsTitleMobile>
+      <CollectionDetailsSubtitle variant="body1" color="textSecondary">
+        <em>
+          <Link href={`/collections/${collectionDetails.userId}`} color="inherit">
+            (Part of {collectionDetails.username}'s collection)
+          </Link>
+        </em>
+      </CollectionDetailsSubtitle>
+      <CollectionDetailsBody>
+        <SetIcon setCode={collectionDetails.setCode} />
+        <Typography variant="h5" color="textSecondary" component="div">
+          {collectionDetails.uniquePrintingsCollectedInSet}/{collectionDetails.cardsInSet}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="div">
+          <em>({collectionDetails.totalCardsCollectedInSet} total cards collected)</em>
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="div">
+          <em>Set value: {collectionDetails?.totalValue && formatter.format(collectionDetails?.totalValue?.[priceType])}</em>
+        </Typography>
+        <CollectionProgressWrapper>
+          <StyledLinearProgress variant="determinate" value={collectionDetails.percentageCollected ?? 0} color="secondary" />
+          <LinearProgressLabel>
+            <Typography variant="body2" color="textSecondary" component="div">
+              {collectionDetails.percentageCollected}% collected!
+            </Typography>
+          </LinearProgressLabel>
+        </CollectionProgressWrapper>
+      </CollectionDetailsBody>
+    </CollectionDetailsWrapper>
+  );
+};
 
 const CollectionDetailsWrapper = styled.div(() => ({
   width: '100%',
@@ -202,3 +260,7 @@ const StyledCollectionDetailsTitleDesktop = styled(CollectionDetailsTitle)(({ th
     display: 'none',
   },
 }));
+
+const CenteredSkeleton = styled(Skeleton)({
+  margin: '0 auto',
+});

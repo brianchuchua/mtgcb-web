@@ -1,7 +1,10 @@
 import Grid from '@material-ui/core/Grid';
+import Skeleton from '@material-ui/lab/Skeleton';
+import { useRef, useState } from 'react';
 import LazyLoad from 'react-lazyload';
 import styled from 'styled-components';
 import Link from '../../components/Link';
+import { useContainerDimensions } from '../../util/useContainerDimensions';
 import { PriceTypes } from './browseSlice';
 import CardPrice from './CardPrice';
 import CardQuantity from './CardQuantity';
@@ -35,14 +38,37 @@ const CardBox: React.FC<CardBoxProps> = ({
 }) => {
   const imageUrl = `https://mtgcb-images.s3.amazonaws.com/cards/images/normal/${card.id}.jpg`;
 
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const componentRef = useRef();
+  const { width, height } = useContainerDimensions(componentRef);
+
   return (
     <CardWrapper key={card.id} fixedHeight={fixedHeight}>
       <CardAttributes>
-        <LazyLoad key={`lazy-${card.id}`} once resize height={50}>
-          <a href={generateCardUrl(card.tcgplayerId, card.name)} target="_blank" rel="noreferrer">
-            <CardImage alt={card.name} title={card.name} src={imageUrl} set={card.set?.name} fixedHeight={fixedHeight} />
-          </a>
-        </LazyLoad>
+        <div ref={componentRef}>
+          <LazyLoad key={`lazy-${card.id}`} once resize style={{ width: '100%' }}>
+            {!imageLoaded && (
+              <Skeleton
+                variant="rect"
+                width="100%"
+                height={`${1.39 * width}px`}
+                animation="wave"
+                style={{ width: '100%', height: `${Math.ceil(1.39 * width)}px`, borderRadius: '5%' }}
+              />
+            )}
+            <a href={generateCardUrl(card.tcgplayerId, card.name)} target="_blank" rel="noreferrer">
+              <CardImage
+                alt={card.name}
+                title={card.name}
+                src={imageUrl}
+                set={card.set?.name}
+                fixedHeight={fixedHeight}
+                style={{ display: imageLoaded ? 'block' : 'none' }}
+                onLoad={() => setImageLoaded(true)}
+              />
+            </a>
+          </LazyLoad>
+        </div>
         {userId && userId === loggedInUserId && (
           <Grid container spacing={1}>
             <Grid item xs={6}>

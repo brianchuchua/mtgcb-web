@@ -65,6 +65,11 @@ const darkTheme = createMuiTheme({
         borderColor: 'rgba(255, 255, 255, 0.23)',
       },
     },
+    MuiSkeleton: {
+      root: {
+        backgroundColor: '#282C34',
+      },
+    },
   },
 });
 

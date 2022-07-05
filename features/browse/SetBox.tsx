@@ -18,10 +18,12 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
   const isSafari = parsedUserAgent?.browser?.name === 'Safari' || parsedUserAgent?.browser?.name === 'Mobile Safari';
   const formTarget = isSafari ? '_self' : '_blank';
 
+  const setUrl = userId ? `/collections/${userId}/sets/${set.slug}` : `/browse/sets/${set.slug}`;
+
   return (
     <SetBoxWrapper variant="outlined">
       <SetName>
-        <Link href={userId ? `/collections/${userId}/sets/${set.slug}` : `/browse/sets/${set.slug}`}>
+        <Link href={setUrl}>
           {set.name} ({set.code})
         </Link>
       </SetName>
@@ -34,7 +36,7 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
       </Typography>
       {costsToPurchaseInSet && userId ? (
         <>
-          <SetIconWithRadialProgress percentage={costsToPurchaseInSet.percentageCollected} setCode={set.code} />
+          <SetIconWithRadialProgress percentage={costsToPurchaseInSet.percentageCollected} setCode={set.code} setUrl={setUrl} />
           <SetStatisticsInCollection
             cardCount={costsToPurchaseInSet?.cardsInSet}
             totalCardsCollectedInSet={costsToPurchaseInSet?.totalCardsCollectedInSet}
@@ -46,7 +48,7 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
         </>
       ) : (
         <>
-          <SetIcon setCode={set.code} />
+          <SetIcon setCode={set.code} setUrl={setUrl} />
           <SetStatistics cardCount={set.cardCount} />
         </>
       )}
@@ -193,7 +195,6 @@ const BuyThisButton = ({ setId, count, countType, price, userId = null, formTarg
 };
 
 const handleBuyThisSubmit = async (e, setId, count, countType, setTcgplayerMassImportString, userId = null) => {
-  console.log('handleBuyThisSubmit', setId, count, countType, setTcgplayerMassImportString, userId);
   e.preventDefault();
   const options: any = { setId: parseInt(setId, 10) }; // eslint-disable-line @typescript-eslint/no-explicit-any
 
@@ -220,9 +221,7 @@ const handleBuyThisSubmit = async (e, setId, count, countType, setTcgplayerMassI
     : (await tcgplayerMassImport(options))?.data?.data?.tcgplayerMassImport?.tcgplayerMassImport;
   setTcgplayerMassImportString(tcgplayerMassImportString);
   const buyThisForm: any = document.getElementById(`tcgplayer-mass-import-form-${setId}-${count}-${countType}`); // eslint-disable-line @typescript-eslint/no-explicit-any
-  console.log('buyThisForm', buyThisForm);
   buyThisForm.submit();
-  console.log('buyThisForm.submit()');
 };
 
 const SetBoxWrapper = styled(Paper)({
@@ -351,9 +350,10 @@ const SetStatisticsInCollection: React.FC<SetStatisticsInCollectionProps> = ({
 interface SetIconWithRadialProgressProps {
   setCode?: string;
   percentage?: number;
+  setUrl?: string;
 }
 
-const SetIconWithRadialProgress: React.FC<SetIconWithRadialProgressProps> = ({ percentage, setCode }) => (
+const SetIconWithRadialProgress: React.FC<SetIconWithRadialProgressProps> = ({ percentage, setCode, setUrl }) => (
   <Box position="relative" display="inline-flex" style={{ padding: '5px' }}>
     <CircularProgress variant="determinate" value={100} thickness={4.5} size={110} style={{ color: '#707070', position: 'absolute' }} />
 
@@ -367,27 +367,32 @@ const SetIconWithRadialProgress: React.FC<SetIconWithRadialProgressProps> = ({ p
         style={{ color: percentage < 100 ? '' : '#cd4809' }}
       />
       <Box top={0} left={0} bottom={0} right={0} position="absolute" display="flex" alignItems="center" justifyContent="center">
-        <SetIcon setCode={setCode} percentage={percentage} />
+        <Link href={setUrl}>
+          <SetIcon setCode={setCode} percentage={percentage} />
+        </Link>
       </Box>
     </Box>
   </Box>
 );
 
 interface SetIconProps {
+  setUrl?: string;
   setCode?: string;
   percentage?: number;
   showPercentage?: boolean;
 }
 
-export const SetIcon: React.FC<SetIconProps> = ({ setCode = '', percentage = 0, showPercentage = false }) => (
+export const SetIcon: React.FC<SetIconProps> = ({ setUrl, setCode = '', percentage = 0, showPercentage = false }) => (
   <div style={{ padding: '5px', position: 'relative' }}>
-    <i
-      className={`ss ss-${setCode.toLowerCase()} ss-5x ss-common ss-fw ${percentage >= 100 ? 'ss-mythic ss-grad' : ''}`}
-      style={{
-        WebkitTextStroke: percentage >= 100 ? '2px #000' : '',
-        textShadow: percentage < 100 ? '-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff' : '',
-      }}
-    />
+    <Link href={setUrl}>
+      <i
+        className={`ss ss-${setCode.toLowerCase()} ss-5x ss-common ss-fw ${percentage >= 100 ? 'ss-mythic ss-grad' : ''}`}
+        style={{
+          WebkitTextStroke: percentage >= 100 ? '2px #000' : '',
+          textShadow: percentage < 100 ? '-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff' : '',
+        }}
+      />
+    </Link>
     <div
       style={{
         position: 'absolute',
