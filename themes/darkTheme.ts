@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck - I need to be able to use the MuiSkeleton class even though it's not defined in the typing of this library.
 import { indigo } from '@material-ui/core/colors';
 import { createMuiTheme } from '@material-ui/core/styles';
 import breakpoints from './breakpoints';
