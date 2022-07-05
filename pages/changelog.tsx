@@ -12,7 +12,7 @@ const ChangelogPage: React.FC = () => (
     <Typography paragraph>
       <ul>
         <li>Improved loading states / added image placeholders / reduced layout shift.</li>
-        <li>Added prefetching logic to the next page in pagination is fetched in advance.</li>
+        <li>Added prefetching logic so the next page in pagination is fetched in advance.</li>
         <li>Made set icons clickable to enter set pages.</li>
       </ul>
     </Typography>
