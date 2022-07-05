@@ -367,9 +367,7 @@ const SetIconWithRadialProgress: React.FC<SetIconWithRadialProgressProps> = ({ p
         style={{ color: percentage < 100 ? '' : '#cd4809' }}
       />
       <Box top={0} left={0} bottom={0} right={0} position="absolute" display="flex" alignItems="center" justifyContent="center">
-        <Link href={setUrl}>
-          <SetIcon setCode={setCode} percentage={percentage} />
-        </Link>
+        <SetIcon setCode={setCode} percentage={percentage} setUrl={setUrl} />
       </Box>
     </Box>
   </Box>
@@ -382,7 +380,7 @@ interface SetIconProps {
   showPercentage?: boolean;
 }
 
-export const SetIcon: React.FC<SetIconProps> = ({ setUrl, setCode = '', percentage = 0, showPercentage = false }) => (
+export const SetIcon: React.FC<SetIconProps> = ({ setUrl = '#', setCode = '', percentage = 0, showPercentage = false }) => (
   <div style={{ padding: '5px', position: 'relative' }}>
     <Link href={setUrl}>
       <i
