@@ -34,6 +34,12 @@ export const CardQuantitySubmitter: React.FC<CardQuantitySubmitterProps> = ({
     }
   }, [isSuccess]);
 
+  useEffect(() => {
+    if (isError) {
+      enqueueSnackbar(`${cardName} could not be updated.`, { variant: 'error', anchorOrigin: { horizontal: 'right', vertical: 'bottom' } });
+    }
+  }, [isError]);
+
   const handleQuantityRegChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === '') {
       setInternalQuantityReg('');

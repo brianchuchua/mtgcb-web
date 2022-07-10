@@ -7,6 +7,15 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-07-10 (v0.41.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Added louder success pop-up when a card is updated outside the Edit Cards page.</li>
+        <li>Added error pop-ups if card updating fails due to an API outage.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-07-04 (v0.40.0)
     </Typography>
     <Typography paragraph>

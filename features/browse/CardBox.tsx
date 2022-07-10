@@ -72,11 +72,19 @@ const CardBox: React.FC<CardBoxProps> = ({
         {userId && userId === loggedInUserId && (
           <Grid container spacing={1}>
             <Grid item xs={6}>
-              <CardQuantitySelector cardId={card.id} quantityReg={quantityReg} userId={userId} setId={card.set?.id} renderFoil={false} />
+              <CardQuantitySelector
+                cardId={card.id}
+                cardName={card.name}
+                quantityReg={quantityReg}
+                userId={userId}
+                setId={card.set?.id}
+                renderFoil={false}
+              />
             </Grid>
             <Grid item xs={6}>
               <CardQuantitySelector
                 cardId={card.id}
+                cardName={card.name}
                 quantityFoil={quantityFoil}
                 userId={userId}
                 setId={card.set?.id}

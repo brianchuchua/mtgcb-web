@@ -88,6 +88,7 @@ const CardTable: React.FC<CardTableProps> = ({
           loggedInUser === userId ? (
             <CardQuantitySelector
               cardId={row?.values?.id}
+              cardName={row?.values?.name}
               userId={userId}
               setId={row?.values?.set?.id}
               quantityReg={value}
@@ -105,6 +106,7 @@ const CardTable: React.FC<CardTableProps> = ({
           loggedInUser === userId ? (
             <CardQuantitySelector
               cardId={row?.values?.id}
+              cardName={row?.values?.name}
               userId={userId}
               setId={row?.values?.set?.id}
               quantityReg={row?.values?.quantityReg}

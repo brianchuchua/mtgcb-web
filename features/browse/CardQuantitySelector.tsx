@@ -2,12 +2,14 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useUpdateCollectionLegacyMutation } from '../../network/services/mtgcbApi';
 import useDebouncedCallback, { cardQuantityInputFieldDebounceTimeMs } from '../../util/useDebouncedCallback';
 
 interface CardQuantitySelectorProps {
   cardId: number;
+  cardName?: string;
   quantityReg?: number | '';
   quantityFoil?: number | '';
   userId: string;
@@ -18,6 +20,7 @@ interface CardQuantitySelectorProps {
 
 const CardQuantitySelector: React.FC<CardQuantitySelectorProps> = ({
   cardId,
+  cardName,
   quantityReg = 0,
   quantityFoil = 0,
   userId = null,
@@ -53,6 +56,46 @@ const CardQuantitySelector: React.FC<CardQuantitySelectorProps> = ({
       setIsLoadingSlowly(false);
     }
   }, [isLoading]);
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    if (isSuccess) {
+      const newQuantityReg = internalQuantityReg;
+      enqueueSnackbar(`${cardName ?? 'Card'} has been set to ${newQuantityReg}.`, {
+        variant: 'success',
+        anchorOrigin: { horizontal: 'right', vertical: 'bottom' },
+      });
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (isSuccessFoil) {
+      const newQuantityFoil = internalQuantityFoil;
+      enqueueSnackbar(`${cardName ?? 'Card'} has been set to ${newQuantityFoil} foil(s).`, {
+        variant: 'success',
+        anchorOrigin: { horizontal: 'right', vertical: 'bottom' },
+      });
+    }
+  }, [isSuccessFoil]);
+
+  useEffect(() => {
+    if (isError) {
+      enqueueSnackbar(`${cardName ?? 'Card'} could not be updated.`, {
+        variant: 'error',
+        anchorOrigin: { horizontal: 'right', vertical: 'bottom' },
+      });
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    if (isErrorFoil) {
+      enqueueSnackbar(`${cardName ?? 'Card'} could not be updated.`, {
+        variant: 'error',
+        anchorOrigin: { horizontal: 'right', vertical: 'bottom' },
+      });
+    }
+  }, [isErrorFoil]);
 
   const handleQuantityRegChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === '') {
