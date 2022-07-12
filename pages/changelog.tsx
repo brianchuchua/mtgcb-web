@@ -7,6 +7,16 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-07-12 (v0.42.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>
+          Added filters and sorting for cards at the root-level collection page. (These were previously only available within a set page.)
+        </li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-07-10 (v0.41.0)
     </Typography>
     <Typography paragraph>

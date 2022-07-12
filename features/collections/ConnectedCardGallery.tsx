@@ -4,6 +4,7 @@ import {
   useGetAllCardsMetaQuery,
   useGetAllCardsQuery,
   useGetCollectionByCardIdLegacyQuery,
+  useGetFilteredCardsSummaryLegacyQuery,
   usePrefetch,
 } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
@@ -38,38 +39,67 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
   const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
   const debouncedOracleTextQuery = useDebounce(oracleTextQuery, searchFieldDebounceTimeMs);
 
-  const { data: cardData, isLoading: isCardDataLoading, isFetching: isCardDataFetching, error: cardError } = useGetAllCardsQuery({
-    first,
-    skip,
-    sortBy,
-    name: debouncedSearchQuery,
-    oracleTextQuery: debouncedOracleTextQuery,
-    cardSets,
-    cardRarities,
-    cardTypes,
-    cardColors,
-    showAllPrintings,
-    cardStatSearches,
-    sortByDirection,
-  });
+  // This deserves a custom hook, but this is used to determine which sets of APIs to use for the card gallery.
+  // If a user is trying to search or sort by quantity, we have to involve an external legacy database and do a manual remote join
+  const includesQuantityFilters = useMemo(() => {
+    for (const cardStatSearch of cardStatSearches) {
+      const { searchAttribute, value } = cardStatSearch;
+      if (value !== '' && (searchAttribute === 'cardsAll' || searchAttribute === 'cardsNormal' || searchAttribute === 'cardsFoil')) {
+        return true;
+      }
+    }
+    if (
+      sortBy === 'currentValue' ||
+      sortBy === 'costToComplete' ||
+      sortBy === 'percentageCollected' ||
+      sortBy === 'quantityAll' ||
+      sortBy === 'quantityNormal' ||
+      sortBy === 'quantityFoil'
+    ) {
+      return true;
+    }
+
+    return false;
+  }, [cardStatSearches, sortBy]);
+
+  const { data: cardData, isLoading: isCardDataLoading, isFetching: isCardDataFetching, error: cardError } = useGetAllCardsQuery(
+    {
+      first,
+      skip,
+      sortBy,
+      name: debouncedSearchQuery,
+      oracleTextQuery: debouncedOracleTextQuery,
+      cardSets,
+      cardRarities,
+      cardTypes,
+      cardColors,
+      showAllPrintings,
+      cardStatSearches,
+      sortByDirection,
+    },
+    { skip: includesQuantityFilters }
+  );
 
   const {
     data: cardMetaData,
     isLoading: isCardMetaDataLoading,
     isFetching: isCardMetaDataFetching,
     error: cardMetaError,
-  } = useGetAllCardsMetaQuery({
-    sortBy,
-    name: debouncedSearchQuery,
-    oracleTextQuery: debouncedOracleTextQuery,
-    cardSets,
-    cardRarities,
-    cardTypes,
-    cardColors,
-    showAllPrintings,
-    cardStatSearches,
-    sortByDirection,
-  });
+  } = useGetAllCardsMetaQuery(
+    {
+      sortBy,
+      name: debouncedSearchQuery,
+      oracleTextQuery: debouncedOracleTextQuery,
+      cardSets,
+      cardRarities,
+      cardTypes,
+      cardColors,
+      showAllPrintings,
+      cardStatSearches,
+      sortByDirection,
+    },
+    { skip: includesQuantityFilters }
+  );
 
   const cards = cardData?.data?.allCards;
   const cardIds = cards?.map((card) => card.id);
@@ -85,7 +115,7 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
       userId,
       cardIds,
     },
-    { skip: cardIds == null }
+    { skip: cardIds == null || includesQuantityFilters }
   );
 
   const collectionByCardId = useMemo(
@@ -97,8 +127,43 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
     [collectionByCardIdResponse]
   ); // eslint-disable-line @typescript-eslint/no-explicit-any
 
-  const isLoading = isCardDataLoading || isCardMetaDataLoading || isCollectionByCardIdLoading;
-  const isFetching = isCardDataFetching || isCardMetaDataFetching || isCollectionByCardIdFetching;
+  const {
+    data: filteredCardsSummary,
+    isLoading: loadingFilteredCardsSummary,
+    isFetching: fetchingFilteredCardsSummary,
+  } = useGetFilteredCardsSummaryLegacyQuery(
+    {
+      userId,
+      first,
+      skip,
+      sortBy,
+      sortByDirection,
+      name: debouncedSearchQuery,
+      oracleTextQuery: debouncedOracleTextQuery,
+      cardRarities,
+      cardTypes,
+      cardColors,
+      showAllPrintings,
+      cardStatSearches,
+      additionalWhere: null,
+      additionalSortBy: null,
+    },
+    { skip: !includesQuantityFilters }
+  );
+
+  const cardsFromHeavyQuery = filteredCardsSummary?.data?.filteredCardsSummaryLegacy?.cards;
+  const totalResultsFromHeavyQuery = filteredCardsSummary?.data?.filteredCardsSummaryLegacy?.count;
+  const collectionByCardIdFromHeavyQuery = useMemo(
+    () =>
+      filteredCardsSummary?.data?.filteredCardsSummaryLegacy?.cards?.reduce((acc, curr) => {
+        acc[curr.id] = curr;
+        return acc;
+      }, {} as any),
+    [filteredCardsSummary?.data?.filteredCardsSummaryLegacy?.cards]
+  ); // eslint-disable-line @typescript-eslint/no-explicit-any
+
+  const isLoading = isCardDataLoading || isCardMetaDataLoading || isCollectionByCardIdLoading || loadingFilteredCardsSummary;
+  const isFetching = isCardDataFetching || isCardMetaDataFetching || isCollectionByCardIdFetching || fetchingFilteredCardsSummary;
 
   const prefetchAllCards = usePrefetch('getAllCards');
 
@@ -144,8 +209,8 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
 
   return (
     <MemoizedCardGallery
-      cards={cards}
-      totalResults={totalResults}
+      cards={includesQuantityFilters ? cardsFromHeavyQuery : cards}
+      totalResults={includesQuantityFilters ? totalResultsFromHeavyQuery : totalResults}
       first={first}
       skip={skip}
       page={page}
@@ -154,7 +219,7 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
       setPage={setPage}
       priceType={priceType}
       userId={userId}
-      collectionByCardId={collectionByCardId}
+      collectionByCardId={includesQuantityFilters ? collectionByCardIdFromHeavyQuery : collectionByCardId}
       isLoading={isLoading}
       isFetching={isFetching}
     />

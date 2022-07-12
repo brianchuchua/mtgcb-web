@@ -20,6 +20,7 @@ import {
 import {
   addCardStatSearch,
   removeCardStatSearch,
+  searchAttributeOptions,
   setCardColors,
   setCardRarities,
   setCardSets,
@@ -41,6 +42,7 @@ import {
   setSetCompletionStatuses,
   setViewMode,
   setViewSubject,
+  sortByOptions,
 } from '../collectionSlice';
 
 // TODO: Add headers to this thing
@@ -67,8 +69,14 @@ const CollectionSearchForm: React.FC = () => {
             setCardStatSearches={setCardStatSearches}
             setComparator={setComparator}
             setSearchAttribute={setSearchAttribute}
+            searchAttributeOptionsOverride={searchAttributeOptions}
           />
-          <SortSelector reduxSlice={reduxSlice} setCardSort={setCardSort} setCardSortDirection={setCardSortDirection} />
+          <SortSelector
+            reduxSlice={reduxSlice}
+            sortByOptions={sortByOptions}
+            setCardSort={setCardSort}
+            setCardSortDirection={setCardSortDirection}
+          />
         </>
       )}
       {isFormVisible && viewSubject === 'sets' && (

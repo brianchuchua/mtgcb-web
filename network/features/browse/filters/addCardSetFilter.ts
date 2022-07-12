@@ -6,7 +6,7 @@ interface AddCardSetFilterFunction {
 }
 
 const addCardSetFilter: AddCardSetFilterFunction = (cardSets, where) => {
-  if (cardSets.length) {
+  if (cardSets?.length) {
     const setIdConditions = { setId: { AND: [], OR: [] } };
     for (const cardSetSelection of cardSets) {
       if (cardSetSelection.exclude) {

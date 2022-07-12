@@ -176,6 +176,9 @@ export const searchAttributeOptions = [
   { value: 'average', label: 'Price (Average)' },
   { value: 'high', label: 'Price (High)' },
   { value: 'foil', label: 'Price (Foil)' },
+  { value: 'cardsAll', label: 'Quantity (All)' },
+  { value: 'cardsNormal', label: 'Quantity (Normal)' },
+  { value: 'cardsFoil', label: 'Quantity (Foil)' },
 ];
 
 export const sortByOptions = [
@@ -192,6 +195,9 @@ export const sortByOptions = [
   { value: 'average', label: 'Price (Average)' },
   { value: 'high', label: 'Price (High)' },
   { value: 'foil', label: 'Price (Foil)' },
+  { value: 'quantityAll', label: 'Quantity (All)' },
+  { value: 'quantityNormal', label: 'Quantity (Normal)' },
+  { value: 'quantityFoil', label: 'Quantity (Foil)' },
 ];
 
 export const expansionSortByOptions = [
@@ -290,7 +296,14 @@ export interface SearchAttributeOption {
 }
 
 export type SearchComparators = 'gt' | 'gte' | 'lt' | 'lte' | 'eq' | 'not';
-export type SearchAttribute = 'convertedManaCost' | 'powerNumeric' | 'toughnessNumeric' | 'loyaltyNumeric';
+export type SearchAttribute =
+  | 'convertedManaCost'
+  | 'powerNumeric'
+  | 'toughnessNumeric'
+  | 'loyaltyNumeric'
+  | 'cardsAll'
+  | 'cardsNormal'
+  | 'cardsFoil';
 
 export type ColorTypes = 'at-least-these-colors' | 'only-these-colors' | 'at-most-these-colors';
 

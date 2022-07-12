@@ -128,7 +128,7 @@ export const mtgcbApi = createApi({
           query: filteredCardsSummaryLegacy,
           variables: {
             userId: Number(userId),
-            setId: Number(setId),
+            setId: Number(setId) || null,
             where: buildBrowseFilter({
               cardSets,
               cardRarities,
@@ -687,7 +687,7 @@ interface FilteredCollectionSummaryLegacyVariables {
 
 interface FilteredCardsSummaryLegacyVariables {
   userId: string;
-  setId: string;
+  setId?: string;
   first?: number;
   skip?: number;
   sortBy?: string;

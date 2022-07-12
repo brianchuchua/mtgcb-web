@@ -1,8 +1,9 @@
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { Dispatch, SetStateAction, useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { useAuthentication } from '../../auth/AuthenticationProvider';
+import Wubrg from '../../components/loaders/Wubrg';
 import { PriceTypes } from './browseSlice';
 import CardBox from './CardBox';
 import GalleryControls from './GalleryControls';
@@ -83,7 +84,7 @@ const CardGallery: React.FC<CardGalleryProps> = ({
     },
   ];
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <>
         <GalleryControls
@@ -103,6 +104,9 @@ const CardGallery: React.FC<CardGalleryProps> = ({
           isLoading={isLoading}
           isFetching={isFetching}
         />
+        <FadeIn style={{ marginTop: '100px' }}>
+          <Wubrg />
+        </FadeIn>
       </>
     );
   }
@@ -171,5 +175,15 @@ const CardGalleryWrapper = styled.div<CardGalleryWrapperProps>(({ cardsPerRow = 
   width: `${galleryWidth}%`,
   margin: '0 auto',
 }));
+
+const fadeIn = keyframes`
+    0% { opacity: 0; }
+    66% { opacity: 0; }
+    100% { opacity: 1; }
+`;
+
+const FadeIn = styled.div`
+  animation: ${fadeIn} 2s ease-in;
+`;
 
 export default CardGallery;

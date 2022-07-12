@@ -270,7 +270,14 @@ export interface SearchAttributeOption {
 }
 
 export type SearchComparators = 'gt' | 'gte' | 'lt' | 'lte' | 'eq' | 'not';
-export type SearchAttribute = 'convertedManaCost' | 'powerNumeric' | 'toughnessNumeric' | 'loyaltyNumeric';
+export type SearchAttribute =
+  | 'convertedManaCost'
+  | 'powerNumeric'
+  | 'toughnessNumeric'
+  | 'loyaltyNumeric'
+  | 'cardsAll'
+  | 'cardsNormal'
+  | 'cardsFoil';
 
 export type ColorTypes = 'at-least-these-colors' | 'only-these-colors' | 'at-most-these-colors';
 

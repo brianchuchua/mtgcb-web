@@ -1,6 +1,6 @@
 const filteredCardsSummaryLegacy = `query filteredCardsSummaryLegacy(
   $userId: Int!,
-  $setId: Int!,
+  $setId: Int,
   $where: CardWhereInput = {},
   $search: String = "",
   $first: Int = 50,
