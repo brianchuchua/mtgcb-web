@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-07-14 (v0.42.1)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Fixed a bug that caused the card gallery to fully reset when a card quantity was updated.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-07-12 (v0.42.0)
     </Typography>
     <Typography paragraph>

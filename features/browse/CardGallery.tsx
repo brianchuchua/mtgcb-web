@@ -84,7 +84,7 @@ const CardGallery: React.FC<CardGalleryProps> = ({
     },
   ];
 
-  if (isLoading || isFetching) {
+  if (isLoading) {
     return (
       <>
         <GalleryControls
