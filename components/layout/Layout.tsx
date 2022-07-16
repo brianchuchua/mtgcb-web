@@ -8,7 +8,6 @@ const OuterWrapper = styled.div({
 
 const ContentWrapper = styled.main(({ theme }) => ({
   flexGrow: 1,
-  height: 'calc(100vh-64px)',
   overflow: 'auto',
   backgroundColor: theme.palette.background.default,
   padding: theme.spacing(3),

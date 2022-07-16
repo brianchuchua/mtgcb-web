@@ -147,6 +147,24 @@ const CardGallery: React.FC<CardGalleryProps> = ({
               />
             ))}
         </CardGalleryWrapper>
+        <div style={{ marginTop: '20px' }}>
+          <GalleryControls
+            items={cards}
+            first={first}
+            page={page}
+            setCardsPerRow={setCardsPerRow}
+            setFirst={setFirst}
+            setGalleryWidth={setGalleryWidth}
+            setPage={setPage}
+            setSkip={setSkip}
+            skip={skip}
+            totalResults={totalResults}
+            cardsPerRow={cardsPerRow}
+            settingGroups={settingGroups}
+            galleryType="cards"
+            isOnBottom
+          />
+        </div>
       </>
     );
   }
@@ -170,7 +188,7 @@ interface CardGalleryWrapperProps {
 const CardGalleryWrapper = styled.div<CardGalleryWrapperProps>(({ cardsPerRow = 4, galleryWidth = 100 }) => ({
   display: 'grid',
   gridTemplateColumns: `repeat(${cardsPerRow}, minmax(0, 1fr))`,
-  gridTemplateRows: 'repeat(3, 1fr)',
+  gridTemplateRows: 'repeat(1, 1fr)',
   gap: `5px 10px`,
   width: `${galleryWidth}%`,
   margin: '0 auto',

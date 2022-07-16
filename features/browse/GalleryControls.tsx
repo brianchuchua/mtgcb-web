@@ -29,6 +29,7 @@ interface GalleryControlsProps {
   galleryType?: GalleryTypes;
   isLoading?: boolean;
   isFetching?: boolean;
+  isOnBottom?: boolean;
 }
 
 const GalleryControls: React.FC<GalleryControlsProps> = ({
@@ -46,6 +47,7 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
   settingGroups = [],
   isLoading,
   isFetching,
+  isOnBottom = false,
 }) => {
   const startOfRange = 1 + skip;
   const numberOfCards = items?.length ?? 0;
@@ -92,6 +94,7 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
           setFirst={setFirst}
           setPage={setPage}
           setSkip={setSkip}
+          isOnBottom={isOnBottom}
         />
         <GalleryPaginationMobile
           settingGroups={settingGroups}
@@ -105,8 +108,9 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
           setFirst={setFirst}
           setPage={setPage}
           setSkip={setSkip}
+          isOnBottom={isOnBottom}
         />
-        {setGalleryWidth && setCardsPerRow && width >= breakpoints.sm && galleryType === 'cards' && (
+        {setGalleryWidth && setCardsPerRow && width >= breakpoints.sm && galleryType === 'cards' && !isOnBottom && (
           <Grid container item sm={12} spacing={2} justify="space-between" alignItems="center">
             <Grid item sm={6}>
               <Typography id="card-size-slider">Card size</Typography>
@@ -185,6 +189,7 @@ interface GalleryPaginationDesktopProps {
   setFirst: Dispatch<SetStateAction<number>>;
   setPage: Dispatch<SetStateAction<number>>;
   setSkip: Dispatch<SetStateAction<number>>;
+  isOnBottom?: boolean;
 }
 
 const GalleryPaginationDesktop: React.FC<GalleryPaginationDesktopProps> = ({
@@ -199,6 +204,7 @@ const GalleryPaginationDesktop: React.FC<GalleryPaginationDesktopProps> = ({
   setFirst,
   setPage,
   setSkip,
+  isOnBottom = false,
 }) => (
   <StyledDesktopOnlyGrid
     container
@@ -219,6 +225,11 @@ const GalleryPaginationDesktop: React.FC<GalleryPaginationDesktopProps> = ({
       </Grid>
       <Grid item>{settingGroups.length > 0 && <SettingsPanel panelId="cardGallerySettings" settingGroups={settingGroups} />}</Grid>
     </RightAlignedGrid>
+    {isOnBottom && (
+      <Typography variant="body2" color="primary" onClick={() => window?.scrollTo(0, 0)} style={{ cursor: 'pointer', display: 'inline' }}>
+        (Back to Top)
+      </Typography>
+    )}
   </StyledDesktopOnlyGrid>
 );
 
@@ -240,6 +251,7 @@ const GalleryPaginationMobile: React.FC<GalleryPaginationDesktopProps> = ({
   setFirst,
   setPage,
   setSkip,
+  isOnBottom = false,
 }) => (
   <StyledMobileOnlyGrid
     container
@@ -260,6 +272,16 @@ const GalleryPaginationMobile: React.FC<GalleryPaginationDesktopProps> = ({
       </Grid>
       <Grid item>{settingGroups.length > 0 && <SettingsPanel panelId="cardGallerySettings" settingGroups={settingGroups} />}</Grid>
     </RightAlignedGrid>
+    {isOnBottom && (
+      <Typography
+        variant="body2"
+        color="primary"
+        onClick={() => window?.scrollTo(0, 0)}
+        style={{ cursor: 'pointer', display: 'inline', marginLeft: '5px' }}
+      >
+        (Back to Top)
+      </Typography>
+    )}
   </StyledMobileOnlyGrid>
 );
 

@@ -414,6 +414,21 @@ const CardTable: React.FC<CardTableProps> = ({
           </TableBody>
         </Table>
       </StyledTableContainer>
+      <div style={{ marginTop: '20px' }}>
+        <GalleryControls
+          items={cards}
+          first={first}
+          page={page}
+          setFirst={setFirst}
+          setPage={setPage}
+          setSkip={setSkip}
+          skip={skip}
+          totalResults={totalResults}
+          settingGroups={settingGroups}
+          galleryType="cards"
+          isOnBottom
+        />
+      </div>
     </>
   ) : (
     <Grid container alignItems="center" justify="center">

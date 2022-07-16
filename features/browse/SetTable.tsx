@@ -130,6 +130,21 @@ const SetTable: React.FC<SetTableProps> = ({
           </TableBody>
         </Table>
       </StyledTableContainer>
+      <div style={{ marginTop: '20px' }}>
+        <GalleryControls
+          items={sets}
+          first={first}
+          page={page}
+          setFirst={setFirst}
+          setPage={setPage}
+          setSkip={setSkip}
+          skip={skip}
+          totalResults={totalResults}
+          settingGroups={settingGroups}
+          galleryType="sets"
+          isOnBottom
+        />
+      </div>
     </>
   ) : (
     <Grid container alignItems="center" justify="center">

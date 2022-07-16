@@ -86,6 +86,24 @@ const SetGallery: React.FC<SetGalleryProps> = ({
             );
           })}
       </SetGalleryWrapper>
+
+      <div style={{ marginTop: '20px' }}>
+        <GalleryControls
+          items={sets}
+          first={first}
+          page={page}
+          setCardsPerRow={setSetsPerRow}
+          setFirst={setFirst}
+          setGalleryWidth={setGalleryWidth}
+          setPage={setPage}
+          setSkip={setSkip}
+          skip={skip}
+          totalResults={totalResults}
+          cardsPerRow={setsPerRow}
+          galleryType="sets"
+          isOnBottom
+        />
+      </div>
     </>
   ) : (
     <Grid container alignItems="center" justify="center">
@@ -119,7 +137,7 @@ const SetGalleryWrapper = styled.div<SetGalleryWrapperProps>(({ setsPerRow = 4, 
     gridTemplateColumns: `repeat(${setsPerRow}, minmax(0, 1fr))`,
   },
 
-  gridTemplateRows: 'repeat(3, 1fr)',
+  gridTemplateRows: 'repeat(1, 1fr)',
   gap: `10px 10px`,
   width: `${galleryWidth}%`,
   margin: '0 auto',

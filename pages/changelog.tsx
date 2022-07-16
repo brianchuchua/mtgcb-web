@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-07-16 (v0.43.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Added pagination to bottom of pages (along with a "back to top" button.)</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-07-14 (v0.42.1)
     </Typography>
     <Typography paragraph>
