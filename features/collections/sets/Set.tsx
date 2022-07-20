@@ -8,6 +8,7 @@ import { ResponsiveContainer } from '../../../components/layout/ResponsiveContai
 import Link from '../../../components/Link';
 import { useGetSetBySlugQuery, useGetSetSummaryLegacyQuery } from '../../../network/services/mtgcbApi';
 import { RootState } from '../../../redux/rootReducer';
+import { useLocalStorage } from '../../../util';
 import { SetIcon } from '../../browse/SetBox';
 import { formatter } from '../../browse/util/formatPrice';
 import { ConnectedCollectionCardGallery } from '../ConnectedCollectionCardGallery';
@@ -32,7 +33,7 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   }, []);
 
   const [skip, setSkip] = useState(0);
-  const [first, setFirst] = useState(50);
+  const [first, setFirst] = useLocalStorage('numberOfCardsPerPage', 50);
   const [page, setPage] = useState(1);
 
   const { data: setData, isLoading: isSetLoading, isFetching: isSetFetching, error: setError } = useGetSetBySlugQuery(

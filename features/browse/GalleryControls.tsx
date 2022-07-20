@@ -19,6 +19,7 @@ interface GalleryControlsProps {
   page: number;
   first: number;
   skip: number;
+  galleryWidth?: number;
   setSkip: Dispatch<SetStateAction<number>>;
   setFirst: Dispatch<SetStateAction<number>>;
   setPage: Dispatch<SetStateAction<number>>;
@@ -38,6 +39,8 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
   skip,
   page,
   totalResults,
+  galleryWidth,
+  cardsPerRow,
   setSkip,
   setFirst,
   setPage,
@@ -67,7 +70,7 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
     if (width < breakpoints.sm) {
       handleCardsPerRowChange(1, setCardsPerRow);
     } else {
-      handleCardsPerRowChange(4, setCardsPerRow);
+      handleCardsPerRowChange(cardsPerRow, setCardsPerRow);
     }
   }, [width]);
 
@@ -115,7 +118,7 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
             <Grid item sm={6}>
               <Typography id="card-size-slider">Card size</Typography>
               <Slider
-                defaultValue={100}
+                defaultValue={galleryWidth}
                 aria-labelledby="card-size-slider"
                 valueLabelDisplay="auto"
                 step={5}
@@ -127,7 +130,7 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
             <Grid item sm={6}>
               <Typography id="cards-per-row-slider">Cards per row</Typography>
               <Slider
-                defaultValue={4}
+                defaultValue={cardsPerRow}
                 aria-labelledby="cards-per-row-slider"
                 valueLabelDisplay="auto"
                 step={1}

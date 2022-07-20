@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { ResponsiveContainer } from '../../components/layout/ResponsiveContainer';
 import { useGetAllCardsMetaQuery, useGetAllSetsMetaQuery } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
+import { useLocalStorage } from '../../util';
 import useDebounce, { searchFieldDebounceTimeMs } from '../../util/useDebounce';
 import { setFormVisibility } from './collectionSlice';
 import { ConnectedCardGallery } from './ConnectedCardGallery';
@@ -38,11 +39,11 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
   const debouncedExpansionSearchQuery = useDebounce(expansionSearchQuery, searchFieldDebounceTimeMs);
 
   const [skip, setSkip] = useState(0);
-  const [first, setFirst] = useState(50);
+  const [first, setFirst] = useLocalStorage('numberOfCardsPerPage', 50);
   const [page, setPage] = useState(1);
 
   const [expansionsSkip, setExpansionsSkip] = useState(0);
-  const [expansionsFirst, setExpansionsFirst] = useState(16);
+  const [expansionsFirst, setExpansionsFirst] = useLocalStorage('numberOfExpansionsPerPage', 16);
   const [expansionsPage, setExpansionsPage] = useState(1);
 
   const dispatch = useDispatch();

@@ -1,9 +1,10 @@
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useAuthentication } from '../../auth/AuthenticationProvider';
 import Wubrg from '../../components/loaders/Wubrg';
+import { useLocalStorage } from '../../util';
 import { PriceTypes } from './browseSlice';
 import CardBox from './CardBox';
 import GalleryControls from './GalleryControls';
@@ -11,7 +12,6 @@ import { Card } from './types/Card';
 
 interface CardGalleryProps {
   cards: Card[];
-  cardsPerRow?: number;
   page: number;
   first: number;
   skip: number;
@@ -47,11 +47,11 @@ const CardGallery: React.FC<CardGalleryProps> = ({
   isLoading,
   isFetching,
 }) => {
-  const [cardsPerRow, setCardsPerRow] = useState(4);
-  const [galleryWidth, setGalleryWidth] = useState(100);
-  const [nameIsVisible, setNameIsVisible] = useState(true);
-  const [setIsVisible, setSetIsVisible] = useState(true);
-  const [priceIsVisible, setPriceIsVisible] = useState(true);
+  const [cardsPerRow, setCardsPerRow] = useLocalStorage('cardsPerRow', 5);
+  const [galleryWidth, setGalleryWidth] = useLocalStorage('cardSize', 100);
+  const [nameIsVisible, setNameIsVisible] = useLocalStorage('cardNameIsVisible', true);
+  const [setIsVisible, setSetIsVisible] = useLocalStorage('cardSetIsVisible', true);
+  const [priceIsVisible, setPriceIsVisible] = useLocalStorage('cardPriceIsVisible', true);
 
   const { user } = useAuthentication();
 
@@ -99,6 +99,7 @@ const CardGallery: React.FC<CardGalleryProps> = ({
           skip={skip}
           totalResults={totalResults}
           cardsPerRow={cardsPerRow}
+          galleryWidth={galleryWidth}
           settingGroups={settingGroups}
           galleryType="cards"
           isLoading={isLoading}
@@ -126,6 +127,7 @@ const CardGallery: React.FC<CardGalleryProps> = ({
           skip={skip}
           totalResults={totalResults}
           cardsPerRow={cardsPerRow}
+          galleryWidth={galleryWidth}
           settingGroups={settingGroups}
           galleryType="cards"
         />
@@ -152,6 +154,7 @@ const CardGallery: React.FC<CardGalleryProps> = ({
             items={cards}
             first={first}
             page={page}
+            galleryWidth={galleryWidth}
             setCardsPerRow={setCardsPerRow}
             setFirst={setFirst}
             setGalleryWidth={setGalleryWidth}
@@ -185,7 +188,7 @@ interface CardGalleryWrapperProps {
   galleryWidth: number;
 }
 
-const CardGalleryWrapper = styled.div<CardGalleryWrapperProps>(({ cardsPerRow = 4, galleryWidth = 100 }) => ({
+const CardGalleryWrapper = styled.div<CardGalleryWrapperProps>(({ cardsPerRow = 5, galleryWidth = 100 }) => ({
   display: 'grid',
   gridTemplateColumns: `repeat(${cardsPerRow}, minmax(0, 1fr))`,
   gridTemplateRows: 'repeat(1, 1fr)',

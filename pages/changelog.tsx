@@ -7,6 +7,15 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-07-19 (v0.44.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Made a bunch of settings saved to your device -- number of cards per row, card sizes, cards per page, and sets per page.</li>
+        <li>Changed the default number of cards from 4 to 5 -- it looked too zoomed in.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-07-16 (v0.43.0)
     </Typography>
     <Typography paragraph>
