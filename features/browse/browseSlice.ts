@@ -122,7 +122,8 @@ const browseSlice = createSlice({
     setCardColors(state, action: PayloadAction<string>) {
       const color = action.payload;
       state.cardColors[color] = !state.cardColors[color];
-      updateSearchInUrl('colors', convertColorsToString(state.cardColors[color]));
+      const newCardColors = { ...state.cardColors };
+      updateSearchInUrl('colors', convertColorsToString(newCardColors));
     },
     setColorType(state, action: PayloadAction<ColorTypes>) {
       const type = action.payload;

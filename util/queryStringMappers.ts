@@ -46,7 +46,6 @@ export const updateSearchInUrlQuery = (queryLabel: QueryLabel, newValue: string 
     const queryString = qs.stringify(query, { addQueryPrefix: true });
 
     window.history.replaceState(null, null, queryString?.length ? queryString : window.location.href.split('?')[0]);
-    // use pushstate instead
   }
 };
 
