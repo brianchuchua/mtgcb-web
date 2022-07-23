@@ -1,4 +1,6 @@
-import { useSelector } from 'react-redux';
+import Button from '@material-ui/core/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { RootState } from '../../../redux/rootReducer';
 import {
   CardNameSearch,
@@ -20,6 +22,7 @@ import {
 import {
   addCardStatSearch,
   removeCardStatSearch,
+  reset,
   searchAttributeOptions,
   setCardColors,
   setCardRarities,
@@ -49,6 +52,7 @@ import {
 const CollectionSearchForm: React.FC = () => {
   const { isFormVisible, viewSubject } = useSelector((state: RootState) => state.collection);
   const reduxSlice = 'collection';
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -77,6 +81,11 @@ const CollectionSearchForm: React.FC = () => {
             setCardSort={setCardSort}
             setCardSortDirection={setCardSortDirection}
           />
+          <ButtonWrapper>
+            <Button size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
+              Reset Search
+            </Button>
+          </ButtonWrapper>
         </>
       )}
       {isFormVisible && viewSubject === 'sets' && (
@@ -92,10 +101,20 @@ const CollectionSearchForm: React.FC = () => {
             setExpansionSort={setExpansionSort}
             setExpansionSortDirection={setExpansionSortDirection}
           />
+          <ButtonWrapper>
+            <Button size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
+              Reset Search
+            </Button>
+          </ButtonWrapper>
         </>
       )}
     </>
   );
 };
+
+const ButtonWrapper = styled.div({
+  paddingLeft: '8px',
+  paddingRight: '8px',
+});
 
 export default CollectionSearchForm;

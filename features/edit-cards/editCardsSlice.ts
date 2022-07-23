@@ -1,8 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { getValueFromLocalStorage, setValueToLocalStorage } from '../../util/useLocalStorage';
+
+const priceTypeFromLocalStorage = getValueFromLocalStorage('priceType', 'market');
+const cardEditingModeFromLocalStorage = getValueFromLocalStorage('cardEditingMode', 'increment');
 
 const initialState: EditCardsState = {
-  priceType: 'market',
-  cardEditingMode: 'increment',
+  priceType: priceTypeFromLocalStorage || 'market',
+  cardEditingMode: cardEditingModeFromLocalStorage || 'increment',
   isFormVisible: false,
 };
 
@@ -13,10 +17,12 @@ const editCardsSlice = createSlice({
     setPriceType(state, action: PayloadAction<PriceTypes>) {
       const priceType = action.payload;
       state.priceType = priceType;
+      setValueToLocalStorage('priceType', priceType);
     },
     setCardEditingMode(state, action: PayloadAction<CardEditingModes>) {
       const cardEditingMode = action.payload;
       state.cardEditingMode = cardEditingMode;
+      setValueToLocalStorage('cardEditingMode', cardEditingMode);
     },
     setFormVisibility(state, action: PayloadAction<FormVisibility>) {
       const { isFormVisibile } = action.payload;

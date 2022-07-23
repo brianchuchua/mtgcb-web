@@ -29,3 +29,26 @@ function useLocalStorage<T>(key: string, initialValue: T): readonly [any, (value
 }
 
 export default useLocalStorage;
+
+export const getValueFromLocalStorage = (key: string, initialValue: any): any => {
+  if (typeof window === 'undefined') {
+    return initialValue;
+  }
+  try {
+    const item = window.localStorage.getItem(key);
+    return item ? JSON.parse(item) : initialValue;
+  } catch (error) {
+    console.log(error);
+    return initialValue;
+  }
+};
+
+export const setValueToLocalStorage = (key: string, value: any): void => {
+  try {
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};

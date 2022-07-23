@@ -7,11 +7,23 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-07-22 (v0.45.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Added deep linking of searches -- you can share any search with friends by copying the URL! It now updates as you search.</li>
+        <li>Added a reset search button to the bottom of each search form.</li>
+        <li>Made view subject, view mode, and price preference sticky per user device.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-07-19 (v0.44.0)
     </Typography>
     <Typography paragraph>
       <ul>
-        <li>Made a bunch of settings saved to your device -- number of cards per row, card sizes, cards per page, and sets per page.</li>
+        <li>
+          Made a bunch of settings saved to your device -- number of cards per row, card sizes, cards per page, sets per page, and more!
+        </li>
         <li>Changed the default number of cards from 4 to 5 -- it looked too zoomed in.</li>
       </ul>
     </Typography>

@@ -1,4 +1,6 @@
-import { useSelector } from 'react-redux';
+import Button from '@material-ui/core/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { RootState } from '../../../redux/rootReducer';
 import {
   CardNameSearch,
@@ -19,6 +21,7 @@ import {
 import {
   addCardStatSearch,
   removeCardStatSearch,
+  reset,
   setCardColors,
   setCardRarities,
   setCardSets,
@@ -45,6 +48,7 @@ import {
 const SearchForm: React.FC = () => {
   const { isFormVisible, viewSubject } = useSelector((state: RootState) => state.browse);
   const reduxSlice = 'browse';
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -67,6 +71,11 @@ const SearchForm: React.FC = () => {
             setSearchAttribute={setSearchAttribute}
           />
           <SortSelector reduxSlice={reduxSlice} setCardSort={setCardSort} setCardSortDirection={setCardSortDirection} />
+          <ButtonWrapper>
+            <Button size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
+              Reset Search
+            </Button>
+          </ButtonWrapper>
         </>
       )}
       {isFormVisible && viewSubject === 'sets' && (
@@ -81,10 +90,20 @@ const SearchForm: React.FC = () => {
             setExpansionSort={setExpansionSort}
             setExpansionSortDirection={setExpansionSortDirection}
           />
+          <ButtonWrapper>
+            <Button size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
+              Reset Search
+            </Button>
+          </ButtonWrapper>
         </>
       )}
     </>
   );
 };
+
+const ButtonWrapper = styled.div({
+  paddingLeft: '8px',
+  paddingRight: '8px',
+});
 
 export default SearchForm;

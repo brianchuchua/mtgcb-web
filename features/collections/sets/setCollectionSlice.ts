@@ -1,9 +1,53 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+// eslint-disable-next-line import/no-cycle
+import {
+  computedQueryFromUrl as queryFromUrl,
+  convertCardStatSearchesToString,
+  convertCardTypesToString,
+  convertColorsToString,
+  convertRaritiesToString,
+  convertStringToCardStatSearches,
+  convertStringToCardTypes,
+  convertStringToColors,
+  convertStringToRarities,
+  updateSearchInUrl,
+} from '../../../util/queryStringMappers';
+import { getValueFromLocalStorage, setValueToLocalStorage } from '../../../util/useLocalStorage';
+
+const viewModeFromLocalStorage = getValueFromLocalStorage('viewMode', 'grid');
+const priceTypeFromLocalStorage = getValueFromLocalStorage('priceType', 'market');
 
 const initialState: SetState = {
+  searchQuery: queryFromUrl.card || '',
+  oracleTextQuery: queryFromUrl.oracle || '',
+  cardTypes: convertStringToCardTypes(queryFromUrl.types) || [],
+  cardRarities: convertStringToRarities(queryFromUrl.rarities) || [],
+  cardColors: (convertStringToColors(queryFromUrl.colors) as CardColors) || {
+    white: false,
+    blue: false,
+    black: false,
+    red: false,
+    green: false,
+    colorless: false,
+    type: 'at-least-these-colors',
+  },
+  showAllPrintings: true,
+  cardStatSearches: (convertStringToCardStatSearches(queryFromUrl.stats) as CardStatSearch[]) || [
+    { searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' },
+  ],
+  sortBy: queryFromUrl.sort || 'collectorNumber',
+  sortByDirection: queryFromUrl.order || 'ASC',
+  isFormVisible: false,
+  viewSubject: 'cards',
+  viewMode: queryFromUrl.mode || viewModeFromLocalStorage || 'grid',
+  priceType: queryFromUrl.price || priceTypeFromLocalStorage || 'market',
+};
+
+const emptyState = {
   searchQuery: '',
   oracleTextQuery: '',
   cardTypes: [],
+  cardSets: [],
   cardRarities: [],
   cardColors: {
     white: false,
@@ -18,44 +62,51 @@ const initialState: SetState = {
   cardStatSearches: [{ searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' }],
   sortBy: 'collectorNumber',
   sortByDirection: 'ASC',
-  isFormVisible: false,
-  viewSubject: 'cards',
-  viewMode: 'grid',
-  priceType: 'market',
-  expansionSearchQuery: '',
-  sortExpansionBy: 'releasedAt',
-  sortExpansionByDirection: 'DESC',
-  expansionTypes: [],
-  expansionCategories: [],
+  isFormVisible: true,
 };
 
 const setCollectionSlice = createSlice({
   name: 'setCollection',
   initialState,
   reducers: {
+    reset: (state) => {
+      if (typeof window !== 'undefined') {
+        window.history.replaceState(null, null, '?');
+        window.scrollTo(0, 0);
+      }
+      return { ...state, ...emptyState } as SetState;
+    },
     setSearchQuery(state, action: PayloadAction<SearchQuery>) {
       const { searchQuery } = action.payload;
       state.searchQuery = searchQuery;
+      updateSearchInUrl('card', searchQuery);
     },
     setOracleTextQuery(state, action: PayloadAction<OracleTextQuery>) {
       const { oracleTextQuery } = action.payload;
       state.oracleTextQuery = oracleTextQuery;
+      updateSearchInUrl('oracle', oracleTextQuery);
     },
     setCardTypes(state, action: PayloadAction<CardTypes>) {
       const { cardTypes } = action.payload;
       state.cardTypes = cardTypes;
+      updateSearchInUrl('types', convertCardTypesToString(cardTypes));
     },
     setCardRarities(state, action: PayloadAction<CardRarities>) {
       const { cardRarities } = action.payload;
       state.cardRarities = cardRarities;
+      updateSearchInUrl('rarities', convertRaritiesToString(cardRarities));
     },
     setCardColors(state, action: PayloadAction<string>) {
       const color = action.payload;
       state.cardColors[color] = !state.cardColors[color];
+      updateSearchInUrl('colors', convertColorsToString(state.cardColors[color]));
     },
     setColorType(state, action: PayloadAction<ColorTypes>) {
       const type = action.payload;
       state.cardColors.type = type;
+      const newCardColors = { ...state.cardColors };
+      newCardColors.type = type;
+      updateSearchInUrl('colors', convertColorsToString(newCardColors));
     },
     setShowAllPrintings(state, action: PayloadAction<boolean>) {
       const showAllPrintings = action.payload;
@@ -64,30 +115,51 @@ const setCollectionSlice = createSlice({
     setSearchAttribute(state, action: PayloadAction<SearchAttributeChangePayload>) {
       const { searchAttribute, index } = action.payload;
       state.cardStatSearches[index].searchAttribute = searchAttribute;
+      const newCardStatSearches = [...state.cardStatSearches];
+      newCardStatSearches[index].searchAttribute = searchAttribute;
+      updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
     },
     setComparator(state, action: PayloadAction<SearchComparatorPayload>) {
       const { comparator, index } = action.payload;
       state.cardStatSearches[index].comparator = comparator;
+      const newCardStatSearches = [...state.cardStatSearches];
+      newCardStatSearches[index].comparator = comparator;
+      updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
     },
     setCardStatSearches(state, action: PayloadAction<SearchValuePayload>) {
       const { value, index } = action.payload;
       state.cardStatSearches[index].value = value;
+      const newCardStatSearches = [...state.cardStatSearches];
+      newCardStatSearches[index].value = value;
+      updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
     },
     addCardStatSearch(state) {
       state.cardStatSearches.push({ searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' });
+      const newCardStatSearches = [...state.cardStatSearches];
+      newCardStatSearches.push({
+        searchAttribute: 'convertedManaCost',
+        comparator: 'gt',
+        value: '',
+      });
+      updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
     },
     removeCardStatSearch(state) {
       if (state.cardStatSearches.length > 1) {
         state.cardStatSearches.pop();
+        const newCardStatSearches = [...state.cardStatSearches];
+        newCardStatSearches.pop();
+        updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
       }
     },
     setCardSort(state, action: PayloadAction<string>) {
       const sortBy = action.payload;
       state.sortBy = sortBy;
+      updateSearchInUrl('sort', sortBy);
     },
     setCardSortDirection(state, action: PayloadAction<'ASC' | 'DESC'>) {
       const sortByDirection = action.payload;
       state.sortByDirection = sortByDirection;
+      updateSearchInUrl('order', sortByDirection);
     },
     setFormVisibility(state, action: PayloadAction<FormVisibility>) {
       const { isFormVisibile } = action.payload;
@@ -100,30 +172,14 @@ const setCollectionSlice = createSlice({
     setViewMode(state, action: PayloadAction<'grid' | 'table'>) {
       const viewMode = action.payload;
       state.viewMode = viewMode;
+      updateSearchInUrl('mode', viewMode);
+      setValueToLocalStorage('viewMode', viewMode);
     },
     setPriceType(state, action: PayloadAction<PriceTypes>) {
       const priceType = action.payload;
       state.priceType = priceType;
-    },
-    setExpansionSearchQuery(state, action: PayloadAction<ExpansionSearchQuery>) {
-      const { expansionSearchQuery } = action.payload;
-      state.expansionSearchQuery = expansionSearchQuery;
-    },
-    setExpansionSort(state, action: PayloadAction<string>) {
-      const sortExpansionBy = action.payload;
-      state.sortExpansionBy = sortExpansionBy;
-    },
-    setExpansionSortDirection(state, action: PayloadAction<'ASC' | 'DESC'>) {
-      const sortExpansionByDirection = action.payload;
-      state.sortExpansionByDirection = sortExpansionByDirection;
-    },
-    setExpansionTypes(state, action: PayloadAction<SetTypes>) {
-      const { setTypes } = action.payload;
-      state.expansionTypes = setTypes;
-    },
-    setExpansionCategories(state, action: PayloadAction<SetCategories>) {
-      const { setCategories } = action.payload;
-      state.expansionCategories = setCategories;
+      updateSearchInUrl('price', priceType);
+      setValueToLocalStorage('priceType', priceType);
     },
   },
 });
@@ -147,11 +203,7 @@ export const {
   setViewSubject,
   setViewMode,
   setPriceType,
-  setExpansionSearchQuery,
-  setExpansionSort,
-  setExpansionSortDirection,
-  setExpansionTypes,
-  setExpansionCategories,
+  reset,
 } = setCollectionSlice.actions;
 
 export const searchAttributeOptions = [
@@ -224,11 +276,6 @@ interface SetState {
   viewSubject: 'cards' | 'sets';
   viewMode: 'grid' | 'table';
   priceType: PriceTypes;
-  expansionSearchQuery: string;
-  sortExpansionBy: string;
-  sortExpansionByDirection: 'ASC' | 'DESC';
-  expansionTypes: SetType[];
-  expansionCategories: SetCategory[];
 }
 
 export type PriceTypes = 'low' | 'average' | 'high' | 'market' | 'foil';
@@ -250,7 +297,7 @@ export interface CardSet {
 export interface CardRarity {
   category: string;
   label: string;
-  value: 'common' | 'uncommon' | 'rare' | 'mythic' | 'special' | 'none';
+  value: 'common' | 'uncommon' | 'rare' | 'mythic' | 'special' | 'none' | '';
   exclude: boolean;
 }
 
