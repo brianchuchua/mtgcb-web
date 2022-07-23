@@ -89,7 +89,7 @@ const browseSlice = createSlice({
   reducers: {
     reset: (state) => {
       if (typeof window !== 'undefined') {
-        window.history.replaceState(null, null, '?');
+        window.history.replaceState(null, null, window.location.href.split('?')[0]);
         window.scrollTo(0, 0);
       }
       return { ...state, ...emptyState } as BrowseState;
