@@ -163,7 +163,7 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
   ); // eslint-disable-line @typescript-eslint/no-explicit-any
 
   const isLoading = isCardDataLoading || isCardMetaDataLoading || isCollectionByCardIdLoading || loadingFilteredCardsSummary;
-  const isFetching = isCardDataFetching || isCardMetaDataFetching || isCollectionByCardIdFetching || fetchingFilteredCardsSummary;
+  const isFetching = isCardDataFetching || isCardMetaDataFetching || fetchingFilteredCardsSummary;
 
   const prefetchAllCards = usePrefetch('getAllCards');
 
