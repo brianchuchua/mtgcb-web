@@ -219,7 +219,7 @@ const GalleryPaginationDesktop: React.FC<GalleryPaginationDesktopProps> = ({
 
   const rangeValuesAreUpdatingViaPagination =
     totalResults === previousTotalResults && (startOfRange !== previousStartOfRange || endOfRange !== previousEndOfRange);
-  const rangeValuesAreValid = startOfRange <= endOfRange && endOfRange <= totalResults;
+  const rangeValuesAreValid = startOfRange <= endOfRange && endOfRange <= totalResults && endOfRange > 0;
 
   useEffect(() => {
     if (!isFetching && rangeValuesAreValid) {
