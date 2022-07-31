@@ -40,6 +40,7 @@ interface CardTableProps {
   ];
   userId?: string;
   isShowingSingleSet?: boolean;
+  isFetching: boolean;
 }
 
 const CardTable: React.FC<CardTableProps> = ({
@@ -54,6 +55,7 @@ const CardTable: React.FC<CardTableProps> = ({
   priceType,
   userId,
   collectionByCardId,
+  isFetching,
   isShowingSingleSet = false,
 }) => {
   const atLeastOneCardToShow = totalResults > 0;
@@ -345,6 +347,7 @@ const CardTable: React.FC<CardTableProps> = ({
         totalResults={totalResults}
         settingGroups={settingGroups}
         galleryType="cards"
+        isFetching={isFetching}
       />
       <StyledTableContainer>
         <Table {...getTableProps()} size="small">
@@ -427,6 +430,7 @@ const CardTable: React.FC<CardTableProps> = ({
           settingGroups={settingGroups}
           galleryType="cards"
           isOnBottom
+          isFetching={isFetching}
         />
       </div>
     </>

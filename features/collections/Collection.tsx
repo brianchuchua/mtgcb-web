@@ -46,6 +46,8 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
   const [expansionsFirst, setExpansionsFirst] = useLocalStorage('numberOfExpansionsPerPage', 16);
   const [expansionsPage, setExpansionsPage] = useState(1);
 
+  const [previousTotalResults, setPreviousTotalResults] = useState(null);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -70,11 +72,16 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
   const totalResults = cardMetaData?.data?._allCardsMeta?.count;
 
   useEffect(() => {
+    if (totalResults !== previousTotalResults) {
+      setSkip(0);
+      setPage(1);
+      setPreviousTotalResults(totalResults);
+    }
     if (skip > totalResults) {
       setSkip(0);
       setPage(1);
     }
-  }, [skip, totalResults]);
+  }, [skip, totalResults, previousTotalResults]);
 
   const { data: allSetsMetaResponse } = useGetAllSetsMetaQuery({
     name: debouncedExpansionSearchQuery,

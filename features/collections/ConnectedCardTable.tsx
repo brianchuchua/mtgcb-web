@@ -220,12 +220,13 @@ export const ConnectedCardTable: React.FC<ConnectedCardTableProps> = ({ userId, 
       priceType={priceType}
       userId={userId}
       collectionByCardId={includesQuantityFilters ? collectionByCardIdFromHeavyQuery : collectionByCardId}
+      isFetching={isFetching}
     />
   );
 };
 
 const tableShouldNotRerender = (prevProps, nextProps) => {
-  if (prevProps?.cards?.length !== nextProps?.cards?.length) {
+  if (prevProps?.cards?.length !== nextProps?.cards?.length || prevProps.isFetching !== nextProps.isFetching) {
     return false;
   }
   const idsAreTheSame = prevProps?.cards?.map((card) => card.id).join(',') === nextProps?.cards?.map((card) => card.id).join(',');

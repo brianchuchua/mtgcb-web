@@ -21,7 +21,7 @@ interface SetProps {
 }
 
 export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
-  const { searchQuery, oracleTextQuery, viewSubject, viewMode, priceType } = useSelector((state: RootState) => state.setCollection);
+  const { viewSubject, viewMode, priceType } = useSelector((state: RootState) => state.setCollection);
 
   const dispatch = useDispatch();
 

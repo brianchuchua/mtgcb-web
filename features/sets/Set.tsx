@@ -47,6 +47,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
   const [skip, setSkip] = useState(0);
   const [first, setFirst] = useState(50);
   const [page, setPage] = useState(1);
+  const [previousTotalResults, setPreviousTotalResults] = useState(null);
 
   const { data: setData, isLoading: isSetLoading, isFetching: isSetFetching, error: setError } = useGetSetBySlugQuery({ slug: setSlug });
 
@@ -103,6 +104,18 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
 
   const isLoading = isSetLoading || isCardDataLoading || isCardMetaDataLoading;
   const isFetching = isSetFetching || isCardDataFetching || isCardMetaDataFetching;
+
+  useEffect(() => {
+    if (totalResults !== previousTotalResults) {
+      setSkip(0);
+      setPage(1);
+      setPreviousTotalResults(totalResults);
+    }
+    if (skip > totalResults) {
+      setSkip(0);
+      setPage(1);
+    }
+  }, [skip, totalResults, previousTotalResults]);
 
   // TODO: Make a nice set icon component with intelligent fallbacks or a default option
   // TODO: Add buy links here and come up with a good interface, similar to how Scryfall does card pages perhaps
@@ -192,6 +205,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
                 setPage={setPage}
                 priceType={priceType}
                 isShowingSingleSet
+                isFetching={isFetching}
               />
             )}
           </div>

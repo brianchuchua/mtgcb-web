@@ -33,6 +33,7 @@ export const ConnectedSetTable: React.FC<ConnectedSetTableProps> = ({
   const {
     data: collectionSummary,
     isLoading: isFilteredCollectionSummaryLoading,
+    isFetching,
     error: filteredCollectionSummaryError,
   } = useGetFilteredCollectionSummaryLegacyQuery({
     userId,
@@ -66,6 +67,7 @@ export const ConnectedSetTable: React.FC<ConnectedSetTableProps> = ({
       priceType={priceType}
       userId={userId}
       isCollectorMode
+      isFetching={isFetching}
     />
   );
 };

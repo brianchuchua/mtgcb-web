@@ -2,7 +2,7 @@ import Grid from '@material-ui/core/Grid';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { forceCheck as forceImagesToCheckIfTheyShouldLoad } from 'react-lazyload';
 import styled from 'styled-components';
 import Pagination from '../../components/Pagination';
@@ -29,7 +29,7 @@ interface GalleryControlsProps {
   settingGroups?: SettingGroup[];
   galleryType?: GalleryTypes;
   isLoading?: boolean;
-  isFetching?: boolean;
+  isFetching: boolean;
   isOnBottom?: boolean;
 }
 
@@ -98,6 +98,7 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
           setPage={setPage}
           setSkip={setSkip}
           isOnBottom={isOnBottom}
+          isFetching={isFetching}
         />
         <GalleryPaginationMobile
           settingGroups={settingGroups}
@@ -112,6 +113,7 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
           setPage={setPage}
           setSkip={setSkip}
           isOnBottom={isOnBottom}
+          isFetching={isFetching}
         />
         {setGalleryWidth && setCardsPerRow && width >= breakpoints.sm && galleryType === 'cards' && !isOnBottom && (
           <Grid container item sm={12} spacing={2} justify="space-between" alignItems="center">
@@ -193,6 +195,7 @@ interface GalleryPaginationDesktopProps {
   setPage: Dispatch<SetStateAction<number>>;
   setSkip: Dispatch<SetStateAction<number>>;
   isOnBottom?: boolean;
+  isFetching: boolean;
 }
 
 const GalleryPaginationDesktop: React.FC<GalleryPaginationDesktopProps> = ({
@@ -208,33 +211,62 @@ const GalleryPaginationDesktop: React.FC<GalleryPaginationDesktopProps> = ({
   setPage,
   setSkip,
   isOnBottom = false,
-}) => (
-  <StyledDesktopOnlyGrid
-    container
-    spacing={2}
-    justify="center"
-    alignItems="center"
-    style={{ marginBottom: galleryType === 'sets' ? '10px' : '0px' }}
-  >
-    <Grid item lg={3}>
-      <Typography>{`Showing ${startOfRange}-${endOfRange} of ${totalResults} ${typeLabel.toLowerCase()}`}</Typography>
-    </Grid>
-    <CenteredGrid item lg={6}>
-      <Pagination total={totalResults} page={page} first={first} setPage={setPage} setSkip={setSkip} />
-    </CenteredGrid>
-    <RightAlignedGrid container item lg={3} alignItems="center" justify="flex-end">
-      <Grid item>
-        <NumberOfItemsSelect first={first} setFirst={setFirst} label={typeLabel} />
+  isFetching = true,
+}) => {
+  const [previousStartOfRange, setPreviousStartOfRange] = useState(startOfRange);
+  const [previousEndOfRange, setPreviousEndOfRange] = useState(endOfRange);
+  const [previousTotalResults, setPreviousTotalResults] = useState(totalResults);
+
+  const rangeValuesAreUpdatingViaPagination =
+    totalResults === previousTotalResults && (startOfRange !== previousStartOfRange || endOfRange !== previousEndOfRange);
+  const rangeValuesAreValid = startOfRange <= endOfRange && endOfRange <= totalResults;
+
+  useEffect(() => {
+    if (!isFetching && rangeValuesAreValid) {
+      setPreviousStartOfRange(startOfRange);
+      setPreviousEndOfRange(endOfRange);
+      setPreviousTotalResults(totalResults);
+    }
+  }, [isFetching, startOfRange, endOfRange, totalResults]);
+
+  return (
+    <StyledDesktopOnlyGrid
+      container
+      spacing={2}
+      justify="center"
+      alignItems="center"
+      style={{ marginBottom: galleryType === 'sets' ? '10px' : '0px' }}
+    >
+      <Grid item lg={3}>
+        {isFetching && rangeValuesAreUpdatingViaPagination && rangeValuesAreValid && (
+          <Typography>{`Showing ${previousStartOfRange}-${previousEndOfRange} of ${previousTotalResults} ${typeLabel.toLowerCase()}`}</Typography>
+        )}
+        {isFetching && !rangeValuesAreValid && (
+          <Typography
+            style={{ visibility: 'hidden' }}
+          >{`Showing ${previousStartOfRange}-${previousEndOfRange} of ${previousTotalResults} ${typeLabel.toLowerCase()}`}</Typography>
+        )}
+        {!isFetching && rangeValuesAreValid && (
+          <Typography>{`Showing ${startOfRange}-${endOfRange} of ${totalResults} ${typeLabel.toLowerCase()}`}</Typography>
+        )}
       </Grid>
-      <Grid item>{settingGroups.length > 0 && <SettingsPanel panelId="cardGallerySettings" settingGroups={settingGroups} />}</Grid>
-    </RightAlignedGrid>
-    {isOnBottom && (
-      <Typography variant="body2" color="primary" onClick={() => window?.scrollTo(0, 0)} style={{ cursor: 'pointer', display: 'inline' }}>
-        (Back to Top)
-      </Typography>
-    )}
-  </StyledDesktopOnlyGrid>
-);
+      <CenteredGrid item lg={6}>
+        <Pagination total={totalResults} page={page} first={first} setPage={setPage} setSkip={setSkip} />
+      </CenteredGrid>
+      <RightAlignedGrid container item lg={3} alignItems="center" justify="flex-end">
+        <Grid item>
+          <NumberOfItemsSelect first={first} setFirst={setFirst} label={typeLabel} />
+        </Grid>
+        <Grid item>{settingGroups.length > 0 && <SettingsPanel panelId="cardGallerySettings" settingGroups={settingGroups} />}</Grid>
+      </RightAlignedGrid>
+      {isOnBottom && (
+        <Typography variant="body2" color="primary" onClick={() => window?.scrollTo(0, 0)} style={{ cursor: 'pointer', display: 'inline' }}>
+          (Back to Top)
+        </Typography>
+      )}
+    </StyledDesktopOnlyGrid>
+  );
+};
 
 const StyledDesktopOnlyGrid = styled(Grid)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -255,38 +287,67 @@ const GalleryPaginationMobile: React.FC<GalleryPaginationDesktopProps> = ({
   setPage,
   setSkip,
   isOnBottom = false,
-}) => (
-  <StyledMobileOnlyGrid
-    container
-    spacing={0}
-    justify="center"
-    alignItems="center"
-    style={{ marginBottom: galleryType === 'sets' ? '10px' : '0px' }}
-  >
-    <StyledGridCenteredIfSmall item sm={3} xs={12}>
-      <Typography>{`Showing ${startOfRange}-${endOfRange} of ${totalResults} ${typeLabel.toLowerCase()}`}</Typography>
-    </StyledGridCenteredIfSmall>
-    <StyledGridLeftAlignedIfSmall item sm={6} xs={9}>
-      <Pagination total={totalResults} page={page} first={first} setPage={setPage} setSkip={setSkip} />
-    </StyledGridLeftAlignedIfSmall>
-    <RightAlignedGrid container item sm={3} xs={3} alignItems="center" justify="flex-end">
-      <Grid item>
-        <NumberOfItemsSelect first={first} setFirst={setFirst} label={typeLabel} />
-      </Grid>
-      <Grid item>{settingGroups.length > 0 && <SettingsPanel panelId="cardGallerySettings" settingGroups={settingGroups} />}</Grid>
-    </RightAlignedGrid>
-    {isOnBottom && (
-      <Typography
-        variant="body2"
-        color="primary"
-        onClick={() => window?.scrollTo(0, 0)}
-        style={{ cursor: 'pointer', display: 'inline', marginLeft: '5px' }}
-      >
-        (Back to Top)
-      </Typography>
-    )}
-  </StyledMobileOnlyGrid>
-);
+  isFetching = true,
+}) => {
+  const [previousStartOfRange, setPreviousStartOfRange] = useState(startOfRange);
+  const [previousEndOfRange, setPreviousEndOfRange] = useState(endOfRange);
+  const [previousTotalResults, setPreviousTotalResults] = useState(totalResults);
+
+  const rangeValuesAreUpdatingViaPagination =
+    totalResults === previousTotalResults && (startOfRange !== previousStartOfRange || endOfRange !== previousEndOfRange);
+  const rangeValuesAreValid = startOfRange <= endOfRange && endOfRange <= totalResults;
+
+  useEffect(() => {
+    if (!isFetching && rangeValuesAreValid) {
+      setPreviousStartOfRange(startOfRange);
+      setPreviousEndOfRange(endOfRange);
+      setPreviousTotalResults(totalResults);
+    }
+  }, [isFetching, startOfRange, endOfRange, totalResults]);
+
+  return (
+    <StyledMobileOnlyGrid
+      container
+      spacing={0}
+      justify="center"
+      alignItems="center"
+      style={{ marginBottom: galleryType === 'sets' ? '10px' : '0px' }}
+    >
+      <StyledGridCenteredIfSmall item sm={3} xs={12}>
+        {isFetching && rangeValuesAreUpdatingViaPagination && rangeValuesAreValid && (
+          <Typography>{`Showing ${previousStartOfRange}-${previousEndOfRange} of ${previousTotalResults} ${typeLabel.toLowerCase()}`}</Typography>
+        )}
+        {isFetching && !rangeValuesAreValid && (
+          <Typography
+            style={{ visibility: 'hidden' }}
+          >{`Showing ${previousStartOfRange}-${previousEndOfRange} of ${previousTotalResults} ${typeLabel.toLowerCase()}`}</Typography>
+        )}
+        {!isFetching && rangeValuesAreValid && (
+          <Typography>{`Showing ${startOfRange}-${endOfRange} of ${totalResults} ${typeLabel.toLowerCase()}`}</Typography>
+        )}
+      </StyledGridCenteredIfSmall>
+      <StyledGridLeftAlignedIfSmall item sm={6} xs={9}>
+        <Pagination total={totalResults} page={page} first={first} setPage={setPage} setSkip={setSkip} />
+      </StyledGridLeftAlignedIfSmall>
+      <RightAlignedGrid container item sm={3} xs={3} alignItems="center" justify="flex-end">
+        <Grid item>
+          <NumberOfItemsSelect first={first} setFirst={setFirst} label={typeLabel} />
+        </Grid>
+        <Grid item>{settingGroups.length > 0 && <SettingsPanel panelId="cardGallerySettings" settingGroups={settingGroups} />}</Grid>
+      </RightAlignedGrid>
+      {isOnBottom && (
+        <Typography
+          variant="body2"
+          color="primary"
+          onClick={() => window?.scrollTo(0, 0)}
+          style={{ cursor: 'pointer', display: 'inline', marginLeft: '5px' }}
+        >
+          (Back to Top)
+        </Typography>
+      )}
+    </StyledMobileOnlyGrid>
+  );
+};
 
 const StyledMobileOnlyGrid = styled(Grid)(({ theme }) => ({
   [theme.breakpoints.up('lg')]: {

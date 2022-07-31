@@ -52,6 +52,8 @@ export const Browse: React.FC = () => {
   const [expansionsFirst, setExpansionsFirst] = useLocalStorage('numberOfExpansionsPerPage', 16);
   const [expansionsPage, setExpansionsPage] = useState(1);
 
+  const [previousTotalResults, setPreviousTotalResults] = useState(null);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -105,11 +107,16 @@ export const Browse: React.FC = () => {
   const totalResults = cardMetaData?.data?._allCardsMeta?.count;
 
   useEffect(() => {
+    if (totalResults !== previousTotalResults) {
+      setSkip(0);
+      setPage(1);
+      setPreviousTotalResults(totalResults);
+    }
     if (skip > totalResults) {
       setSkip(0);
       setPage(1);
     }
-  }, [skip, totalResults]);
+  }, [skip, totalResults, previousTotalResults]);
 
   const { data: allSetsResponse, isLoading: isGetAllSetsLoading, isFetching: isGetAllSetsFetching } = useGetAllSetsQuery({
     first: expansionsFirst,
@@ -157,6 +164,7 @@ export const Browse: React.FC = () => {
             setFirst={setFirst}
             setPage={setPage}
             priceType={priceType}
+            isFetching={isFetching}
           />
         )}
         {viewSubject === 'cards' && viewMode === 'table' && (
@@ -170,6 +178,7 @@ export const Browse: React.FC = () => {
             setFirst={setFirst}
             setPage={setPage}
             priceType={priceType}
+            isFetching={isFetching}
           />
         )}
         {viewSubject === 'sets' && viewMode === 'grid' && (
@@ -199,6 +208,7 @@ export const Browse: React.FC = () => {
             setFirst={setExpansionsFirst}
             setPage={setExpansionsPage}
             priceType={priceType}
+            isFetching={isFetching}
           />
         )}
       </ContentWrapper>

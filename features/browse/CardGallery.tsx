@@ -29,7 +29,7 @@ interface CardGalleryProps {
   ];
   userId?: string;
   isLoading?: boolean;
-  isFetching?: boolean;
+  isFetching: boolean;
 }
 
 const CardGallery: React.FC<CardGalleryProps> = ({
@@ -129,6 +129,7 @@ const CardGallery: React.FC<CardGalleryProps> = ({
           cardsPerRow={cardsPerRow}
           galleryWidth={galleryWidth}
           settingGroups={settingGroups}
+          isFetching={isFetching}
           galleryType="cards"
         />
 
@@ -164,6 +165,7 @@ const CardGallery: React.FC<CardGalleryProps> = ({
             totalResults={totalResults}
             cardsPerRow={cardsPerRow}
             settingGroups={settingGroups}
+            isFetching={isFetching}
             galleryType="cards"
             isOnBottom
           />

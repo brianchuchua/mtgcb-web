@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useGetFilteredCardsSummaryLegacyQuery } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
@@ -41,6 +41,7 @@ export const ConnectedCollectionCardGallery: React.FC<ConnectedConnectionCardGal
 
   const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
   const debouncedOracleTextQuery = useDebounce(oracleTextQuery, searchFieldDebounceTimeMs);
+  const [previousTotalResults, setPreviousTotalResults] = useState(null);
 
   const {
     data: filteredCardsSummary,
@@ -74,6 +75,18 @@ export const ConnectedCollectionCardGallery: React.FC<ConnectedConnectionCardGal
 
   const cards = filteredCardsSummary?.data?.filteredCardsSummaryLegacy?.cards;
   const totalResults = filteredCardsSummary?.data?.filteredCardsSummaryLegacy?.count;
+
+  useEffect(() => {
+    if (totalResults !== previousTotalResults) {
+      setSkip(0);
+      setPage(1);
+      setPreviousTotalResults(totalResults);
+    }
+    if (skip > totalResults) {
+      setSkip(0);
+      setPage(1);
+    }
+  }, [skip, totalResults, previousTotalResults]);
 
   const collectionByCardId = useMemo(
     () =>

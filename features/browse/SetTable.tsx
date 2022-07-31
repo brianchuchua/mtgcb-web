@@ -29,6 +29,7 @@ interface SetTableProps {
   priceType: PriceTypes;
   isCollectorMode?: boolean;
   userId?: string;
+  isFetching: boolean;
 }
 
 const SetTable: React.FC<SetTableProps> = ({
@@ -44,6 +45,7 @@ const SetTable: React.FC<SetTableProps> = ({
   priceType,
   isCollectorMode = false,
   userId = null,
+  isFetching = true,
 }) => {
   const atLeastOneSetToShow = totalResults > 0;
 
@@ -97,6 +99,7 @@ const SetTable: React.FC<SetTableProps> = ({
         totalResults={totalResults}
         settingGroups={settingGroups}
         galleryType="sets"
+        isFetching={isFetching}
       />
       <StyledTableContainer>
         <Table {...getTableProps()} size="small">
@@ -142,6 +145,7 @@ const SetTable: React.FC<SetTableProps> = ({
           totalResults={totalResults}
           settingGroups={settingGroups}
           galleryType="sets"
+          isFetching={isFetching}
           isOnBottom
         />
       </div>

@@ -68,6 +68,7 @@ const SetGallery: React.FC<SetGalleryProps> = ({
         skip={skip}
         totalResults={totalResults}
         cardsPerRow={setsPerRow}
+        isFetching={isFetching}
         galleryType="sets"
       />
 
@@ -100,6 +101,7 @@ const SetGallery: React.FC<SetGalleryProps> = ({
           skip={skip}
           totalResults={totalResults}
           cardsPerRow={setsPerRow}
+          isFetching={isFetching}
           galleryType="sets"
           isOnBottom
         />

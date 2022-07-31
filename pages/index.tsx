@@ -107,15 +107,14 @@ const HomePage: React.FC = () => (
           ⏳ Limited Edition Beta (In Progress): As many of the new MTG CB features that can be squeezed in here (Tokens, Custom Collection
           Goals, and Foreign Cards), although they'll be deferred if more current feature improvements are needed.
         </li>
-        <li>Unlimited Edition (June): Full release of the new MTG CB.</li>
+        <li>Unlimited Edition: Full release of the new MTG CB.</li>
         <li>
-          Combo Winter (New): I need to invest some time in upgrading the libraries used by the new MTG CB. I'll do this after the main
-          release.
+          Combo Winter: I need to invest some time in upgrading the libraries used by the new MTG CB. I'll do this after the main release.
         </li>
-        <li>Revised Edition (TBD): The v1.1 update adding a single new requested feature.</li>
+        <li>Revised Edition: The v1.1 update adding a single new requested feature.</li>
         <li>
-          Future Updates (TBD): Future updates will follow the same pattern of v1.2, v1.3, and so on, each adding a single new feature in
-          focused iterations.
+          Future Updates: Future updates will follow the same pattern of v1.2, v1.3, and so on, each adding a single new feature in focused
+          iterations.
         </li>
       </ul>
     </Typography>
