@@ -84,7 +84,7 @@ const CardGallery: React.FC<CardGalleryProps> = ({
     },
   ];
 
-  if (isLoading) {
+  if (isLoading || (isFetching && userId)) {
     return (
       <>
         <GalleryControls
@@ -206,7 +206,7 @@ const fadeIn = keyframes`
 `;
 
 const FadeIn = styled.div`
-  animation: ${fadeIn} 2s ease-in;
+  animation: ${fadeIn} 1.5s ease-in;
 `;
 
 export default CardGallery;

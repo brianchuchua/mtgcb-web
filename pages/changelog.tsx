@@ -7,6 +7,15 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-07-30 (v0.45.1)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Fix bugs with performing searches mid-pagination.</li>
+        <li>Improve loading state for slow pagination (collections filtered by quantity)</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-07-22 (v0.45.0)
     </Typography>
     <Typography paragraph>
