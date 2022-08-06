@@ -145,8 +145,8 @@ const CardGallery: React.FC<CardGalleryProps> = ({
                 priceIsVisible={priceIsVisible}
                 userId={userId}
                 loggedInUserId={user?.id}
-                quantityReg={collectionByCardId?.[card.id]?.quantityReg ?? 0}
-                quantityFoil={collectionByCardId?.[card.id]?.quantityFoil ?? 0}
+                quantityReg={collectionByCardId?.[card.id]?.quantityReg ?? null}
+                quantityFoil={collectionByCardId?.[card.id]?.quantityFoil ?? null}
               />
             ))}
         </CardGalleryWrapper>

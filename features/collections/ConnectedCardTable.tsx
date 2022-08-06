@@ -127,6 +127,25 @@ export const ConnectedCardTable: React.FC<ConnectedCardTableProps> = ({ userId, 
     [collectionByCardIdResponse]
   ); // eslint-disable-line @typescript-eslint/no-explicit-any
 
+  const collectionByCardIdWithDefaults = useMemo(
+    () =>
+      cardIds && collectionByCardId && !isCollectionByCardIdFetching
+        ? cardIds?.reduce((acc, curr) => {
+            if (!collectionByCardId[curr]) {
+              acc[curr] = {
+                cardID: Number(curr),
+                quantityReg: 0,
+                quantityFoil: 0,
+              };
+            } else {
+              acc[curr] = collectionByCardId[curr];
+            }
+            return acc;
+          }, {})
+        : {},
+    [collectionByCardId, cardIds, isCollectionByCardIdFetching]
+  );
+
   const {
     data: filteredCardsSummary,
     isLoading: loadingFilteredCardsSummary,
@@ -161,6 +180,25 @@ export const ConnectedCardTable: React.FC<ConnectedCardTableProps> = ({ userId, 
       }, {} as any),
     [filteredCardsSummary?.data?.filteredCardsSummaryLegacy?.cards]
   ); // eslint-disable-line @typescript-eslint/no-explicit-any
+
+  const collectionByCardIdWithDefaultsFromHeavyQuery = useMemo(
+    () =>
+      cardsFromHeavyQuery && collectionByCardIdFromHeavyQuery && !fetchingFilteredCardsSummary
+        ? cardsFromHeavyQuery?.reduce((acc, curr) => {
+            if (!collectionByCardIdFromHeavyQuery[curr.id]) {
+              acc[curr.id] = {
+                cardID: Number(curr.id),
+                quantityReg: 0,
+                quantityFoil: 0,
+              };
+            } else {
+              acc[curr.id] = collectionByCardIdFromHeavyQuery[curr.id];
+            }
+            return acc;
+          }, {} as any)
+        : {},
+    [collectionByCardIdFromHeavyQuery, cardsFromHeavyQuery, fetchingFilteredCardsSummary]
+  );
 
   const isLoading = isCardDataLoading || isCardMetaDataLoading || isCollectionByCardIdLoading || loadingFilteredCardsSummary;
   const isFetching = isCardDataFetching || isCardMetaDataFetching || fetchingFilteredCardsSummary;
@@ -219,21 +257,11 @@ export const ConnectedCardTable: React.FC<ConnectedCardTableProps> = ({ userId, 
       setPage={setPage}
       priceType={priceType}
       userId={userId}
-      collectionByCardId={includesQuantityFilters ? collectionByCardIdFromHeavyQuery : collectionByCardId}
+      collectionByCardId={includesQuantityFilters ? collectionByCardIdWithDefaultsFromHeavyQuery : collectionByCardIdWithDefaults}
       isFetching={isFetching}
+      isLoading={isLoading}
     />
   );
 };
 
-const tableShouldNotRerender = (prevProps, nextProps) => {
-  if (prevProps?.cards?.length !== nextProps?.cards?.length || prevProps.isFetching !== nextProps.isFetching) {
-    return false;
-  }
-  const idsAreTheSame = prevProps?.cards?.map((card) => card.id).join(',') === nextProps?.cards?.map((card) => card.id).join(',');
-  if (idsAreTheSame) {
-    return true;
-  }
-  return false;
-};
-
-const MemoizedCardTable = memo(CardTable, tableShouldNotRerender);
+const MemoizedCardTable = memo(CardTable);

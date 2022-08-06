@@ -127,6 +127,25 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
     [collectionByCardIdResponse]
   ); // eslint-disable-line @typescript-eslint/no-explicit-any
 
+  const collectionByCardIdWithDefaults = useMemo(
+    () =>
+      cardIds && collectionByCardId && !isCollectionByCardIdFetching
+        ? cardIds?.reduce((acc, curr) => {
+            if (!collectionByCardId[curr]) {
+              acc[curr] = {
+                cardID: Number(curr),
+                quantityReg: 0,
+                quantityFoil: 0,
+              };
+            } else {
+              acc[curr] = collectionByCardId[curr];
+            }
+            return acc;
+          }, {})
+        : {},
+    [collectionByCardId, cardIds, isCollectionByCardIdFetching]
+  );
+
   const {
     data: filteredCardsSummary,
     isLoading: loadingFilteredCardsSummary,
@@ -162,9 +181,27 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
     [filteredCardsSummary?.data?.filteredCardsSummaryLegacy?.cards]
   ); // eslint-disable-line @typescript-eslint/no-explicit-any
 
+  const collectionByCardIdWithDefaultsFromHeavyQuery = useMemo(
+    () =>
+      cardsFromHeavyQuery && collectionByCardIdFromHeavyQuery && !fetchingFilteredCardsSummary
+        ? cardsFromHeavyQuery?.reduce((acc, curr) => {
+            if (!collectionByCardIdFromHeavyQuery[curr.id]) {
+              acc[curr.id] = {
+                cardID: Number(curr.id),
+                quantityReg: 0,
+                quantityFoil: 0,
+              };
+            } else {
+              acc[curr.id] = collectionByCardIdFromHeavyQuery[curr.id];
+            }
+            return acc;
+          }, {} as any)
+        : {},
+    [collectionByCardIdFromHeavyQuery, cardsFromHeavyQuery, fetchingFilteredCardsSummary]
+  );
+
   const isLoading = isCardDataLoading || isCardMetaDataLoading || isCollectionByCardIdLoading || loadingFilteredCardsSummary;
   const isFetching = isCardDataFetching || isCardMetaDataFetching || fetchingFilteredCardsSummary;
-
   const prefetchAllCards = usePrefetch('getAllCards');
 
   const prefetchNextAllCards = useCallback(() => {
@@ -219,7 +256,7 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
       setPage={setPage}
       priceType={priceType}
       userId={userId}
-      collectionByCardId={includesQuantityFilters ? collectionByCardIdFromHeavyQuery : collectionByCardId}
+      collectionByCardId={includesQuantityFilters ? collectionByCardIdWithDefaultsFromHeavyQuery : collectionByCardIdWithDefaults}
       isLoading={isLoading}
       isFetching={isFetching}
     />

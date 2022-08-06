@@ -42,6 +42,7 @@ const CardBox: React.FC<CardBoxProps> = ({
   const componentRef = useRef();
   const { width, height } = useContainerDimensions(componentRef);
 
+  const computedHeight = Math.ceil((680 / 488) * width);
   return (
     <CardWrapper key={card.id} fixedHeight={fixedHeight}>
       <CardAttributes>
@@ -51,9 +52,15 @@ const CardBox: React.FC<CardBoxProps> = ({
               <Skeleton
                 variant="rect"
                 width="100%"
-                height={`${1.39 * width}px`}
+                height={fixedHeight || `${computedHeight}px`}
                 animation="wave"
-                style={{ width: '100%', height: `${Math.ceil(1.39 * width)}px`, borderRadius: '5%' }}
+                style={{
+                  width: fixedHeight ? Math.ceil((488 / 680) * Number(fixedHeight.replace('px', ''))) : '100%',
+                  height: fixedHeight || `${computedHeight}px`,
+                  borderRadius: '5%',
+                  padding: '0',
+                  margin: '0',
+                }}
               />
             )}
             <a href={generateCardUrl(card.tcgplayerId, card.name)} target="_blank" rel="noreferrer">
@@ -63,6 +70,7 @@ const CardBox: React.FC<CardBoxProps> = ({
                 src={imageUrl}
                 set={card.set?.name}
                 fixedHeight={fixedHeight}
+                computedHeight={computedHeight}
                 style={{ display: imageLoaded ? 'block' : 'none' }}
                 onLoad={() => setImageLoaded(true)}
               />
@@ -138,11 +146,12 @@ const CardSet = styled.em(({ theme }) => ({
 interface CardImageProps {
   set?: string;
   fixedHeight?: string;
+  computedHeight?: number;
 }
 
-const CardImage = styled.img<CardImageProps>(({ set, fixedHeight }) => ({
+const CardImage = styled.img<CardImageProps>(({ set, fixedHeight, computedHeight }) => ({
   width: fixedHeight ? 'auto' : '100%',
-  height: fixedHeight || 'auto',
+  height: fixedHeight || `${computedHeight}px`,
   borderRadius: set === 'Limited Edition Alpha' ? '7%' : '5%',
 }));
 

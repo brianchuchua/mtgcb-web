@@ -21,8 +21,8 @@ interface CardQuantitySelectorProps {
 const CardQuantitySelector: React.FC<CardQuantitySelectorProps> = ({
   cardId,
   cardName,
-  quantityReg = 0,
-  quantityFoil = 0,
+  quantityReg = null,
+  quantityFoil = null,
   userId = null,
   setId = null,
   renderNormal = true,

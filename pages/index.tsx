@@ -8,7 +8,7 @@ const HomePage: React.FC = () => (
       MTG CB Limited Edition Beta - Build v0.45.1 👷‍♂️
     </Typography>
     <Typography paragraph align="center">
-      <em>Last updated: 2022-07-30</em>
+      <em>Last updated: 2022-08-06</em>
     </Typography>
     <br />
     <br />

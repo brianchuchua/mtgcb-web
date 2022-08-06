@@ -10,9 +10,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 import { useSortBy, useTable } from 'react-table';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { useAuthentication } from '../../auth/AuthenticationProvider';
 import Link from '../../components/Link';
+import Wubrg from '../../components/loaders/Wubrg';
 import ManaCost, { sortByManaSymbols } from '../../components/symbols/mana/ManaCost';
 import { PriceTypes } from './browseSlice';
 import CardBox from './CardBox';
@@ -41,6 +42,7 @@ interface CardTableProps {
   userId?: string;
   isShowingSingleSet?: boolean;
   isFetching: boolean;
+  isLoading: boolean;
 }
 
 const CardTable: React.FC<CardTableProps> = ({
@@ -56,6 +58,7 @@ const CardTable: React.FC<CardTableProps> = ({
   userId,
   collectionByCardId,
   isFetching,
+  isLoading,
   isShowingSingleSet = false,
 }) => {
   const atLeastOneCardToShow = totalResults > 0;
@@ -93,8 +96,8 @@ const CardTable: React.FC<CardTableProps> = ({
               cardName={row?.values?.name}
               userId={userId}
               setId={row?.values?.set?.id}
-              quantityReg={value}
-              quantityFoil={row?.values?.quantityFoil}
+              quantityReg={value ?? null}
+              quantityFoil={row?.values?.quantityFoil ?? null}
               renderFoil={false}
             />
           ) : (
@@ -111,8 +114,8 @@ const CardTable: React.FC<CardTableProps> = ({
               cardName={row?.values?.name}
               userId={userId}
               setId={row?.values?.set?.id}
-              quantityReg={row?.values?.quantityReg}
-              quantityFoil={value}
+              quantityReg={row?.values?.quantityReg ?? null}
+              quantityFoil={value ?? null}
               renderNormal={false}
             />
           ) : (
@@ -213,8 +216,8 @@ const CardTable: React.FC<CardTableProps> = ({
     if (collectionByCardId) {
       return cards.map((card) => ({
         ...card,
-        quantityReg: collectionByCardId?.[card.id]?.quantityReg ?? 0,
-        quantityFoil: collectionByCardId?.[card.id]?.quantityFoil ?? 0,
+        quantityReg: collectionByCardId?.[card.id]?.quantityReg ?? null,
+        quantityFoil: collectionByCardId?.[card.id]?.quantityFoil ?? null,
       }));
     }
 
@@ -334,6 +337,30 @@ const CardTable: React.FC<CardTableProps> = ({
     },
   ];
 
+  console.log(isLoading, isFetching, userId);
+  if (isLoading || (isFetching && userId)) {
+    return (
+      <>
+        <GalleryControls
+          items={cards}
+          first={first}
+          page={page}
+          setFirst={setFirst}
+          setPage={setPage}
+          setSkip={setSkip}
+          skip={skip}
+          totalResults={totalResults}
+          settingGroups={settingGroups}
+          galleryType="cards"
+          isFetching={isFetching}
+          isLoading={isLoading}
+        />
+        <FadeIn style={{ marginTop: '100px' }}>
+          <Wubrg />
+        </FadeIn>
+      </>
+    );
+  }
   return atLeastOneCardToShow ? (
     <>
       <GalleryControls
@@ -456,3 +483,13 @@ const generateCardUrl = (cardId: string | number, cardName: string, card: any) =
     ? `https://shop.tcgplayer.com/magic/product/productsearch?id=${cardId}&utm_campaign=affiliate&utm_medium=CTNBLDR&utm_source=CTNBLDR`
     : `https://www.tcgplayer.com/search/magic/product?productLineName=magic&q=${cardName}&utm_campaign=affiliate&utm_medium=CTNBLDR&utm_source=CTNBLDR`;
 export default CardTable;
+
+const fadeIn = keyframes`
+    0% { opacity: 0; }
+    66% { opacity: 0; }
+    100% { opacity: 1; }
+`;
+
+const FadeIn = styled.div`
+  animation: ${fadeIn} 1.5s ease-in;
+`;

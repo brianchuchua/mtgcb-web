@@ -31,7 +31,7 @@ import {
 export const mtgcbApi = createApi({
   reducerPath: 'mtgcb',
   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_MTGCB_API_URL, credentials: 'include' }),
-  tagTypes: ['Sets', 'Cards', 'Collections'],
+  tagTypes: ['Sets', 'Cards', 'Collections', 'CollectionSummary'],
   endpoints: (builder) => ({
     getAllSets: builder.query<AxiosResponse<SetResponse>, AllSetsVariables>({
       query: ({ first, skip, name, sortBy = 'releasedAt', sortByDirection = 'DESC', setTypes, setCategories }) => ({
@@ -67,7 +67,7 @@ export const mtgcbApi = createApi({
       AxiosResponse<FilteredCollectionSummaryLegacyResponse>,
       FilteredCollectionSummaryLegacyVariables
     >({
-      providesTags: ['Collections'],
+      providesTags: ['CollectionSummary'],
       query: ({
         userId,
         priceType = 'market',
@@ -104,6 +104,7 @@ export const mtgcbApi = createApi({
     }),
     getFilteredCardsSummaryLegacy: builder.query<AxiosResponse<FilteredCardsSummaryLegacyResponse>, FilteredCardsSummaryLegacyVariables>({
       providesTags: ['Collections'],
+      keepUnusedDataFor: 0,
       query: ({
         userId,
         setId,
@@ -274,7 +275,7 @@ export const mtgcbApi = createApi({
           },
         },
       }),
-      providesTags: ['Collections'],
+      providesTags: ['CollectionSummary'],
     }),
     getTcgplayerMassImportForUserLegacy: builder.query<
       // TODO: Remove me, not a great fit for redux query
@@ -305,7 +306,7 @@ export const mtgcbApi = createApi({
           },
         },
       }),
-      providesTags: ['Collections'],
+      providesTags: ['CollectionSummary'],
     }),
     getCollectionByCardIdLegacy: builder.query<AxiosResponse<CollectionByCardIdLegacyResponse>, CollectionByCardIdLegacyVariables>({
       query: ({ cardIds, userId }) => ({
@@ -320,6 +321,7 @@ export const mtgcbApi = createApi({
         },
       }),
       providesTags: ['Collections'],
+      keepUnusedDataFor: 0,
     }),
     updateCollectionLegacy: builder.mutation<AxiosResponse<UpdateCollectionLegacyResponse>, UpdateCollectionLegacyVariables>({
       query: ({ cardId, mode, quantityRegular, quantityFoil, setId, userId }) => ({
@@ -335,36 +337,7 @@ export const mtgcbApi = createApi({
           },
         },
       }),
-      invalidatesTags: ['Collections'],
-      async onQueryStarted({ cardId, mode, quantityRegular, quantityFoil, setId, userId }, { dispatch, queryFulfilled }) {
-        dispatch(
-          mtgcbApi.util.updateQueryData('getSetSummaryLegacy', { setId, userId }, (draft) => {
-            const card = draft.data.setSummaryLegacy.collection.find((c) => Number(c.cardID) === Number(cardId));
-            if (card) {
-              if (mode === 'set') {
-                if (quantityRegular !== null && quantityRegular !== undefined) {
-                  card.quantityReg = quantityRegular;
-                }
-                if (quantityFoil !== null && quantityFoil !== undefined) {
-                  card.quantityFoil = quantityFoil;
-                }
-              } else {
-                if (quantityRegular !== null && quantityRegular !== undefined) {
-                  card.quantityReg += quantityRegular;
-                }
-                if (quantityFoil !== null && quantityFoil !== undefined) {
-                  card.quantityFoil += quantityFoil;
-                }
-              }
-            }
-          })
-        );
-        try {
-          await queryFulfilled;
-        } catch {
-          dispatch(mtgcbApi.util.invalidateTags(['Collections']));
-        }
-      },
+      invalidatesTags: ['CollectionSummary'],
     }),
     getCardAutocomplete: builder.query<AxiosResponse<CardAutocompleteResponse>, CardAutocompleteOptions>({
       query: ({ name }) => ({
