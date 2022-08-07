@@ -107,6 +107,7 @@ export const ConnectedCollectionCardTable: React.FC<ConnectedConnectionCardTable
       userId={userId}
       collectionByCardId={collectionByCardId}
       isFetching={isFetching}
+      isLoading={loadingFilteredCardsSummary}
     />
   );
 };

@@ -179,6 +179,7 @@ export const Browse: React.FC = () => {
             setPage={setPage}
             priceType={priceType}
             isFetching={isFetching}
+            isLoading={isLoading}
           />
         )}
         {viewSubject === 'sets' && viewMode === 'grid' && (

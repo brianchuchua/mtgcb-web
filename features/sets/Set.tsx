@@ -206,6 +206,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
                 priceType={priceType}
                 isShowingSingleSet
                 isFetching={isFetching}
+                isLoading={isLoading}
               />
             )}
           </div>

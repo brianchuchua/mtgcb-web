@@ -337,7 +337,6 @@ const CardTable: React.FC<CardTableProps> = ({
     },
   ];
 
-  console.log(isLoading, isFetching, userId);
   if (isLoading || (isFetching && userId)) {
     return (
       <>
