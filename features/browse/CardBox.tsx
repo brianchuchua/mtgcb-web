@@ -151,7 +151,7 @@ interface CardImageProps {
 
 const CardImage = styled.img<CardImageProps>(({ set, fixedHeight, computedHeight }) => ({
   width: fixedHeight ? 'auto' : '100%',
-  height: fixedHeight || `${computedHeight}px`,
+  height: fixedHeight || `auto`,
   borderRadius: set === 'Limited Edition Alpha' ? '7%' : '5%',
 }));
 

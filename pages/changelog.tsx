@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-08-10 (v0.45.2)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Fixed issue with image warping when using the cards per row slider via clicking.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-08-06 (v0.45.1)
     </Typography>
     <Typography paragraph>
