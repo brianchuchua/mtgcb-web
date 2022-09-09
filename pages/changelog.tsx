@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-09-08 (v0.45.3)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Allowed Edit Cards page to render 500 search results (instead of 50).</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-08-10 (v0.45.2)
     </Typography>
     <Typography paragraph>

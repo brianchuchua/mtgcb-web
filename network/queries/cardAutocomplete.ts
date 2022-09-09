@@ -1,4 +1,4 @@
-const cardAutocomplete = `query cardAutocomplete($first: Int = 50, $sortBy: [SortCardsBy!] = [name_ASC, releasedAt_ASC], $name: String = "") {
+const cardAutocomplete = `query cardAutocomplete($first: Int = 500, $sortBy: [SortCardsBy!] = [name_ASC, releasedAt_ASC], $name: String = "") {
   allCards(first: $first, sortBy: $sortBy, search: $name) {
     id
     name
