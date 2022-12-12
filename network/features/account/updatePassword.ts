@@ -1,5 +1,5 @@
-import { updateUser as updateUserMutation } from '../../mutations';
 import { api } from '../../index';
+import { updateUser as updateUserMutation } from '../../mutations';
 
 interface UpdatePasswordFunction {
   (id: number, password: string): any; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -10,7 +10,7 @@ const updatePassword: UpdatePasswordFunction = async (id, password) => {
     const response = await api.post('', {
       query: updateUserMutation,
       variables: {
-        id,
+        where: { id },
         data: {
           password,
         },

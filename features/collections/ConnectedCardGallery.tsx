@@ -101,9 +101,9 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
     { skip: includesQuantityFilters }
   );
 
-  const cards = cardData?.data?.allCards;
+  const cards = cardData?.data?.cards;
   const cardIds = cards?.map((card) => card.id);
-  const totalResults = cardMetaData?.data?._allCardsMeta?.count;
+  const totalResults = cardMetaData?.data?.count;
 
   const {
     data: collectionByCardIdResponse,

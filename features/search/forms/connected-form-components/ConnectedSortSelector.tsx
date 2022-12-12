@@ -17,14 +17,14 @@ const ConnectedSortSelector: React.FC<ConnectedSortSelectorProps> = ({ reduxSlic
     dispatch(setCardSort(event.target.value));
   };
 
-  const handleSortByDirectionChange = (event: React.ChangeEvent<{ value: 'ASC' | 'DESC' }>) => {
+  const handleSortByDirectionChange = (event: React.ChangeEvent<{ value: 'asc' | 'desc' }>) => {
     dispatch(setCardSortDirection(event.target.value));
   };
 
   return (
     <SortSelector
       sortBy={sortBy}
-      sortByDirection={sortByDirection}
+      sortByDirection={sortByDirection?.toLowerCase()}
       sortByOptions={sortByOptions}
       handleSortByChange={handleSortByChange}
       handleSortByDirectionChange={handleSortByDirectionChange}

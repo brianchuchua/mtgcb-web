@@ -1,5 +1,5 @@
-import { updateUser as updateUserMutation } from '../../mutations';
 import { api } from '../../index';
+import { updateUser as updateUserMutation } from '../../mutations';
 
 interface UpdateUserFunction {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -11,7 +11,7 @@ const updateUser: UpdateUserFunction = async (id, username, email) => {
     const response = await api.post('', {
       query: updateUserMutation,
       variables: {
-        id,
+        where: { id },
         data: {
           username,
           email,

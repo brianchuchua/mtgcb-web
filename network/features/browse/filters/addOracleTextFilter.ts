@@ -12,7 +12,7 @@ const addOracleTextFilter: AddOracleTextFilterFunction = (oracleTextSearchQuery,
     const graphqlFilters = { AND: [] };
     for (const oracleTextQuery of oracleTextQueries) {
       const oracleTextQueryWithWrappingQuotesRemoved = oracleTextQuery.replace(REGEX_TO_REMOVE_LEADING_AND_TRAILING_QUOTES, '$1');
-      graphqlFilters.AND.push({ oracleText_contains_i: oracleTextQueryWithWrappingQuotesRemoved });
+      graphqlFilters.AND.push({ oracleText: { contains: oracleTextQueryWithWrappingQuotesRemoved, mode: 'insensitive' } });
     }
     where.AND.push(graphqlFilters);
   }

@@ -103,8 +103,8 @@ export const Browse: React.FC = () => {
     error: costsToPurchaseError,
   } = useGetCostToPurchaseAllQuery();
   const costsToPurchase = costToPurchaseAll?.data?.costToPurchaseAll?.costToPurchaseAll;
-  const cards = cardData?.data?.allCards;
-  const totalResults = cardMetaData?.data?._allCardsMeta?.count;
+  const cards = cardData?.data?.cards;
+  const totalResults = cardMetaData?.data?.count;
 
   useEffect(() => {
     if (totalResults !== previousTotalResults) {
@@ -127,7 +127,7 @@ export const Browse: React.FC = () => {
     setTypes: expansionTypes,
     setCategories: expansionCategories,
   });
-  const expansions = allSetsResponse?.data?.allSets;
+  const expansions = allSetsResponse?.data?.sets;
 
   const { data: allSetsMetaResponse, isLoading: isAllSetsMetaLoading, isFetching: isAllSetsMetaFetching } = useGetAllSetsMetaQuery({
     name: debouncedExpansionSearchQuery,
@@ -136,7 +136,7 @@ export const Browse: React.FC = () => {
     setTypes: expansionTypes,
     setCategories: expansionCategories,
   });
-  const allSetsMeta = allSetsMetaResponse?.data?._allSetsMeta;
+  const allSetsMeta = allSetsMetaResponse?.data;
   const totalExpansionsResults = allSetsMeta?.count || 0;
 
   const isLoading = isCardDataLoading || isCardMetaDataLoading || isCostsToPurchaseLoading || isGetAllSetsLoading || isAllSetsMetaLoading;

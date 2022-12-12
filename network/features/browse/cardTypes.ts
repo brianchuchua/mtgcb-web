@@ -1,5 +1,5 @@
-import { cardTypes as cardTypesQuery } from '../../queries';
 import { api } from '../../index';
+import { cardTypes as cardTypesQuery } from '../../queries';
 
 interface GetCardTypesFunction {
   (): any; // eslint-disable-line @typescript-eslint/no-explicit-any

@@ -1,5 +1,5 @@
-const allCards = `query allCards($first: Int = 50, $skip: Int = 0, $sortBy: [SortCardsBy!] = [name_ASC, releasedAt_ASC], $name: String = "", $where: CardWhereInput = {}, $distinct: [String] = "") {
-  allCards(first: $first, skip: $skip, sortBy: $sortBy, search: $name, where: $where, distinct: $distinct) {
+const allCards = `query allCards($take: Int = 50, $skip: Int = 0, $orderBy: [CardOrderByInput!] = [{name: asc},{releasedAt: asc}], $where: CardWhereInput = {}) {
+  cards(take: $take, skip: $skip, orderBy: $orderBy, where: $where) {
     id
     name
     set:setId {
@@ -13,11 +13,13 @@ const allCards = `query allCards($first: Int = 50, $skip: Int = 0, $sortBy: [Sor
     oracleTypeLine
     collectorNumber
     tcgplayerId
-    low
-    average
-    high
-    market
-    foil
+    priceId {
+      low
+      average
+      high
+      market
+      foil
+    }
   }
 }
 `;

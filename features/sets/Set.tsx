@@ -60,8 +60,8 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
     cardSets: [
       {
         category: 'Sets',
-        value: setData?.data?.allSets?.[0]?.id,
-        label: setData?.data?.allSets?.[0]?.name,
+        value: setData?.data?.sets?.[0]?.id,
+        label: setData?.data?.sets?.[0]?.name,
         exclude: false,
       },
     ],
@@ -85,8 +85,8 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
     cardSets: [
       {
         category: 'Sets',
-        value: setData?.data?.allSets?.[0]?.id,
-        label: setData?.data?.allSets?.[0]?.name,
+        value: setData?.data?.sets?.[0]?.id,
+        label: setData?.data?.sets?.[0]?.name,
         exclude: false,
       },
     ],
@@ -98,9 +98,9 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
     sortByDirection,
   });
 
-  const set = setData?.data?.allSets?.[0];
-  const cards = cardData?.data?.allCards;
-  const totalResults = cardMetaData?.data?._allCardsMeta?.count;
+  const set = setData?.data?.sets?.[0];
+  const cards = cardData?.data?.cards;
+  const totalResults = cardMetaData?.data?.count;
 
   const isLoading = isSetLoading || isCardDataLoading || isCardMetaDataLoading;
   const isFetching = isSetFetching || isCardDataFetching || isCardMetaDataFetching;
@@ -126,7 +126,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
       <div>
         {set && (
           <div>
-            {(isLoading || setSlug !== setData?.data?.allSets?.[0].slug) && (
+            {(isLoading || setSlug !== setData?.data?.sets?.[0].slug) && (
               <CenteredSkeleton variant="rect" width="100%">
                 <div style={{ textAlign: 'center' }}>
                   <Typography variant="h4" component="div">
@@ -211,7 +211,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
             )}
           </div>
         )}
-        {((setData?.data?.allSets && setData?.data?.allSets.length === 0) || setError) && <p>No set found</p>}
+        {((setData?.data?.sets && setData?.data?.sets.length === 0) || setError) && <p>No set found</p>}
       </div>
     </ResponsiveContainer>
   );

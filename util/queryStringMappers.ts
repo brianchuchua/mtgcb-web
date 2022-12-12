@@ -14,13 +14,13 @@ interface QueryParams {
   colors?: string;
   stats?: string;
   sort?: string;
-  order?: 'ASC' | 'DESC';
+  order?: 'asc' | 'desc';
   view?: 'cards' | 'sets';
   price?: PriceTypes;
   mode?: 'table' | 'grid';
   set?: string;
   setSort: string;
-  setOrder: 'ASC' | 'DESC';
+  setOrder: 'asc' | 'desc';
   setCats: string;
   setTypes: string;
   status?: SetCompletionStatus;

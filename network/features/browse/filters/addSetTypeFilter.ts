@@ -12,9 +12,9 @@ const addSetTypeFilter: AddSetTypeFilterFunction = (setTypes, where) => {
     for (const setTypeSelection of setTypes) {
       const setType = setTypeSelection.value;
       if (setTypeSelection.exclude) {
-        setTypeConditions.AND.push({ setType_not: setType });
+        setTypeConditions.AND.push({ setType: { not: setType } });
       } else {
-        setTypeConditions.OR.push({ setType });
+        setTypeConditions.OR.push({ setType: { equals: setType } });
       }
     }
 

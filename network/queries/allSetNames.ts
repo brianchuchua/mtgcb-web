@@ -1,5 +1,5 @@
-const allSetNames = `query allSets($sortBy: [SortSetsBy!] = releasedAt_DESC) {
-  allSets(sortBy: $sortBy) {
+const allSetNames = `query allSets($orderBy: [SetOrderByInput!] = [{releasedAt: desc}]) {
+  sets(orderBy: $orderBy) {
     id
     name
   }

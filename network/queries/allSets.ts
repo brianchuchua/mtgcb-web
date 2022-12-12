@@ -1,5 +1,5 @@
-const allSets = `query allSets($first: Int = 50, $skip: Int = 0, $name: String = "", $sortBy: [SortSetsBy!] = releasedAt_DESC, $where: SetWhereInput = {}) {
-  allSets(first: $first, skip: $skip, search: $name, sortBy: $sortBy, where: $where) {
+const allSets = `query allSets($take: Int = 50, $skip: Int = 0, $orderBy: [SetOrderByInput!] = [{releasedAt: desc}], $where: SetWhereInput = {}) {
+  sets(take: $take, skip: $skip, orderBy: $orderBy, where: $where) {
     id
     name
     slug

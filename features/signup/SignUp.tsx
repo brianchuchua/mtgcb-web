@@ -12,6 +12,7 @@ import * as Yup from 'yup';
 import { useAuthentication } from '../../auth/AuthenticationProvider';
 import Button from '../../components/Button';
 import Link from '../../components/Link';
+import { getUser } from '../../network/features/account';
 import { signUp } from '../../network/features/signup';
 import { convertQueryToString, logIntoMtgCb } from '../login/Login';
 
@@ -59,6 +60,7 @@ const signUpForMtgCb = async (username, email, password, passwordConfirmation) =
     response.data = {
       username: result?.data?.data?.signUp?.item?.username ?? 'Unknown',
       id: result?.data?.data?.signUp?.item?.id,
+      email: result?.data?.data?.signUp?.email,
     };
   } else {
     const errorMessage = result?.data?.errors?.[0]?.message;
@@ -110,6 +112,7 @@ export const SignUp: React.FC = () => {
         initialValues={{ username: '', email: '', password: '', passwordConfirmation: '' }}
         validationSchema={SignUpSchema}
         onSubmit={async (values, { setSubmitting, setStatus }) => {
+          return;
           setSubmitting(true);
           setStatus(null);
           const result = await signUpForMtgCb(values.username, values.email, values.password, values.passwordConfirmation);
@@ -120,9 +123,14 @@ export const SignUp: React.FC = () => {
             setStatus(loginResult.error);
             const loginWasSuccessful = loginResult.data?.id;
             if (loginWasSuccessful) {
-              setUser(loginResult.data);
-              const destination = convertQueryToString(router.query?.destination) || '/';
-              router.push(destination);
+              const getUserDataResult = await getUser();
+              setStatus(getUserDataResult.error);
+              const gettingAdditionalUserDataWasSuccessful = getUserDataResult?.data?.data?.authenticatedUser;
+              if (gettingAdditionalUserDataWasSuccessful) {
+                setUser(getUserDataResult?.data?.data?.authenticatedUser);
+                const destination = convertQueryToString(router.query?.destination) || '/';
+                router.push(destination);
+              }
             }
           }
         }}
@@ -132,7 +140,6 @@ export const SignUp: React.FC = () => {
             <Field id="username" name="username">
               {({ field }) => (
                 <TextField
-                  disabled
                   label="Username"
                   type="text"
                   variant="outlined"
@@ -152,7 +159,6 @@ export const SignUp: React.FC = () => {
             <Field id="email" name="email">
               {({ field }) => (
                 <TextField
-                  disabled
                   label="Email"
                   type="text"
                   variant="outlined"
@@ -171,7 +177,6 @@ export const SignUp: React.FC = () => {
             <Field name="password" id="password">
               {({ field }) => (
                 <TextField
-                  disabled
                   label="Password"
                   variant="outlined"
                   margin="normal"
@@ -190,7 +195,6 @@ export const SignUp: React.FC = () => {
             <Field name="passwordConfirmation" id="passwordConfirmation">
               {({ field }) => (
                 <TextField
-                  disabled
                   label="Confirm Password"
                   variant="outlined"
                   margin="normal"

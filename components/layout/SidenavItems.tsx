@@ -9,6 +9,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import LibraryIcon from '@material-ui/icons/ImportContacts';
 import IsoIcon from '@material-ui/icons/Iso';
 import ListAltIcon from '@material-ui/icons/ListAlt';
+import StorefrontIcon from '@material-ui/icons/Storefront';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useAuthentication } from '../../auth/AuthenticationProvider';
@@ -107,6 +108,18 @@ const SidenavItems: React.FC<SidenavItemsProps> = ({ handleSidenavClose = null }
           <ListAltIcon />
         </ListItemIcon>
         <ListItemText primary="Changelog" />
+      </ListItem>
+      <ListItem
+        button
+        component={Link}
+        href="https://cottonbureau.com/products/mtg-collection-builder-apparel-1#/15070134/tee-men-standard-tee-vintage-black-tri-blend-s"
+        color="inherit"
+        target="_blank"
+      >
+        <ListItemIcon>
+          <StorefrontIcon />
+        </ListItemIcon>
+        <ListItemText primary="Apparel" />
       </ListItem>
     </List>
   );

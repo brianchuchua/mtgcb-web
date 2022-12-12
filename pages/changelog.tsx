@@ -7,6 +7,17 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-12-11 (v0.46.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Other than adding thousands of new cards:</li>
+        <li>Completely rewrote and migrated to a new backend API and database.</li>
+        <li>Changed logged into direct the user to the Collection page.</li>
+        <li>Fixed a bug where sets weren't being filtered by completion status in table view.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-09-08 (v0.45.3)
     </Typography>
     <Typography paragraph>

@@ -22,8 +22,8 @@ const ConnectedSetSelector: React.FC<ConnectedSetSelectorProps> = ({ reduxSlice,
 
   const { cardSets } = useSelector((state: RootState) => state[reduxSlice]);
 
-  const { data: allSetsMetaResponse } = useGetAllSetNamesQuery({});
-  const allSetNames = allSetsMetaResponse?.data?.allSets;
+  const { data: allSetNamesResponse } = useGetAllSetNamesQuery({});
+  const allSetNames = allSetNamesResponse?.data?.sets;
   const sets = mapCardSets(allSetNames || []);
 
   const isMobileBrowser = isMobile();

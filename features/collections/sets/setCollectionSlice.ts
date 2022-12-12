@@ -36,7 +36,7 @@ const initialState: SetState = {
     { searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' },
   ],
   sortBy: queryFromUrl.sort || 'collectorNumber',
-  sortByDirection: queryFromUrl.order || 'ASC',
+  sortByDirection: queryFromUrl.order || 'asc',
   isFormVisible: false,
   viewSubject: 'cards',
   viewMode: queryFromUrl.mode || viewModeFromLocalStorage || 'grid',
@@ -61,7 +61,7 @@ const emptyState = {
   showAllPrintings: true,
   cardStatSearches: [{ searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' }],
   sortBy: 'collectorNumber',
-  sortByDirection: 'ASC',
+  sortByDirection: 'asc',
   isFormVisible: true,
 };
 
@@ -157,7 +157,7 @@ const setCollectionSlice = createSlice({
       state.sortBy = sortBy;
       updateSearchInUrl('sort', sortBy);
     },
-    setCardSortDirection(state, action: PayloadAction<'ASC' | 'DESC'>) {
+    setCardSortDirection(state, action: PayloadAction<'asc' | 'desc'>) {
       const sortByDirection = action.payload;
       state.sortByDirection = sortByDirection;
       updateSearchInUrl('order', sortByDirection);
@@ -272,7 +272,7 @@ interface SetState {
   showAllPrintings: boolean;
   cardStatSearches: CardStatSearch[];
   sortBy: string;
-  sortByDirection: 'ASC' | 'DESC';
+  sortByDirection: 'asc' | 'desc';
   isFormVisible: boolean;
   viewSubject: 'cards' | 'sets';
   viewMode: 'grid' | 'table';

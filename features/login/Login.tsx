@@ -61,15 +61,15 @@ export const logIntoMtgCb: LogIntoMtgCbFunction = async (username, password) => 
 
   const result = await logIn(username, password);
 
-  const logInWasSuccessful = result?.data?.data?.authenticateUserWithPassword?.token != null;
+  const logInWasSuccessful = result?.data?.data?.authenticateUserWithPassword?.token != null; // TODO: The caller shouldn't have to know this data shape
   if (logInWasSuccessful) {
     response.data = {
       username: result?.data?.data?.authenticateUserWithPassword?.item?.username ?? 'Unknown',
       id: result?.data?.data?.authenticateUserWithPassword?.item?.id,
     };
   } else {
-    const errorMessage = result?.data?.errors?.[0]?.message;
-    const invalidLogin = errorMessage?.match(/passwordAuth:failure/);
+    const errorMessage = result?.data?.data?.authenticateUserWithPassword?.message;
+    const invalidLogin = errorMessage?.match(/Authentication failed/);
     const isApiFailure = result?.status !== 200;
     if (invalidLogin) {
       response.error =
@@ -95,14 +95,14 @@ export const convertQueryToString = (query: string | string[]): string => {
 
 export const Login: React.FC = () => {
   const router = useRouter();
-  const { isAuthenticated, isCheckingAuth, setUser } = useAuthentication();
+  const { isAuthenticated, isCheckingAuth, setUser, user } = useAuthentication();
 
   if (isCheckingAuth) {
     return <></>;
   }
 
   if (isAuthenticated) {
-    router.push('/');
+    router.push(`/collections/${user?.id || ''}`);
     return <></>;
   }
 
@@ -129,8 +129,6 @@ export const Login: React.FC = () => {
             const gettingAdditionalUserDataWasSuccessful = getUserDataResult?.data?.data?.authenticatedUser;
             if (gettingAdditionalUserDataWasSuccessful) {
               setUser(getUserDataResult?.data?.data?.authenticatedUser);
-              const destination = convertQueryToString(router.query?.destination) || '/';
-              router.push(destination);
             }
           }
         }}

@@ -9,9 +9,11 @@ const getUser: GetUserFunction = async () => {
     const response = await api.post('', {
       query: `query authenticatedUser {
         authenticatedUser {
-          id
-          username
-          email
+          ... on User {
+            id
+            username
+            email
+          }
         }
       }
       `,

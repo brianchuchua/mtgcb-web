@@ -1,12 +1,14 @@
-const cardAutocomplete = `query cardAutocomplete($first: Int = 500, $sortBy: [SortCardsBy!] = [name_ASC, releasedAt_ASC], $name: String = "") {
-  allCards(first: $first, sortBy: $sortBy, search: $name) {
+const cardAutocomplete = `query cardAutocomplete($take: Int = 500, $orderBy: [CardOrderByInput!] = [{name: asc},{releasedAt: desc}], $where: CardWhereInput ={}) {
+  cards(take: $take, orderBy: $orderBy, where: $where) {
     id
     name
-    low
-    average
-    high
-    market
-    foil
+    priceId {
+      low
+      average
+      high
+      market
+      foil
+    }
     tcgplayerId
     set:setId {
       id

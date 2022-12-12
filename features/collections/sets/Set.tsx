@@ -41,7 +41,7 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
     { skip: setSlug == null }
   );
 
-  const setId = setData?.data?.allSets?.[0]?.id;
+  const setId = setData?.data?.sets?.[0]?.id;
   const {
     data: setSummaryData,
     isLoading: isSetSummaryLoading,
@@ -49,13 +49,13 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
     error: setSummaryError,
   } = useGetSetSummaryLegacyQuery(
     {
-      setId: setData?.data?.allSets?.[0]?.id,
+      setId: setData?.data?.sets?.[0]?.id,
       userId,
     },
     { skip: setId == null || userId == null }
   );
 
-  const set = setData?.data?.allSets?.[0];
+  const set = setData?.data?.sets?.[0];
   const setSummary = setSummaryData?.data?.setSummaryLegacy;
   const username = setSummary?.username ?? '';
 
@@ -90,7 +90,7 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
             {viewSubject === 'cards' && viewMode === 'grid' && (
               <ConnectedCollectionCardGallery
                 userId={userId}
-                setId={setData?.data?.allSets?.[0]?.id}
+                setId={setData?.data?.sets?.[0]?.id}
                 first={first}
                 skip={skip}
                 page={page}
@@ -102,7 +102,7 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
             {viewSubject === 'cards' && viewMode === 'table' && (
               <ConnectedCollectionCardTable
                 userId={userId}
-                setId={setData?.data?.allSets?.[0]?.id}
+                setId={setData?.data?.sets?.[0]?.id}
                 first={first}
                 skip={skip}
                 page={page}
@@ -113,7 +113,7 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
             )}
           </>
         )}
-        {((setData?.data?.allSets && setData?.data?.allSets.length === 0) || setSummaryError) && <p>No set found</p>}
+        {((setData?.data?.sets && setData?.data?.sets.length === 0) || setSummaryError) && <p>No set found</p>}
       </>
     </ResponsiveContainer>
   );

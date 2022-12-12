@@ -1,5 +1,5 @@
 interface DetermineSortFilterFunction {
-  (sortBy: string, sortByDirection: 'ASC' | 'DESC'): string[];
+  (sortBy: string, sortByDirection: 'asc' | 'desc'): any;
 }
 
 const determineSortFilter: DetermineSortFilterFunction = (sortBy, sortByDirection) => {
@@ -11,20 +11,22 @@ const determineSortFilter: DetermineSortFilterFunction = (sortBy, sortByDirectio
     sortBy === 'quantityNormal' ||
     sortBy === 'quantityFoil'
   ) {
-    return ['name_ASC'];
+    return [{ name: 'asc' }];
   }
+  // eslint-disable-next-line no-param-reassign
+  sortByDirection = sortByDirection?.toLowerCase() as 'asc' | 'desc';
 
   if (sortBy === 'collectorNumber') {
-    return [`collectorNumberNumeric_${sortByDirection}`, `collectorNumber_${sortByDirection}`, 'name_ASC', 'releasedAt_ASC'];
+    return [{ collectorNumberNumeric: sortByDirection }, { collectorNumber: sortByDirection }, { name: 'asc' }, { releasedAt: 'asc' }];
   }
   if (sortBy === 'releasedAt') {
-    return [`${sortBy}_${sortByDirection}`, 'name_ASC'];
+    return [{ releasedAt: sortByDirection }, { name: 'asc' }];
   }
   if (sortBy === 'name') {
-    return [`${sortBy}_${sortByDirection}`, 'releasedAt_ASC'];
+    return [{ name: sortByDirection }, { releasedAt: 'asc' }];
   }
 
-  return [`${sortBy}_${sortByDirection}`, 'name_ASC', 'releasedAt_ASC'];
+  return [{ [sortBy]: sortByDirection }, { name: 'asc' }, { releasedAt: 'asc' }];
 };
 
 export default determineSortFilter;

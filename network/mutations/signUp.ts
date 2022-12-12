@@ -4,6 +4,7 @@ const signUp = `mutation signUp($username: String!, $email: String!, $password: 
       id
       username
     }
+    email
   }
 }
 `;

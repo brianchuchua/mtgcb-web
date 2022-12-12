@@ -69,7 +69,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
     cardStatSearches,
     sortByDirection,
   });
-  const totalResults = cardMetaData?.data?._allCardsMeta?.count;
+  const totalResults = cardMetaData?.data?.count;
 
   useEffect(() => {
     if (totalResults !== previousTotalResults) {
@@ -90,7 +90,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
     setTypes: expansionTypes,
     setCategories: expansionCategories,
   });
-  const allSetsMeta = allSetsMetaResponse?.data?._allSetsMeta;
+  const allSetsMeta = allSetsMetaResponse?.data;
   const totalExpansionsResults = allSetsMeta?.count || 0;
 
   useEffect(() => {

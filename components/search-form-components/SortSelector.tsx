@@ -30,8 +30,8 @@ const SortSelector: React.FC<SortSelectorProps> = ({
         ))}
       </SortByOption>
       <SortByDirection value={sortByDirection} onChange={handleSortByDirectionChange} variant="outlined">
-        <MenuItem value="ASC">ASC</MenuItem>
-        <MenuItem value="DESC">DESC</MenuItem>
+        <MenuItem value="asc">ASC</MenuItem>
+        <MenuItem value="desc">DESC</MenuItem>
       </SortByDirection>
     </StyledSortSelector>
   );

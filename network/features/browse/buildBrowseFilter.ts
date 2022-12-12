@@ -10,6 +10,18 @@ import {
 } from './filters';
 
 interface BuildBrowseFilterSettings {
+  name?: string;
+  cardTypes?: CardType[];
+  cardSets?: CardSet[];
+  cardRarities?: CardRarity[];
+  cardColors?: CardColors;
+  oracleTextQuery?: string;
+  cardStatSearches?: CardStatSearch[];
+  orderBy: string;
+}
+
+interface BuildAdditionalWhereFilterFunctionSettings {
+  name?: string;
   cardTypes?: CardType[];
   cardSets?: CardSet[];
   cardRarities?: CardRarity[];
@@ -23,15 +35,24 @@ interface BuildBrowseFilterFunction {
 }
 
 const buildBrowseFilter: BuildBrowseFilterFunction = ({
+  name,
   cardTypes,
   cardSets,
   cardRarities,
   cardColors,
   oracleTextQuery,
   cardStatSearches,
+  orderBy,
 }) => {
   const where = { AND: [] };
-
+  if (name) {
+    where.AND.push({
+      name: {
+        contains: name,
+        mode: 'insensitive',
+      },
+    });
+  }
   addCardTypeFilter(cardTypes, where);
   addCardSetFilter(cardSets, where);
   addCardRarityFilter(cardRarities, where);
@@ -39,11 +60,36 @@ const buildBrowseFilter: BuildBrowseFilterFunction = ({
   addOracleTextFilter(oracleTextQuery, where);
   addCardStatFilter(cardStatSearches, where);
 
+  const orderByOptionsThatMayBeNull = [
+    'releasedAt',
+    'collectorNumber',
+    'rarityNumeric',
+    'convertedManaCost',
+    'powerNumeric',
+    'toughnessNumeric',
+    'loyaltyNumeric',
+    'market',
+    'low',
+    'average',
+    'high',
+    'foil',
+  ];
+
+  if (orderBy) {
+    if (orderByOptionsThatMayBeNull.includes(orderBy)) {
+      where.AND.push({
+        [orderBy]: {
+          not: null,
+        },
+      });
+    }
+  }
+
   return where;
 };
 
 interface BuildAdditionalWhereFilterFunction {
-  (filterSettings: BuildBrowseFilterSettings): any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  (filterSettings: BuildAdditionalWhereFilterFunctionSettings): any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export const buildAdditionalWhereFilter: BuildAdditionalWhereFilterFunction = ({ cardStatSearches }) => {

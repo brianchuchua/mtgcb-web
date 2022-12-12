@@ -12,13 +12,19 @@ const addCardTypeFilter: AddCardTypeFilterFunction = (cardTypes, where) => {
     if (cardTypeSelection.exclude) {
       where.AND.push({
         AND: [
-          { oracleTypeLine_not_contains_i: `${cardTypeSelection.value} ` },
-          { oracleTypeLine_not_ends_with_i: `${cardTypeSelection.value}` },
+          { oracleTypeLine: { not: { startsWith: `${cardTypeSelection.value} `, mode: 'insensitive' } } },
+          { oracleTypeLine: { not: { contains: ` ${cardTypeSelection.value} `, mode: 'insensitive' } } },
+          { oracleTypeLine: { not: { endsWith: ` ${cardTypeSelection.value}`, mode: 'insensitive' } } },
         ],
       });
     } else {
       where.AND.push({
-        OR: [{ oracleTypeLine_contains_i: `${cardTypeSelection.value} ` }, { oracleTypeLine_ends_with_i: `${cardTypeSelection.value}` }],
+        OR: [
+          // This is a way to force an exact match instead of a partial match.
+          { oracleTypeLine: { startsWith: `${cardTypeSelection.value} `, mode: 'insensitive' } },
+          { oracleTypeLine: { contains: ` ${cardTypeSelection.value} `, mode: 'insensitive' } },
+          { oracleTypeLine: { endsWith: ` ${cardTypeSelection.value}`, mode: 'insensitive' } },
+        ],
       });
     }
   }

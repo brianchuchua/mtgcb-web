@@ -91,8 +91,8 @@ const EditCards: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (data?.data?.allCards) {
-      setOptions(data.data.allCards);
+    if (data?.data?.cards) {
+      setOptions(data.data.cards);
     } else {
       setOptions([]);
       setSelectedCard(null);

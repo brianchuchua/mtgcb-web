@@ -24,9 +24,15 @@ export const ConnectedSetTable: React.FC<ConnectedSetTableProps> = ({
   setExpansionsFirst,
   setExpansionsPage,
 }) => {
-  const { sortExpansionBy, sortExpansionByDirection, priceType, expansionTypes, expansionCategories, expansionSearchQuery } = useSelector(
-    (state: RootState) => state.collection
-  );
+  const {
+    sortExpansionBy,
+    sortExpansionByDirection,
+    priceType,
+    expansionTypes,
+    expansionCategories,
+    expansionSearchQuery,
+    setCompletionStatuses,
+  } = useSelector((state: RootState) => state.collection);
 
   const debouncedExpansionSearchQuery = useDebounce(expansionSearchQuery, searchFieldDebounceTimeMs);
 
@@ -44,7 +50,7 @@ export const ConnectedSetTable: React.FC<ConnectedSetTableProps> = ({
     sortBy: sortExpansionBy,
     sortByDirection: sortExpansionByDirection,
     additionalSortBy: null,
-    whereSetCompletionStatus: null,
+    whereSetCompletionStatus: setCompletionStatuses ?? ['all'],
     setTypes: expansionTypes,
     setCategories: expansionCategories,
   });

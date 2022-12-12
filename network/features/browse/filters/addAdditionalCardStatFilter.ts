@@ -20,12 +20,13 @@ const addAdditionalCardStatFilter: AddAdditionalCardStatFilterFunction = (cardSt
           if (valueIsNotNumeric(value)) {
             equalitySearchAttribute = searchAttribute.replace('Numeric', '');
           }
+
           cardStatSearchConditions.AND.push({
-            [equalitySearchAttribute]: Number(value),
+            [equalitySearchAttribute]: { equals: Number(value) },
           });
         } else {
           cardStatSearchConditions.AND.push({
-            [`${searchAttribute}_${comparator}`]: Number(value),
+            [searchAttribute]: { [comparator]: Number(value) },
           });
         }
       }

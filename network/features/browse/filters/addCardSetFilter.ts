@@ -10,9 +10,9 @@ const addCardSetFilter: AddCardSetFilterFunction = (cardSets, where) => {
     const setIdConditions = { setId: { AND: [], OR: [] } };
     for (const cardSetSelection of cardSets) {
       if (cardSetSelection.exclude) {
-        setIdConditions.setId.AND.push({ id_not: cardSetSelection.value });
+        setIdConditions.setId.AND.push({ id: { not: cardSetSelection.value } });
       } else {
-        setIdConditions.setId.OR.push({ id: cardSetSelection.value });
+        setIdConditions.setId.OR.push({ id: { equals: cardSetSelection.value } });
       }
     }
     if (setIdConditions.setId.OR.length === 0) {

@@ -4,7 +4,7 @@ export interface SearchOptions {
   first?: number;
   skip?: number;
   sortBy?: string;
-  sortByDirection?: 'ASC' | 'DESC';
+  sortByDirection?: 'asc' | 'desc';
   name?: string;
   oracleTextQuery?: string;
   cardTypes?: CardType[];
@@ -19,7 +19,7 @@ export interface SetSearchOptions {
   first?: number;
   skip?: number;
   sortBy?: string[];
-  sortByDirection?: 'ASC' | 'DESC';
+  sortByDirection?: 'asc' | 'desc';
   name?: string;
 }
 

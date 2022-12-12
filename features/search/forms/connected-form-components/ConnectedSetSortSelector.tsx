@@ -19,7 +19,7 @@ const ConnectedSetSortSelector: React.FC<ConnectedSetSortSelectorProps> = ({ red
     dispatch(setExpansionSort(event.target.value));
   };
 
-  const handleSortByDirectionChange = (event: React.ChangeEvent<{ value: 'ASC' | 'DESC' }>) => {
+  const handleSortByDirectionChange = (event: React.ChangeEvent<{ value: 'asc' | 'desc' }>) => {
     dispatch(setExpansionSortDirection(event.target.value));
   };
 
@@ -35,8 +35,8 @@ const ConnectedSetSortSelector: React.FC<ConnectedSetSortSelectorProps> = ({ red
         ))}
       </SortByOption>
       <SortByDirection value={sortExpansionByDirection} onChange={handleSortByDirectionChange} variant="outlined">
-        <MenuItem value="ASC">ASC</MenuItem>
-        <MenuItem value="DESC">DESC</MenuItem>
+        <MenuItem value="asc">ASC</MenuItem>
+        <MenuItem value="desc">DESC</MenuItem>
       </SortByDirection>
     </StyledSortSelector>
   );

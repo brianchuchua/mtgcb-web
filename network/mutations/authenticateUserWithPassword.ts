@@ -1,9 +1,15 @@
 const authenticateUserWithPassword = `mutation authenticateUserWithPassword($username: String!, $password: String!) {
   authenticateUserWithPassword(username: $username, password: $password) {
-    token
-    item {
-      id
-      username
+    ...on UserAuthenticationWithPasswordSuccess {
+      token:sessionToken
+      item {
+        id
+        username
+        email
+      }
+    }
+    ...on UserAuthenticationWithPasswordFailure {
+      message
     }
   }
 }

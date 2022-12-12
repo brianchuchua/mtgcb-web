@@ -12,9 +12,9 @@ const addSetCategoryFilter: AddSetCategoryFilterFunction = (setCategories, where
     for (const setCategorySelection of setCategories) {
       const category = setCategorySelection.value;
       if (setCategorySelection.exclude) {
-        setCategoryConditions.AND.push({ category_not: category });
+        setCategoryConditions.AND.push({ category: { not: category } });
       } else {
-        setCategoryConditions.OR.push({ category });
+        setCategoryConditions.OR.push({ category: { equals: category } });
       }
     }
 

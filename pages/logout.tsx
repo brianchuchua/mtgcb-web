@@ -11,7 +11,7 @@ const logOutOfMtgCb = async () => {
 
   const result = await logOut();
 
-  const logOutWasSuccessful = result?.data?.data?.unauthenticate?.success;
+  const logOutWasSuccessful = result?.data?.data?.logout?.success;
   if (logOutWasSuccessful) {
     response.data = {
       success: true,

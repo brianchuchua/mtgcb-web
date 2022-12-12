@@ -44,14 +44,14 @@ const initialState: BrowseState = {
     { searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' },
   ],
   sortBy: queryFromUrl.sort || 'releasedAt',
-  sortByDirection: queryFromUrl.order || 'ASC',
+  sortByDirection: queryFromUrl.order || 'asc',
   isFormVisible: false,
   viewSubject: queryFromUrl.view || viewSubjectFromLocalStorage || 'sets',
   viewMode: queryFromUrl.mode || viewModeFromLocalStorage || 'grid',
   priceType: queryFromUrl.price || priceTypeFromLocalStorage || 'market',
   expansionSearchQuery: queryFromUrl.set || '',
   sortExpansionBy: queryFromUrl.setSort || 'releasedAt',
-  sortExpansionByDirection: queryFromUrl.setOrder || 'DESC',
+  sortExpansionByDirection: queryFromUrl.setOrder || 'desc',
   expansionTypes: convertStringToSetTypes(queryFromUrl.setTypes) || [],
   expansionCategories: convertStringToExpansionCategories(queryFromUrl.setCats) || [],
 };
@@ -74,11 +74,11 @@ const emptyState = {
   showAllPrintings: true,
   cardStatSearches: [{ searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' }],
   sortBy: 'releasedAt',
-  sortByDirection: 'ASC',
+  sortByDirection: 'asc',
   isFormVisible: true,
   expansionSearchQuery: '',
   sortExpansionBy: 'releasedAt',
-  sortExpansionByDirection: 'DESC',
+  sortExpansionByDirection: 'desc',
   expansionTypes: [],
   expansionCategories: [],
 };
@@ -180,7 +180,7 @@ const browseSlice = createSlice({
       state.sortBy = sortBy;
       updateSearchInUrl('sort', sortBy);
     },
-    setCardSortDirection(state, action: PayloadAction<'ASC' | 'DESC'>) {
+    setCardSortDirection(state, action: PayloadAction<'asc' | 'desc'>) {
       const sortByDirection = action.payload;
       state.sortByDirection = sortByDirection;
       updateSearchInUrl('order', sortByDirection);
@@ -217,7 +217,7 @@ const browseSlice = createSlice({
       state.sortExpansionBy = sortExpansionBy;
       updateSearchInUrl('setSort', sortExpansionBy);
     },
-    setExpansionSortDirection(state, action: PayloadAction<'ASC' | 'DESC'>) {
+    setExpansionSortDirection(state, action: PayloadAction<'asc' | 'desc'>) {
       const sortExpansionByDirection = action.payload;
       state.sortExpansionByDirection = sortExpansionByDirection;
       updateSearchInUrl('setOrder', sortExpansionByDirection);
@@ -329,14 +329,14 @@ interface BrowseState {
   showAllPrintings: boolean;
   cardStatSearches: CardStatSearch[];
   sortBy: string;
-  sortByDirection: 'ASC' | 'DESC';
+  sortByDirection: 'asc' | 'desc';
   isFormVisible: boolean;
   viewSubject: 'cards' | 'sets';
   viewMode: 'grid' | 'table';
   priceType: PriceTypes;
   expansionSearchQuery: string;
   sortExpansionBy: string;
-  sortExpansionByDirection: 'ASC' | 'DESC';
+  sortExpansionByDirection: 'asc' | 'desc';
   expansionTypes: SetType[];
   expansionCategories: SetCategory[];
 }

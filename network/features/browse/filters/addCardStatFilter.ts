@@ -21,11 +21,11 @@ const addCardStatFilter: AddCardStatFilterFunction = (cardStatSearches, where) =
             equalitySearchAttribute = searchAttribute.replace('Numeric', '');
           }
           cardStatSearchConditions.AND.push({
-            [equalitySearchAttribute]: value,
+            [equalitySearchAttribute]: { equals: value },
           });
         } else {
           cardStatSearchConditions.AND.push({
-            [`${searchAttribute}_${comparator}`]: value,
+            [searchAttribute]: { [comparator]: value },
           });
         }
       }

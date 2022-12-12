@@ -34,31 +34,29 @@ export const mtgcbApi = createApi({
   tagTypes: ['Sets', 'Cards', 'Collections', 'CollectionSummary'],
   endpoints: (builder) => ({
     getAllSets: builder.query<AxiosResponse<SetResponse>, AllSetsVariables>({
-      query: ({ first, skip, name, sortBy = 'releasedAt', sortByDirection = 'DESC', setTypes, setCategories }) => ({
+      query: ({ first, skip, name, sortBy = 'releasedAt', sortByDirection = 'desc', setTypes, setCategories }) => ({
         url: '',
         method: 'POST',
         body: {
           query: allSets,
           variables: {
-            first,
+            take: first,
             skip,
-            sortBy: determineSortFilter(sortBy, sortByDirection),
-            name: name ? name.trim() : '',
-            where: buildBrowseExpansionFilter({ setTypes, setCategories }),
+            orderBy: determineSortFilter(sortBy, sortByDirection),
+            where: buildBrowseExpansionFilter({ name, setTypes, setCategories }),
           },
         },
       }),
     }),
+    // TODO: What do I do about meta calls? Can I just get this data from the base call now? Lots of touch points in the code.
     getAllSetsMeta: builder.query<AxiosResponse<SetsMetaResponse>, AllSetsMetaVariables>({
-      query: ({ name, sortBy = 'releasedAt', sortByDirection = 'DESC', setTypes, setCategories }) => ({
+      query: ({ name, sortBy = 'releasedAt', sortByDirection = 'desc', setTypes, setCategories }) => ({
         url: '',
         method: 'POST',
         body: {
           query: allSetsMeta,
           variables: {
-            sortBy: determineSortFilter(sortBy, sortByDirection),
-            name: name ? name.trim() : '',
-            where: buildBrowseExpansionFilter({ setTypes, setCategories }),
+            where: buildBrowseExpansionFilter({ name, setTypes, setCategories }),
           },
         },
       }),
@@ -75,7 +73,7 @@ export const mtgcbApi = createApi({
         skip = 0,
         search = '',
         sortBy = 'releasedAt',
-        sortByDirection = 'DESC',
+        sortByDirection = 'desc',
         additionalSortBy,
         whereSetCompletionStatus,
         setTypes,
@@ -88,10 +86,10 @@ export const mtgcbApi = createApi({
           variables: {
             userId: Number(userId),
             priceType,
-            first,
+            take: first,
             skip,
             search,
-            sortBy: determineSortFilter(sortBy, sortByDirection),
+            orderBy: determineSortFilter(sortBy, sortByDirection),
             additionalSortBy: determineAdditionalSortFilter(sortBy, sortByDirection),
             whereSetCompletionStatus,
             where: buildBrowseExpansionFilter({
@@ -137,10 +135,11 @@ export const mtgcbApi = createApi({
               cardColors,
               oracleTextQuery: oracleTextQuery ? oracleTextQuery.trim() : '',
               cardStatSearches,
+              orderBy: sortBy,
             }),
             search: name ? name.trim() : '',
-            sortBy: determineSortFilter(sortBy, sortByDirection),
-            first,
+            orderBy: determineSortFilter(sortBy, sortByDirection),
+            take: first,
             skip,
             additionalSortBy: determineAdditionalSortFilter(sortBy, sortByDirection),
             additionalWhere: buildAdditionalWhereFilter({ cardStatSearches }),
@@ -155,19 +154,19 @@ export const mtgcbApi = createApi({
         body: {
           query: allSets,
           variables: {
-            where: { slug },
+            where: { slug: { equals: slug } },
           },
         },
       }),
     }),
     getAllSetNames: builder.query<AxiosResponse<SetNamesResponse>, AllSetNamesVariables>({
-      query: ({ sortBy = 'releasedAt_DESC' }) => ({
+      query: ({ sortBy = [{ releasedAt: 'desc' }] }) => ({
         url: '',
         method: 'POST',
         body: {
           query: allSetNames,
           variables: {
-            sortBy,
+            orderBy: sortBy,
           },
         },
       }),
@@ -201,17 +200,18 @@ export const mtgcbApi = createApi({
         body: {
           query: allCards,
           variables: {
-            first,
+            take: first,
             skip,
-            sortBy: determineSortFilter(sortBy, sortByDirection),
-            name: name ? name.trim() : '',
+            orderBy: determineSortFilter(sortBy, sortByDirection),
             where: buildBrowseFilter({
+              name: name?.trim(),
               cardSets,
               cardRarities,
               cardTypes,
               cardColors,
               oracleTextQuery: oracleTextQuery ? oracleTextQuery.trim() : '',
               cardStatSearches,
+              orderBy: sortBy,
             }),
             distinct: determineDistinctClause(showAllPrintings, sortBy),
           },
@@ -238,19 +238,16 @@ export const mtgcbApi = createApi({
         body: {
           query: allCardsMeta,
           variables: {
-            first,
-            skip,
-            sortBy: determineSortFilter(sortBy, sortByDirection),
-            name: name ? name.trim() : '',
             where: buildBrowseFilter({
+              name: name?.trim(),
               cardSets,
               cardRarities,
               cardTypes,
               cardColors,
               oracleTextQuery: oracleTextQuery ? oracleTextQuery.trim() : '',
               cardStatSearches,
+              orderBy: sortBy,
             }),
-            distinct: determineDistinctClause(showAllPrintings, sortBy),
           },
         },
       }),
@@ -346,7 +343,7 @@ export const mtgcbApi = createApi({
         body: {
           query: cardAutocomplete,
           variables: {
-            name: name ? name.trim() : '',
+            where: { name: { contains: name ? name.trim() : '', mode: 'insensitive' } },
           },
         },
       }),
@@ -394,7 +391,7 @@ interface Set {
 }
 
 interface SetResponse {
-  allSets: Set[];
+  sets: Set[];
 }
 
 interface AllSetsVariables {
@@ -402,7 +399,7 @@ interface AllSetsVariables {
   skip: number;
   sortBy?: string;
   name: string;
-  sortByDirection: 'ASC' | 'DESC';
+  sortByDirection: 'asc' | 'desc';
   setTypes: SetType[];
   setCategories: SetCategory[];
 }
@@ -412,15 +409,13 @@ interface SetBySlugVariables {
 }
 
 interface SetsMetaResponse {
-  _allSetsMeta: {
-    count: number;
-  };
+  count: number;
 }
 
 interface AllSetsMetaVariables {
   sortBy?: string;
   name: string;
-  sortByDirection: 'ASC' | 'DESC';
+  sortByDirection: 'asc' | 'desc';
   setTypes: SetType[];
   setCategories: SetCategory[];
 }
@@ -431,7 +426,7 @@ interface SetName {
 }
 
 interface SetNamesResponse {
-  allSets: SetName[];
+  sets: SetName[];
 }
 
 interface AllSetNamesVariables {
@@ -443,13 +438,11 @@ interface SetTypesResponse {
 }
 
 interface AllCardsResponse {
-  allCards: Card[];
+  cards: Card[];
 }
 
 interface AllCardsMetaResponse {
-  _allCardsMeta: {
-    count: number;
-  };
+  count: number;
 }
 
 interface CostToPurchasePerPrice {
@@ -645,14 +638,14 @@ interface FilteredCollectionSummaryLegacyVariables {
   skip?: number;
   search?: string;
   sortBy?: string;
-  sortByDirection?: 'ASC' | 'DESC';
+  sortByDirection?: 'asc' | 'desc';
   additionalSortBy?:
-    | 'currentValue_ASC'
-    | 'currentValue_DESC'
-    | 'costToComplete_ASC'
-    | 'costToComplete_DESC'
-    | 'percentageCollected_ASC'
-    | 'percentageCollected_DESC';
+    | 'currentValue_asc'
+    | 'currentValue_desc'
+    | 'costToComplete_asc'
+    | 'costToComplete_desc'
+    | 'percentageCollected_asc'
+    | 'percentageCollected_desc';
   whereSetCompletionStatus?: SetCompletionStatus[];
   setTypes: SetType[];
   setCategories: SetCategory[];
@@ -664,7 +657,7 @@ interface FilteredCardsSummaryLegacyVariables {
   first?: number;
   skip?: number;
   sortBy?: string;
-  sortByDirection?: 'ASC' | 'DESC';
+  sortByDirection?: 'asc' | 'desc';
   name?: string;
   oracleTextQuery?: string;
   cardTypes?: CardType[];
@@ -674,12 +667,12 @@ interface FilteredCardsSummaryLegacyVariables {
   showAllPrintings?: boolean;
   cardStatSearches: CardStatSearch[];
   additionalSortBy?:
-    | 'currentValue_ASC'
-    | 'currentValue_DESC'
-    | 'costToComplete_ASC'
-    | 'costToComplete_DESC'
-    | 'percentageCollected_ASC'
-    | 'percentageCollected_DESC';
+    | 'currentValue_asc'
+    | 'currentValue_desc'
+    | 'costToComplete_asc'
+    | 'costToComplete_desc'
+    | 'percentageCollected_asc'
+    | 'percentageCollected_desc';
   additionalWhere: string;
 }
 

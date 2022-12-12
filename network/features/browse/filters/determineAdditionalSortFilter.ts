@@ -1,5 +1,5 @@
 interface DetermineAdditionalSortFilterFunction {
-  (sortBy: string, sortByDirection: 'ASC' | 'DESC'): string;
+  (sortBy: string, sortByDirection: 'asc' | 'desc'): string;
 }
 
 const determineAdditionalSortFilter: DetermineAdditionalSortFilterFunction = (sortBy, sortByDirection) => {
@@ -11,7 +11,7 @@ const determineAdditionalSortFilter: DetermineAdditionalSortFilterFunction = (so
     sortBy === 'quantityNormal' ||
     sortBy === 'quantityFoil'
   ) {
-    return `${sortBy}_${sortByDirection}`;
+    return `${sortBy}_${sortByDirection.toLowerCase()}`;
   }
   return null;
 };
