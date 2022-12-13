@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-12-12 (v0.46.1)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Make success pop-up notification locations consistent.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-12-11 (v0.46.0)
     </Typography>
     <Typography paragraph>

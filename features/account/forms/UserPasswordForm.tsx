@@ -1,8 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
-import styled from 'styled-components';
-import { Form, Formik, Field } from 'formik';
-import * as Yup from 'yup';
-import { useSnackbar } from 'notistack';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -12,8 +7,13 @@ import Divider from '@material-ui/core/Divider';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import Button from '../../../components/Button';
+import { Field, Form, Formik } from 'formik';
+import { useSnackbar } from 'notistack';
+import { Dispatch, SetStateAction } from 'react';
+import styled from 'styled-components';
+import * as Yup from 'yup';
 import { User } from '../../../auth/AuthenticationProvider';
+import Button from '../../../components/Button';
 import { updatePassword } from '../../../network/features/account';
 
 interface UserPasswordFormProps {
@@ -36,7 +36,10 @@ const UserPasswordForm: React.FC<UserPasswordFormProps> = ({ user, setUser }) =>
         const userUpdateWasSuccessful = result?.data?.id;
         if (userUpdateWasSuccessful) {
           setUser(result.data);
-          enqueueSnackbar('Your password has been updated.', { variant: 'success' });
+          enqueueSnackbar('Your password has been updated.', {
+            variant: 'success',
+            anchorOrigin: { horizontal: 'right', vertical: 'bottom' },
+          });
         }
       }}
     >
