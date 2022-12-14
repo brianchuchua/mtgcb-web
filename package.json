@@ -1,6 +1,6 @@
 {
   "name": "mtgcb-web",
-  "version": "0.46.1",
+  "version": "0.46.2",
   "private": true,
   "scripts": {
     "dev": "next dev -p 4000",

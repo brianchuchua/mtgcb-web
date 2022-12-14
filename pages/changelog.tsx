@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-12-14 (v0.46.2)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Fixed a bug with fetching collection details filtered by collected amounts.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-12-12 (v0.46.1)
     </Typography>
     <Typography paragraph>
