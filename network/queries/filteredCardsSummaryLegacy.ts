@@ -5,7 +5,7 @@ const filteredCardsSummaryLegacy = `query filteredCardsSummaryLegacy(
   $search: String = "",
   $take: Int = 50,
   $skip: Int = 0,
-  $orderBy: [CardOrderByInput!] = [{name: asc}, {releasedAt: asc}],
+  $orderBy: [CardOrderByInput!] = [{releasedAt: asc}, {name: asc}],
   $additionalSortBy: AdditionalSortCardsBy, 
   $additionalWhere: AdditionalWhereInput) {
     filteredCardsSummaryLegacy(userId: $userId, setId: $setId, where: $where, search: $search, take: $take, skip: $skip, orderBy: $orderBy, additionalSortBy: $additionalSortBy, additionalWhere: $additionalWhere) {
