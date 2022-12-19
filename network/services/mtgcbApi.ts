@@ -563,7 +563,7 @@ interface UpdateCollectionLegacyResponse {
 }
 
 interface CardAutocompleteResponse {
-  allCards: [
+  cards: [
     {
       name: string;
       id: number;

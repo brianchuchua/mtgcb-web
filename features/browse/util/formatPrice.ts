@@ -12,7 +12,7 @@ export interface Card {
   market: number;
   foil: number;
   tcgplayerId: number;
-  priceId: {
+  priceId?: {
     low: number;
     average: number;
     high: number;
