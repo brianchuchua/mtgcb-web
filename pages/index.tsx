@@ -5,10 +5,10 @@ import Link from '../components/Link';
 const HomePage: React.FC = () => (
   <ResponsiveContainer maxWidth="xl">
     <Typography variant="h3" component="h1" align="center">
-      MTG CB Limited Edition Beta - Build v0.46.2 👷‍♂️
+      MTG CB Limited Edition Beta - Build v0.46.3 👷‍♂️
     </Typography>
     <Typography paragraph align="center">
-      <em>Last updated: 2022-12-14</em>
+      <em>Last updated: 2022-12-20</em>
     </Typography>
     <br />
     <br />
@@ -105,7 +105,8 @@ const HomePage: React.FC = () => (
         </li>
         <li>
           ⏳ Limited Edition Beta (In Progress): As many of the new MTG CB features that can be squeezed in here (Tokens, Custom Collection
-          Goals, and Foreign Cards), although they'll be deferred if more current feature improvements are needed.
+          Goals, and Foreign Cards), although they'll be deferred if more current feature improvements are needed. I also snuck in some of
+          Combo Winter here.
         </li>
         <li>Unlimited Edition: Full release of the new MTG CB.</li>
         <li>

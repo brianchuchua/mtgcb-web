@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2022-12-20 (v0.46.3)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Officially switched over to the new backend API and database.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-12-14 (v0.46.2)
     </Typography>
     <Typography paragraph>
@@ -29,7 +37,7 @@ const ChangelogPage: React.FC = () => (
       <ul>
         <li>Other than adding thousands of new cards:</li>
         <li>Completely rewrote and migrated to a new backend API and database.</li>
-        <li>Changed logged into direct the user to the Collection page.</li>
+        <li>Changed logging in to redirect the user to the Collection page afterwards.</li>
         <li>Fixed a bug where sets weren't being filtered by completion status in table view.</li>
       </ul>
     </Typography>
