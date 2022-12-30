@@ -223,6 +223,7 @@ export const sortByOptions = [
   { value: 'name', label: 'Name' },
   { value: 'releasedAt', label: 'Release Date' },
   { value: 'collectorNumber', label: 'Collector Number' },
+  { value: 'mtgcbCollectorNumberNumeric', label: 'MTG CB Collector Number' },
   { value: 'rarityNumeric', label: 'Rarity' },
   { value: 'convertedManaCost', label: 'CMC' },
   { value: 'powerNumeric', label: 'Power' },

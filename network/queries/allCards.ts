@@ -12,6 +12,7 @@ const allCards = `query allCards($take: Int = 50, $skip: Int = 0, $orderBy: [Car
     convertedManaCost
     oracleTypeLine
     collectorNumber
+    mtgcbCollectorNumberNumeric
     tcgplayerId
     priceId {
       low

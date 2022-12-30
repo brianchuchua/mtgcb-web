@@ -177,6 +177,13 @@ const CardTable: React.FC<CardTableProps> = ({
         Cell: ({ value }: any) => (value === '0' ? '' : value),
       },
       {
+        accessor: 'mtgcbCollectorNumberNumeric',
+        Header: 'MTG CB #',
+        sortMethod: (a: string, b: string) => String(a).localeCompare(String(b), 'en', { numeric: true, sensitivity: 'base' }),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        Cell: ({ value }: any) => (value === '0' ? '' : value),
+      },
+      {
         accessor: 'priceId.market',
         Header: 'Price (Market)',
         Cell: ({ row: { original } }) => formatPrice(original, 'market'),
@@ -237,6 +244,7 @@ const CardTable: React.FC<CardTableProps> = ({
           'average',
           'high',
           'tcgplayerId',
+          'mtgcbCollectorNumberNumeric',
           isShowingSingleSet ? 'set' : '',
           userId ? '' : 'quantityReg',
           userId ? '' : 'quantityFoil',
@@ -304,34 +312,39 @@ const CardTable: React.FC<CardTableProps> = ({
           getToggleHiddenProps: allColumns[9].getToggleHiddenProps,
         },
         {
+          key: 'mtgcbCollectorNumberNumeric',
+          label: 'MTG CB Collector Number',
+          getToggleHiddenProps: allColumns[10].getToggleHiddenProps,
+        },
+        {
           key: 'price.market',
           label: 'Price (Market)',
-          getToggleHiddenProps: allColumns[10].getToggleHiddenProps,
+          getToggleHiddenProps: allColumns[11].getToggleHiddenProps,
         },
         {
           key: 'price.low',
           label: 'Price (Low)',
-          getToggleHiddenProps: allColumns[11].getToggleHiddenProps,
+          getToggleHiddenProps: allColumns[12].getToggleHiddenProps,
         },
         {
           key: 'price.average',
           label: 'Price (Avg)',
-          getToggleHiddenProps: allColumns[12].getToggleHiddenProps,
+          getToggleHiddenProps: allColumns[13].getToggleHiddenProps,
         },
         {
           key: 'price.high',
           label: 'Price (High)',
-          getToggleHiddenProps: allColumns[13].getToggleHiddenProps,
+          getToggleHiddenProps: allColumns[14].getToggleHiddenProps,
         },
         {
           key: 'price.foil',
           label: 'Price (Foil)',
-          getToggleHiddenProps: allColumns[14].getToggleHiddenProps,
+          getToggleHiddenProps: allColumns[15].getToggleHiddenProps,
         },
         {
           key: 'tcgplayerId',
           label: 'TCGPlayer ID',
-          getToggleHiddenProps: allColumns[15].getToggleHiddenProps,
+          getToggleHiddenProps: allColumns[16].getToggleHiddenProps,
         },
       ],
     },
