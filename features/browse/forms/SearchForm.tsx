@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { RootState } from '../../../redux/rootReducer';
 import {
+  ArtistSearch,
   CardNameSearch,
   CardStatSearch,
   ColorSelector,
@@ -22,6 +23,7 @@ import {
   addCardStatSearch,
   removeCardStatSearch,
   reset,
+  setArtistQuery,
   setCardColors,
   setCardRarities,
   setCardSets,
@@ -58,6 +60,7 @@ const SearchForm: React.FC = () => {
           <PriceTypeSelector reduxSlice={reduxSlice} setPriceType={setPriceType} />
           <CardNameSearch reduxSlice={reduxSlice} setSearchQuery={setSearchQuery} />
           <OracleTextSearch reduxSlice={reduxSlice} setOracleTextQuery={setOracleTextQuery} />
+          <ArtistSearch reduxSlice={reduxSlice} setArtistQuery={setArtistQuery} />
           <TypeSelector reduxSlice={reduxSlice} setCardTypes={setCardTypes} />
           <ColorSelector reduxSlice={reduxSlice} setCardColors={setCardColors} setColorType={setColorType} />
           <RaritySelector reduxSlice={reduxSlice} setCardRarities={setCardRarities} />

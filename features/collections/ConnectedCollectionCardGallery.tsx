@@ -32,6 +32,7 @@ export const ConnectedCollectionCardGallery: React.FC<ConnectedConnectionCardGal
     priceType,
     searchQuery,
     oracleTextQuery,
+    artistQuery,
     cardRarities,
     cardTypes,
     cardColors,
@@ -41,6 +42,7 @@ export const ConnectedCollectionCardGallery: React.FC<ConnectedConnectionCardGal
 
   const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
   const debouncedOracleTextQuery = useDebounce(oracleTextQuery, searchFieldDebounceTimeMs);
+  const debouncedArtistQuery = useDebounce(artistQuery, searchFieldDebounceTimeMs);
   const [previousTotalResults, setPreviousTotalResults] = useState(null);
 
   const {
@@ -56,6 +58,7 @@ export const ConnectedCollectionCardGallery: React.FC<ConnectedConnectionCardGal
     sortByDirection,
     name: debouncedSearchQuery,
     oracleTextQuery: debouncedOracleTextQuery,
+    artistQuery: debouncedArtistQuery,
     cardSets: [
       {
         category: 'Sets',

@@ -1,6 +1,7 @@
 import { CardColors, CardRarity, CardSet, CardStatSearch, CardType } from '../../../features/browse/browseSlice';
 import {
   addAdditionalCardStatFilter,
+  addArtistFilter,
   addCardColorFilter,
   addCardRarityFilter,
   addCardSetFilter,
@@ -16,6 +17,7 @@ interface BuildBrowseFilterSettings {
   cardRarities?: CardRarity[];
   cardColors?: CardColors;
   oracleTextQuery?: string;
+  artistQuery?: string;
   cardStatSearches?: CardStatSearch[];
   orderBy: string;
 }
@@ -41,6 +43,7 @@ const buildBrowseFilter: BuildBrowseFilterFunction = ({
   cardRarities,
   cardColors,
   oracleTextQuery,
+  artistQuery,
   cardStatSearches,
   orderBy,
 }) => {
@@ -58,6 +61,7 @@ const buildBrowseFilter: BuildBrowseFilterFunction = ({
   addCardRarityFilter(cardRarities, where);
   addCardColorFilter(cardColors, where);
   addOracleTextFilter(oracleTextQuery, where);
+  addArtistFilter(artistQuery, where);
   addCardStatFilter(cardStatSearches, where);
 
   const orderByOptionsThatMayBeNull = [

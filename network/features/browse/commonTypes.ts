@@ -7,6 +7,7 @@ export interface SearchOptions {
   sortByDirection?: 'asc' | 'desc';
   name?: string;
   oracleTextQuery?: string;
+  artistQuery: string;
   cardTypes?: CardType[];
   cardSets?: CardSet[];
   cardRarities?: CardRarity[];

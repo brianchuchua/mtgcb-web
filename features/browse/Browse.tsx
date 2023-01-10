@@ -22,6 +22,7 @@ export const Browse: React.FC = () => {
   const {
     searchQuery,
     oracleTextQuery,
+    artistQuery,
     cardTypes,
     cardSets,
     cardRarities,
@@ -42,6 +43,7 @@ export const Browse: React.FC = () => {
 
   const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
   const debouncedOracleTextQuery = useDebounce(oracleTextQuery, searchFieldDebounceTimeMs);
+  const debouncedArtistQuery = useDebounce(artistQuery, searchFieldDebounceTimeMs);
   const debouncedExpansionSearchQuery = useDebounce(expansionSearchQuery, searchFieldDebounceTimeMs);
 
   const [skip, setSkip] = useState(0);
@@ -69,6 +71,7 @@ export const Browse: React.FC = () => {
     sortBy,
     name: debouncedSearchQuery,
     oracleTextQuery: debouncedOracleTextQuery,
+    artistQuery: debouncedArtistQuery,
     cardSets,
     cardRarities,
     cardTypes,
@@ -87,6 +90,7 @@ export const Browse: React.FC = () => {
     sortBy,
     name: debouncedSearchQuery,
     oracleTextQuery: debouncedOracleTextQuery,
+    artistQuery: debouncedArtistQuery,
     cardSets,
     cardRarities,
     cardTypes,

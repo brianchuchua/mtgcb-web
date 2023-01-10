@@ -112,6 +112,7 @@ export const mtgcbApi = createApi({
         sortByDirection,
         name,
         oracleTextQuery,
+        artistQuery,
         cardSets,
         cardRarities,
         cardTypes,
@@ -134,6 +135,7 @@ export const mtgcbApi = createApi({
               cardTypes,
               cardColors,
               oracleTextQuery: oracleTextQuery ? oracleTextQuery.trim() : '',
+              artistQuery: artistQuery ? artistQuery.trim() : '',
               cardStatSearches,
               orderBy: sortBy,
             }),
@@ -187,6 +189,7 @@ export const mtgcbApi = createApi({
         sortBy,
         name,
         oracleTextQuery,
+        artistQuery,
         cardSets,
         cardRarities,
         cardTypes,
@@ -210,6 +213,7 @@ export const mtgcbApi = createApi({
               cardTypes,
               cardColors,
               oracleTextQuery: oracleTextQuery ? oracleTextQuery.trim() : '',
+              artistQuery: artistQuery ? artistQuery.trim() : '',
               cardStatSearches,
               orderBy: sortBy,
             }),
@@ -225,6 +229,7 @@ export const mtgcbApi = createApi({
         sortBy,
         name,
         oracleTextQuery,
+        artistQuery,
         cardSets,
         cardRarities,
         cardTypes,
@@ -245,6 +250,7 @@ export const mtgcbApi = createApi({
               cardTypes,
               cardColors,
               oracleTextQuery: oracleTextQuery ? oracleTextQuery.trim() : '',
+              artistQuery: artistQuery ? artistQuery.trim() : '',
               cardStatSearches,
               orderBy: sortBy,
             }),
@@ -660,6 +666,7 @@ interface FilteredCardsSummaryLegacyVariables {
   sortByDirection?: 'asc' | 'desc';
   name?: string;
   oracleTextQuery?: string;
+  artistQuery?: string;
   cardTypes?: CardType[];
   cardSets?: CardSet[];
   cardRarities?: CardRarity[];

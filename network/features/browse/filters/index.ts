@@ -1,4 +1,5 @@
 import addAdditionalCardStatFilter from './addAdditionalCardStatFilter';
+import addArtistFilter from './addArtistFilter';
 import addCardColorFilter from './addCardColorFilter';
 import addCardRarityFilter from './addCardRarityFilter';
 import addCardSetFilter from './addCardSetFilter';
@@ -12,6 +13,7 @@ import determineSortFilter from './determineSortFilter';
 
 export {
   addAdditionalCardStatFilter,
+  addArtistFilter,
   addCardColorFilter,
   addCardSetFilter,
   addCardRarityFilter,

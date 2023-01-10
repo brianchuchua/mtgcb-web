@@ -29,6 +29,7 @@ const priceTypeFromLocalStorage = getValueFromLocalStorage('priceType', 'market'
 const initialState: CollectionState = {
   searchQuery: queryFromUrl.card || '',
   oracleTextQuery: queryFromUrl.oracle || '',
+  artistQuery: queryFromUrl.artist || '',
   cardTypes: convertStringToCardTypes(queryFromUrl.types) || [],
   cardSets: convertStringToSets(queryFromUrl.sets) || [],
   cardRarities: convertStringToRarities(queryFromUrl.rarities) || [],
@@ -62,6 +63,7 @@ const initialState: CollectionState = {
 const emptyState = {
   searchQuery: '',
   oracleTextQuery: '',
+  artistQuery: '',
   cardTypes: [],
   cardSets: [],
   cardRarities: [],
@@ -107,6 +109,11 @@ const collectionSlice = createSlice({
       const { oracleTextQuery } = action.payload;
       state.oracleTextQuery = oracleTextQuery;
       updateSearchInUrl('oracle', oracleTextQuery);
+    },
+    setArtistQuery(state, action: PayloadAction<ArtistQuery>) {
+      const { artistQuery } = action.payload;
+      state.artistQuery = artistQuery;
+      updateSearchInUrl('artist', artistQuery);
     },
     setCardTypes(state, action: PayloadAction<CardTypes>) {
       const { cardTypes } = action.payload;
@@ -247,6 +254,7 @@ const collectionSlice = createSlice({
 export const {
   setSearchQuery,
   setOracleTextQuery,
+  setArtistQuery,
   setCardTypes,
   setCardSets,
   setCardRarities,
@@ -333,6 +341,7 @@ export const expansionCategoryOptions = [
 interface CollectionState {
   searchQuery: string;
   oracleTextQuery: string;
+  artistQuery: string;
   cardTypes: CardType[];
   cardSets: CardSet[];
   cardRarities: CardRarity[];
@@ -441,6 +450,10 @@ interface ExpansionSearchQuery {
 
 interface OracleTextQuery {
   oracleTextQuery: string;
+}
+
+interface ArtistQuery {
+  artistQuery: string;
 }
 
 interface SearchAttributeChangePayload {

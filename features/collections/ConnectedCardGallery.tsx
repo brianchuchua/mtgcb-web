@@ -28,6 +28,7 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
     priceType,
     searchQuery,
     oracleTextQuery,
+    artistQuery,
     cardSets,
     cardRarities,
     cardTypes,
@@ -38,6 +39,7 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
 
   const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
   const debouncedOracleTextQuery = useDebounce(oracleTextQuery, searchFieldDebounceTimeMs);
+  const debouncedArtistQuery = useDebounce(artistQuery, searchFieldDebounceTimeMs);
 
   // This deserves a custom hook, but this is used to determine which sets of APIs to use for the card gallery.
   // If a user is trying to search or sort by quantity, we have to involve an external legacy database and do a manual remote join
@@ -69,6 +71,7 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
       sortBy,
       name: debouncedSearchQuery,
       oracleTextQuery: debouncedOracleTextQuery,
+      artistQuery: debouncedArtistQuery,
       cardSets,
       cardRarities,
       cardTypes,
@@ -90,6 +93,7 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
       sortBy,
       name: debouncedSearchQuery,
       oracleTextQuery: debouncedOracleTextQuery,
+      artistQuery: debouncedArtistQuery,
       cardSets,
       cardRarities,
       cardTypes,
@@ -159,6 +163,7 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
       sortByDirection,
       name: debouncedSearchQuery,
       oracleTextQuery: debouncedOracleTextQuery,
+      artistQuery: debouncedArtistQuery,
       cardRarities,
       cardTypes,
       cardColors,
@@ -212,6 +217,7 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
         sortBy,
         name: debouncedSearchQuery,
         oracleTextQuery: debouncedOracleTextQuery,
+        artistQuery: debouncedArtistQuery,
         cardSets,
         cardRarities,
         cardTypes,
@@ -229,6 +235,7 @@ export const ConnectedCardGallery: React.FC<ConnectedCardGalleryProps> = ({ user
     sortBy,
     debouncedSearchQuery,
     debouncedOracleTextQuery,
+    debouncedArtistQuery,
     cardSets,
     cardRarities,
     cardTypes,

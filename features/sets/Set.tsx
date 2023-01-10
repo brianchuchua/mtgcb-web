@@ -20,6 +20,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
   const {
     searchQuery,
     oracleTextQuery,
+    artistQuery,
     cardTypes,
     cardRarities,
     cardColors,
@@ -43,6 +44,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
 
   const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
   const debouncedOracleTextQuery = useDebounce(oracleTextQuery, searchFieldDebounceTimeMs);
+  const debouncedArtistQuery = useDebounce(artistQuery, searchFieldDebounceTimeMs);
 
   const [skip, setSkip] = useState(0);
   const [first, setFirst] = useState(50);
@@ -57,6 +59,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
     sortBy,
     name: debouncedSearchQuery,
     oracleTextQuery: debouncedOracleTextQuery,
+    artistQuery: debouncedArtistQuery,
     cardSets: [
       {
         category: 'Sets',
@@ -82,6 +85,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
     sortBy,
     name: debouncedSearchQuery,
     oracleTextQuery: debouncedOracleTextQuery,
+    artistQuery: debouncedArtistQuery,
     cardSets: [
       {
         category: 'Sets',

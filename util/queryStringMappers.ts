@@ -8,6 +8,7 @@ import { CardStatSearch } from '../features/sets/setSlice';
 interface QueryParams {
   card?: string;
   oracle?: string;
+  artist?: string;
   types?: string;
   sets?: string;
   rarities?: 'common' | 'uncommon' | 'rare' | 'mythic' | 'special' | 'none';

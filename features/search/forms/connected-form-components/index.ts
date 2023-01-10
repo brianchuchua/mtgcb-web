@@ -1,3 +1,4 @@
+import ConnectedArtistSearch from './ConnectedArtistSearch';
 import ConnectedCardEditingModeSelector from './ConnectedCardEditingModeSelector';
 import ConnectedCardNameSearch from './ConnectedCardNameSearch';
 import ConnectedCardStatSearch from './ConnectedCardStatSearch';
@@ -17,6 +18,7 @@ import ConnectedTypeSelector from './ConnectedTypeSelector';
 import ConnectedViewModeSelector from './ConnectedViewModeSelector';
 
 export {
+  ConnectedArtistSearch as ArtistSearch,
   ConnectedCardNameSearch as CardNameSearch,
   ConnectedCardEditingModeSelector as CardEditingModeSelector,
   ConnectedCardStatSearch as CardStatSearch,
