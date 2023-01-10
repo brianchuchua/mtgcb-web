@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2023-01-09 (v0.47.1)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Added MTG CB Collector Numbers and fixed bugs with collection number sorting.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2022-12-29 (v0.47.0)
     </Typography>
     <Typography paragraph>

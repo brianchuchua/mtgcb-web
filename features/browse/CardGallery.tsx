@@ -47,10 +47,11 @@ const CardGallery: React.FC<CardGalleryProps> = ({
   isLoading,
   isFetching,
 }) => {
+  const isSetPage = window?.location?.href?.includes('/sets/');
   const [cardsPerRow, setCardsPerRow] = useLocalStorage('cardsPerRow', 5);
   const [galleryWidth, setGalleryWidth] = useLocalStorage('cardSize', 100);
   const [nameIsVisible, setNameIsVisible] = useLocalStorage('cardNameIsVisible', true);
-  const [setIsVisible, setSetIsVisible] = useLocalStorage('cardSetIsVisible', true);
+  const [setIsVisible, setSetIsVisible] = useLocalStorage('cardSetIsVisible', !isSetPage);
   const [priceIsVisible, setPriceIsVisible] = useLocalStorage('cardPriceIsVisible', true);
 
   const { user } = useAuthentication();
