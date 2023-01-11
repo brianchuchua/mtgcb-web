@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 import { useSelector } from 'react-redux';
 import { useGetFilteredCollectionSummaryLegacyQuery } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
-import useDebounce, { searchFieldDebounceTimeMs } from '../../util/useDebounce';
 import SetTable from '../browse/SetTable';
 
 interface ConnectedSetTableProps {
@@ -34,8 +33,6 @@ export const ConnectedSetTable: React.FC<ConnectedSetTableProps> = ({
     setCompletionStatuses,
   } = useSelector((state: RootState) => state.collection);
 
-  const debouncedExpansionSearchQuery = useDebounce(expansionSearchQuery, searchFieldDebounceTimeMs);
-
   const {
     data: collectionSummary,
     isLoading: isFilteredCollectionSummaryLoading,
@@ -46,7 +43,7 @@ export const ConnectedSetTable: React.FC<ConnectedSetTableProps> = ({
     priceType,
     first: expansionsFirst,
     skip: expansionsSkip,
-    search: debouncedExpansionSearchQuery,
+    search: expansionSearchQuery,
     sortBy: sortExpansionBy,
     sortByDirection: sortExpansionByDirection,
     additionalSortBy: null,

@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2023-01-10 (v0.48.1)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Fixed performance issues with searching by card name, set name, oracle text, or artist.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2023-01-10 (v0.48.0)
     </Typography>
     <Typography paragraph>

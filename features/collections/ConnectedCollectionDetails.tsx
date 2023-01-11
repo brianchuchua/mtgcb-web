@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 import { useSelector } from 'react-redux';
 import { useGetFilteredCollectionSummaryLegacyQuery } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
-import useDebounce, { searchFieldDebounceTimeMs } from '../../util/useDebounce';
 import { CollectionDetails } from './CollectionDetails';
 
 interface ConnectedCollectionDetailsProps {
@@ -16,8 +15,6 @@ export const ConnectedCollectionDetails: React.FC<ConnectedCollectionDetailsProp
     (state: RootState) => state.collection
   );
 
-  const debouncedExpansionSearchQuery = useDebounce(expansionSearchQuery, searchFieldDebounceTimeMs);
-
   // Tech debt: We should switch to a different query for this component since it can mess with prefetching of other components since it doesn't consume all of the same inputs
   const {
     data: collectionSummary,
@@ -28,7 +25,7 @@ export const ConnectedCollectionDetails: React.FC<ConnectedCollectionDetailsProp
     priceType,
     first: expansionsFirst,
     skip: expansionsSkip,
-    search: debouncedExpansionSearchQuery,
+    search: expansionSearchQuery,
     sortBy: sortExpansionBy,
     sortByDirection: sortExpansionByDirection,
     additionalSortBy: null,

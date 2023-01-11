@@ -5,7 +5,6 @@ import { ResponsiveContainer } from '../../components/layout/ResponsiveContainer
 import { useGetAllCardsMetaQuery, useGetAllSetsMetaQuery } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
 import { useLocalStorage } from '../../util';
-import useDebounce, { searchFieldDebounceTimeMs } from '../../util/useDebounce';
 import { setFormVisibility } from './collectionSlice';
 import { ConnectedCardGallery } from './ConnectedCardGallery';
 import { ConnectedCardTable } from './ConnectedCardTable';
@@ -35,11 +34,6 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
     expansionCategories,
   } = useSelector((state: RootState) => state.collection);
 
-  const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
-  const debouncedOracleTextQuery = useDebounce(oracleTextQuery, searchFieldDebounceTimeMs);
-  const debouncedArtistQuery = useDebounce(artistQuery, searchFieldDebounceTimeMs);
-  const debouncedExpansionSearchQuery = useDebounce(expansionSearchQuery, searchFieldDebounceTimeMs);
-
   const [skip, setSkip] = useState(0);
   const [first, setFirst] = useLocalStorage('numberOfCardsPerPage', 50);
   const [page, setPage] = useState(1);
@@ -61,9 +55,9 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
 
   const { data: cardMetaData, isLoading: isCardMetaDataLoading, error: cardMetaError } = useGetAllCardsMetaQuery({
     sortBy,
-    name: debouncedSearchQuery,
-    oracleTextQuery: debouncedOracleTextQuery,
-    artistQuery: debouncedArtistQuery,
+    name: searchQuery,
+    oracleTextQuery,
+    artistQuery,
     cardSets,
     cardRarities,
     cardTypes,
@@ -87,7 +81,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
   }, [skip, totalResults, previousTotalResults]);
 
   const { data: allSetsMetaResponse } = useGetAllSetsMetaQuery({
-    name: debouncedExpansionSearchQuery,
+    name: expansionSearchQuery,
     sortBy: sortExpansionBy,
     sortByDirection: sortExpansionByDirection,
     setTypes: expansionTypes,

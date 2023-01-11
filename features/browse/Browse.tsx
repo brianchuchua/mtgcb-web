@@ -11,7 +11,6 @@ import {
 } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
 import { useLocalStorage } from '../../util';
-import useDebounce, { searchFieldDebounceTimeMs } from '../../util/useDebounce';
 import { setFormVisibility } from './browseSlice';
 import CardGallery from './CardGallery';
 import CardTable from './CardTable';
@@ -41,11 +40,6 @@ export const Browse: React.FC = () => {
     expansionCategories,
   } = useSelector((state: RootState) => state.browse);
 
-  const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
-  const debouncedOracleTextQuery = useDebounce(oracleTextQuery, searchFieldDebounceTimeMs);
-  const debouncedArtistQuery = useDebounce(artistQuery, searchFieldDebounceTimeMs);
-  const debouncedExpansionSearchQuery = useDebounce(expansionSearchQuery, searchFieldDebounceTimeMs);
-
   const [skip, setSkip] = useState(0);
   const [first, setFirst] = useLocalStorage('numberOfCardsPerPage', 50);
   const [page, setPage] = useState(1);
@@ -69,9 +63,9 @@ export const Browse: React.FC = () => {
     first,
     skip,
     sortBy,
-    name: debouncedSearchQuery,
-    oracleTextQuery: debouncedOracleTextQuery,
-    artistQuery: debouncedArtistQuery,
+    name: searchQuery,
+    oracleTextQuery,
+    artistQuery,
     cardSets,
     cardRarities,
     cardTypes,
@@ -88,9 +82,9 @@ export const Browse: React.FC = () => {
     error: cardMetaError,
   } = useGetAllCardsMetaQuery({
     sortBy,
-    name: debouncedSearchQuery,
-    oracleTextQuery: debouncedOracleTextQuery,
-    artistQuery: debouncedArtistQuery,
+    name: searchQuery,
+    oracleTextQuery,
+    artistQuery,
     cardSets,
     cardRarities,
     cardTypes,
@@ -125,7 +119,7 @@ export const Browse: React.FC = () => {
   const { data: allSetsResponse, isLoading: isGetAllSetsLoading, isFetching: isGetAllSetsFetching } = useGetAllSetsQuery({
     first: expansionsFirst,
     skip: expansionsSkip,
-    name: debouncedExpansionSearchQuery,
+    name: expansionSearchQuery,
     sortBy: sortExpansionBy,
     sortByDirection: sortExpansionByDirection,
     setTypes: expansionTypes,
@@ -134,7 +128,7 @@ export const Browse: React.FC = () => {
   const expansions = allSetsResponse?.data?.sets;
 
   const { data: allSetsMetaResponse, isLoading: isAllSetsMetaLoading, isFetching: isAllSetsMetaFetching } = useGetAllSetsMetaQuery({
-    name: debouncedExpansionSearchQuery,
+    name: expansionSearchQuery,
     sortBy: sortExpansionBy,
     sortByDirection: sortExpansionByDirection,
     setTypes: expansionTypes,

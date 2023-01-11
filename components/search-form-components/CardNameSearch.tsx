@@ -3,12 +3,17 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import SearchIcon from '@material-ui/icons/Search';
+import debounce from 'lodash.debounce';
+import { useCallback } from 'react';
 import styled from 'styled-components';
+import { searchFieldDebounceTimeMs } from '../../util/useDebounce';
 
 interface CardNameSearchProps {
   searchQuery: string;
   updateSearchQuery: (query: string) => void;
 }
+
+const debouncedCallback = debounce((callback, query) => callback(query), searchFieldDebounceTimeMs);
 
 const CardNameSearch: React.FC<CardNameSearchProps> = ({ searchQuery, updateSearchQuery }) => (
   <StyledCardNameSearch fullWidth variant="outlined">
@@ -17,10 +22,10 @@ const CardNameSearch: React.FC<CardNameSearchProps> = ({ searchQuery, updateSear
     </InputLabel>
     <OutlinedInput
       id="search-query"
-      value={searchQuery}
+      defaultValue={searchQuery}
       placeholder="Search by card name"
       label="Card Name"
-      onChange={(e) => updateSearchQuery(e.target.value)}
+      onChange={useCallback((e) => debouncedCallback(updateSearchQuery, e.target.value), [])}
       startAdornment={
         <InputAdornment position="start">
           <SearchIcon color="disabled" />

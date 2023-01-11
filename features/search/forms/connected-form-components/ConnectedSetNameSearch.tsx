@@ -3,14 +3,19 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import SearchIcon from '@material-ui/icons/Search';
+import debounce from 'lodash.debounce';
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { RootState } from '../../../../redux/rootReducer';
+import { searchFieldDebounceTimeMs } from '../../../../util/useDebounce';
 import { ConnectedSearchFormComponentProps } from './types';
 
 interface ConnectedSetNameSearchProps extends ConnectedSearchFormComponentProps {
   setExpansionSearchQuery: any;
 }
+
+const debouncedCallback = debounce((callback, query) => callback(query), searchFieldDebounceTimeMs);
 
 const ConnectedSetNameSearch: React.FC<ConnectedSetNameSearchProps> = ({ reduxSlice, setExpansionSearchQuery }) => {
   const dispatch = useDispatch();
@@ -27,12 +32,10 @@ const ConnectedSetNameSearch: React.FC<ConnectedSetNameSearchProps> = ({ reduxSl
       </InputLabel>
       <OutlinedInput
         id="expansion-search-query"
-        value={expansionSearchQuery}
+        defaultValue={expansionSearchQuery}
         placeholder="Search by set name"
         label="Set Name"
-        onChange={(e) => {
-          updateSearchQuery(e.target.value);
-        }}
+        onChange={useCallback((e) => debouncedCallback(updateSearchQuery, e.target.value), [])}
         startAdornment={
           <InputAdornment position="start">
             <SearchIcon color="disabled" />

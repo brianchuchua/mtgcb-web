@@ -4,12 +4,17 @@ import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoOutlined from '@material-ui/icons/InfoOutlined';
+import debounce from 'lodash.debounce';
+import { useCallback } from 'react';
 import styled from 'styled-components';
+import { searchFieldDebounceTimeMs } from '../../util/useDebounce';
 
 interface OracleTextSearchProps {
   oracleTextQuery: string;
   updateOracleTextQuery: (oracleTextQuery: string) => void;
 }
+
+const debouncedCallback = debounce((callback, query) => callback(query), searchFieldDebounceTimeMs);
 
 const OracleTextSearch: React.FC<OracleTextSearchProps> = ({ oracleTextQuery, updateOracleTextQuery }) => (
   <div>
@@ -20,10 +25,10 @@ const OracleTextSearch: React.FC<OracleTextSearchProps> = ({ oracleTextQuery, up
 
       <OutlinedInput
         id="oracle-text-query"
-        value={oracleTextQuery}
+        defaultValue={oracleTextQuery}
         placeholder="Search by oracle text"
         label="Oracle Text"
-        onChange={(e) => updateOracleTextQuery(e.target.value)}
+        onChange={useCallback((e) => debouncedCallback(updateOracleTextQuery, e.target.value), [])}
         startAdornment={
           <Tooltip
             placement="right"

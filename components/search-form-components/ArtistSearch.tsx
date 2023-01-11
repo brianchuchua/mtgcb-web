@@ -3,12 +3,17 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import SearchIcon from '@material-ui/icons/Search';
+import debounce from 'lodash.debounce';
+import { useCallback } from 'react';
 import styled from 'styled-components';
+import { searchFieldDebounceTimeMs } from '../../util/useDebounce';
 
 interface ArtistSearchProps {
   artistQuery: string;
   updateArtistQuery: (query: string) => void;
 }
+
+const debouncedCallback = debounce((callback, query) => callback(query), searchFieldDebounceTimeMs);
 
 const ArtistSearch: React.FC<ArtistSearchProps> = ({ artistQuery, updateArtistQuery }) => (
   <StyledArtistSearch fullWidth variant="outlined">
@@ -17,10 +22,10 @@ const ArtistSearch: React.FC<ArtistSearchProps> = ({ artistQuery, updateArtistQu
     </InputLabel>
     <OutlinedInput
       id="artist-query"
-      value={artistQuery}
+      defaultValue={artistQuery}
       placeholder="Search by artist"
       label="Artist"
-      onChange={(e) => updateArtistQuery(e.target.value)}
+      onChange={useCallback((e) => debouncedCallback(updateArtistQuery, e.target.value), [])}
       startAdornment={
         <InputAdornment position="start">
           <SearchIcon color="disabled" />

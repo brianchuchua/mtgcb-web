@@ -2,7 +2,6 @@ import React, { memo, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useGetFilteredCollectionSummaryLegacyQuery, usePrefetch } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
-import useDebounce, { searchFieldDebounceTimeMs } from '../../util/useDebounce';
 import SetGallery from '../browse/SetGallery';
 
 interface ConnectedSetGalleryProps {
@@ -34,8 +33,6 @@ export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
     setCompletionStatuses,
   } = useSelector((state: RootState) => state.collection);
 
-  const debouncedExpansionSearchQuery = useDebounce(expansionSearchQuery, searchFieldDebounceTimeMs);
-
   const {
     data: collectionSummary,
     isLoading: isFilteredCollectionSummaryLoading,
@@ -46,7 +43,7 @@ export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
     priceType,
     first: expansionsFirst,
     skip: expansionsSkip,
-    search: debouncedExpansionSearchQuery,
+    search: expansionSearchQuery,
     sortBy: sortExpansionBy,
     sortByDirection: sortExpansionByDirection,
     additionalSortBy: null, // TODO: Check me -- should I be null?
@@ -68,7 +65,7 @@ export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
         priceType,
         first: expansionsFirst,
         skip: expansionsSkip + expansionsFirst,
-        search: debouncedExpansionSearchQuery,
+        search: expansionSearchQuery,
         sortBy: sortExpansionBy,
         sortByDirection: sortExpansionByDirection,
         additionalSortBy: null,
@@ -82,7 +79,7 @@ export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
     priceType,
     expansionsFirst,
     expansionsSkip,
-    debouncedExpansionSearchQuery,
+    expansionSearchQuery,
     sortExpansionBy,
     sortExpansionByDirection,
     setCompletionStatuses,

@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { ResponsiveContainer } from '../../components/layout/ResponsiveContainer';
 import { useGetAllCardsMetaQuery, useGetAllCardsQuery, useGetSetBySlugQuery } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
-import useDebounce, { searchFieldDebounceTimeMs } from '../../util/useDebounce';
 import CardGallery from '../browse/CardGallery';
 import CardTable from '../browse/CardTable';
 import titleCase from '../browse/util/titleCase';
@@ -42,10 +41,6 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
     };
   }, []);
 
-  const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
-  const debouncedOracleTextQuery = useDebounce(oracleTextQuery, searchFieldDebounceTimeMs);
-  const debouncedArtistQuery = useDebounce(artistQuery, searchFieldDebounceTimeMs);
-
   const [skip, setSkip] = useState(0);
   const [first, setFirst] = useState(50);
   const [page, setPage] = useState(1);
@@ -57,9 +52,9 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
     first,
     skip,
     sortBy,
-    name: debouncedSearchQuery,
-    oracleTextQuery: debouncedOracleTextQuery,
-    artistQuery: debouncedArtistQuery,
+    name: searchQuery,
+    oracleTextQuery,
+    artistQuery,
     cardSets: [
       {
         category: 'Sets',
@@ -83,9 +78,9 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
     error: cardMetaError,
   } = useGetAllCardsMetaQuery({
     sortBy,
-    name: debouncedSearchQuery,
-    oracleTextQuery: debouncedOracleTextQuery,
-    artistQuery: debouncedArtistQuery,
+    name: searchQuery,
+    oracleTextQuery,
+    artistQuery,
     cardSets: [
       {
         category: 'Sets',
