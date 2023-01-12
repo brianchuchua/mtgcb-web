@@ -16,10 +16,20 @@ const buildBrowseExpansionFilter: BuildBrowseExpansionFilterFunction = ({ name, 
 
   if (name) {
     where.AND.push({
-      name: {
-        contains: name,
-        mode: 'insensitive',
-      },
+      OR: [
+        {
+          name: {
+            contains: name,
+            mode: 'insensitive',
+          },
+        },
+        {
+          code: {
+            equals: name,
+            mode: 'insensitive',
+          },
+        },
+      ],
     });
   }
 

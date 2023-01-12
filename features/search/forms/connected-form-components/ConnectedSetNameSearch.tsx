@@ -28,13 +28,13 @@ const ConnectedSetNameSearch: React.FC<ConnectedSetNameSearchProps> = ({ reduxSl
   return (
     <StyledSetNameSearch fullWidth variant="outlined">
       <InputLabel htmlFor="expansion-search-query" className="input-label-fix">
-        Set Name
+        Set
       </InputLabel>
       <OutlinedInput
         id="expansion-search-query"
         defaultValue={expansionSearchQuery}
-        placeholder="Search by set name"
-        label="Set Name"
+        placeholder="Search by set name or code"
+        label="Set"
         onChange={useCallback((e) => debouncedCallback(updateSearchQuery, e.target.value), [])}
         startAdornment={
           <InputAdornment position="start">
