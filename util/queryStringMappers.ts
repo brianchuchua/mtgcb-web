@@ -25,6 +25,9 @@ interface QueryParams {
   setCats: string;
   setTypes: string;
   status?: SetCompletionStatus;
+  quantityAll: string;
+  quantityNormal: string;
+  quantityFoil: string;
 }
 
 let queryFromUrl: QueryParams | Record<string, never> = {};

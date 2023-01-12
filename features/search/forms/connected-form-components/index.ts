@@ -5,6 +5,7 @@ import ConnectedCardStatSearch from './ConnectedCardStatSearch';
 import ConnectedColorSelector from './ConnectedColorSelector';
 import ConnectedOracleTextSearch from './ConnectedOracleTextSearch';
 import ConnectedPriceTypeSelector from './ConnectedPriceTypeSelector';
+import ConnectedQuantitySelector from './ConnectedQuantitySelector';
 import ConnectedRaritySelector from './ConnectedRaritySelector';
 import ConnectedSetCategorySelector from './ConnectedSetCategorySelector';
 import ConnectedSetCompletionStatusSelector from './ConnectedSetCompletionStatusSelector';
@@ -36,4 +37,5 @@ export {
   ConnectedViewModeSelector as ViewModeSelector,
   ConnectedPriceTypeSelector as PriceTypeSelector,
   ConnectedSetCompletionStatusSelector as SetCompletionStatusSelector,
+  ConnectedQuantitySelector as QuantitySelector,
 };

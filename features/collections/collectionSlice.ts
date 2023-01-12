@@ -46,6 +46,9 @@ const initialState: CollectionState = {
   cardStatSearches: (convertStringToCardStatSearches(queryFromUrl.stats) as CardStatSearch[]) || [
     { searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' },
   ],
+  quantityAll: queryFromUrl.quantityAll || 'all',
+  quantityNormal: queryFromUrl.quantityNormal || 'all',
+  quantityFoil: queryFromUrl.quantityFoil || 'all',
   sortBy: queryFromUrl.sort || 'releasedAt',
   sortByDirection: queryFromUrl.order || 'asc',
   isFormVisible: false,
@@ -78,6 +81,9 @@ const emptyState = {
   },
   showAllPrintings: true,
   cardStatSearches: [{ searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' }],
+  quantityAll: 'all',
+  quantityNormal: 'all',
+  quantityFoil: 'all',
   sortBy: 'releasedAt',
   sortByDirection: 'asc',
   isFormVisible: true,
@@ -186,6 +192,90 @@ const collectionSlice = createSlice({
         updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
       }
     },
+    setQuantityAll(state, action: PayloadAction<string>) {
+      const quantityAll = action.payload;
+      state.quantityAll = quantityAll;
+      const updatedSearchAttribute: CardStatSearch = { searchAttribute: 'cardsAll', comparator: 'eq', value: '' };
+      if (quantityAll === 'all') {
+        state.cardStatSearches = state.cardStatSearches.filter((search) => search.searchAttribute !== 'cardsAll');
+        const newCardStatSearches = [...state.cardStatSearches];
+        updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
+        setTimeout(() => updateSearchInUrl('quantityAll', quantityAll), 500);
+      } else {
+        const quantityAllNumber = quantityAll.replace('x', '').replace('+', ''); // 5x+ --> 5
+        updatedSearchAttribute.value = quantityAllNumber;
+        if (quantityAllNumber === '5') {
+          updatedSearchAttribute.comparator = 'gte';
+        }
+
+        if (!state.cardStatSearches.some((search) => search.searchAttribute === 'cardsAll')) {
+          state.cardStatSearches.push(updatedSearchAttribute);
+        } else {
+          const quantityAllIndex = state.cardStatSearches.findIndex((search) => search.searchAttribute === 'cardsAll');
+          state.cardStatSearches[quantityAllIndex] = updatedSearchAttribute;
+        }
+
+        const newCardStatSearches = [...state.cardStatSearches];
+        updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
+        setTimeout(() => updateSearchInUrl('quantityAll', quantityAll), 500);
+      }
+    },
+    setQuantityNormal(state, action: PayloadAction<string>) {
+      const quantityNormal = action.payload;
+      state.quantityNormal = quantityNormal;
+      const updatedSearchAttribute: CardStatSearch = { searchAttribute: 'cardsNormal', comparator: 'eq', value: '' };
+      if (quantityNormal === 'all') {
+        state.cardStatSearches = state.cardStatSearches.filter((search) => search.searchAttribute !== 'cardsNormal');
+        const newCardStatSearches = [...state.cardStatSearches];
+        updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
+        setTimeout(() => updateSearchInUrl('quantityNormal', quantityNormal), 500);
+      } else {
+        const quantityNormalNumber = quantityNormal.replace('x', '').replace('+', ''); // 5x+ --> 5
+        updatedSearchAttribute.value = quantityNormalNumber;
+        if (quantityNormalNumber === '5') {
+          updatedSearchAttribute.comparator = 'gte';
+        }
+
+        if (!state.cardStatSearches.some((search) => search.searchAttribute === 'cardsNormal')) {
+          state.cardStatSearches.push(updatedSearchAttribute);
+        } else {
+          const quantityNormalIndex = state.cardStatSearches.findIndex((search) => search.searchAttribute === 'cardsNormal');
+          state.cardStatSearches[quantityNormalIndex] = updatedSearchAttribute;
+        }
+
+        const newCardStatSearches = [...state.cardStatSearches];
+        updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
+        setTimeout(() => updateSearchInUrl('quantityNormal', quantityNormal), 500);
+      }
+    },
+    setQuantityFoil(state, action: PayloadAction<string>) {
+      const quantityFoil = action.payload;
+      state.quantityFoil = quantityFoil;
+      const updatedSearchAttribute: CardStatSearch = { searchAttribute: 'cardsFoil', comparator: 'eq', value: '' };
+      if (quantityFoil === 'all') {
+        state.cardStatSearches = state.cardStatSearches.filter((search) => search.searchAttribute !== 'cardsFoil');
+        const newCardStatSearches = [...state.cardStatSearches];
+        updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
+        setTimeout(() => updateSearchInUrl('quantityFoil', quantityFoil), 500);
+      } else {
+        const quantityFoilNumber = quantityFoil.replace('x', '').replace('+', ''); // 5x+ --> 5
+        updatedSearchAttribute.value = quantityFoilNumber;
+        if (quantityFoilNumber === '5') {
+          updatedSearchAttribute.comparator = 'gte';
+        }
+
+        if (!state.cardStatSearches.some((search) => search.searchAttribute === 'cardsFoil')) {
+          state.cardStatSearches.push(updatedSearchAttribute);
+        } else {
+          const quantityFoilIndex = state.cardStatSearches.findIndex((search) => search.searchAttribute === 'cardsFoil');
+          state.cardStatSearches[quantityFoilIndex] = updatedSearchAttribute;
+        }
+
+        const newCardStatSearches = [...state.cardStatSearches];
+        updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
+        setTimeout(() => updateSearchInUrl('quantityFoil', quantityFoil), 500);
+      }
+    },
     setCardSort(state, action: PayloadAction<string>) {
       const sortBy = action.payload;
       state.sortBy = sortBy;
@@ -279,6 +369,9 @@ export const {
   setExpansionCategories,
   setSetCompletionStatuses,
   reset,
+  setQuantityAll,
+  setQuantityNormal,
+  setQuantityFoil,
 } = collectionSlice.actions;
 
 export const searchAttributeOptions = [
@@ -348,6 +441,9 @@ interface CollectionState {
   cardColors: CardColors;
   showAllPrintings: boolean;
   cardStatSearches: CardStatSearch[];
+  quantityAll: string;
+  quantityNormal: string;
+  quantityFoil: string;
   sortBy: string;
   sortByDirection: 'asc' | 'desc';
   isFormVisible: boolean;

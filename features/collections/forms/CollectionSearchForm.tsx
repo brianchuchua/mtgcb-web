@@ -1,4 +1,7 @@
 import Button from '@material-ui/core/Button';
+import Collapse from '@material-ui/core/Collapse';
+import FormLabel from '@material-ui/core/FormLabel';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { RootState } from '../../../redux/rootReducer';
@@ -9,6 +12,7 @@ import {
   ColorSelector,
   OracleTextSearch,
   PriceTypeSelector,
+  QuantitySelector,
   RaritySelector,
   SetCategorySelector,
   SetCompletionStatusSelector,
@@ -42,6 +46,9 @@ import {
   setExpansionTypes,
   setOracleTextQuery,
   setPriceType,
+  setQuantityAll,
+  setQuantityFoil,
+  setQuantityNormal,
   setSearchAttribute,
   setSearchQuery,
   setSetCompletionStatuses,
@@ -56,6 +63,8 @@ const CollectionSearchForm: React.FC = () => {
   const reduxSlice = 'collection';
   const dispatch = useDispatch();
 
+  const [showAdvancedQuantityOptions, setShowAdvancedQuantityOptions] = useState(false);
+
   return (
     <>
       {isFormVisible && viewSubject === 'cards' && (
@@ -69,6 +78,29 @@ const CollectionSearchForm: React.FC = () => {
           <ColorSelector reduxSlice={reduxSlice} setColorType={setColorType} setCardColors={setCardColors} />
           <RaritySelector reduxSlice={reduxSlice} setCardRarities={setCardRarities} />
           <SetSelector reduxSlice={reduxSlice} setCardSets={setCardSets} />
+          <QuantitySelector
+            reduxSlice={reduxSlice}
+            setQuantity={setQuantityAll}
+            quantityType="quantityAll"
+            label="Quantity Collected (All)"
+          />
+          <StyledFormLabel onClick={() => setShowAdvancedQuantityOptions(!showAdvancedQuantityOptions)}>
+            (Click to {showAdvancedQuantityOptions ? 'hide' : 'show'} more quantity options)
+          </StyledFormLabel>
+          <Collapse in={showAdvancedQuantityOptions}>
+            <QuantitySelector
+              reduxSlice={reduxSlice}
+              setQuantity={setQuantityNormal}
+              quantityType="quantityNormal"
+              label="Quantity Collected (Normal)"
+            />
+            <QuantitySelector
+              reduxSlice={reduxSlice}
+              setQuantity={setQuantityFoil}
+              quantityType="quantityFoil"
+              label="Quantity Collected (Foil)"
+            />
+          </Collapse>
           <CardStatSearch
             reduxSlice={reduxSlice}
             addCardStatSearch={addCardStatSearch}
@@ -118,6 +150,18 @@ const CollectionSearchForm: React.FC = () => {
 const ButtonWrapper = styled.div({
   paddingLeft: '8px',
   paddingRight: '8px',
+});
+
+const StyledFormLabel = styled(FormLabel)({
+  textAlign: 'center',
+  paddingBottom: '8px',
+  display: 'block',
+  fontSize: '0.8rem',
+  opacity: 0.5,
+  cursor: 'pointer',
+  '&:hover': {
+    textDecoration: 'underline',
+  },
 });
 
 export default CollectionSearchForm;
