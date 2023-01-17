@@ -7,6 +7,16 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2023-01-16 (v0.51.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Added compact set view mode.</li>
+        <li>Fixed bugs with rendering percentage completion and card price updates.</li>
+        <li>Made minor performance enhancements when rendering a large number of items.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2023-01-11 (v0.50.0)
     </Typography>
     <Typography paragraph>

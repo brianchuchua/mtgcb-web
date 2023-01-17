@@ -1,8 +1,9 @@
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useLocalStorage } from '../../util';
 import { PriceTypes } from './browseSlice';
 import GalleryControls from './GalleryControls';
 import SetBox, { Set, SetSummary } from './SetBox';
@@ -24,10 +25,63 @@ const SetGallery: React.FC<SetGalleryProps> = ({
 }) => {
   const [setsPerRow, setSetsPerRow] = useState(4);
   const [galleryWidth, setGalleryWidth] = useState(100);
+  const [showCostsToPurchase, setShowCostsToPurchase] = useLocalStorage('showCostsToPurchase', true);
+
+  useEffect(() => {
+    if (!showCostsToPurchase) {
+      setSetsPerRow(5);
+    } else {
+      setSetsPerRow(4);
+    }
+  }, [showCostsToPurchase]);
 
   const atLeastOneSetToShow = totalResults > 0;
 
+  const settingGroups = [
+    {
+      label: 'Show Fields',
+      type: 'toggleFilters',
+      settings: [
+        {
+          key: 'costsToPurchase',
+          label: 'Costs to Purchase',
+          isVisible: showCostsToPurchase,
+          setVisibility: setShowCostsToPurchase,
+        },
+      ],
+    },
+  ];
+
   if (isLoading || isFetching) {
+    const boxHeightCollectionView = 500;
+    const boxHeightCollectorViewCollapsed = 254;
+    const boxHeightBrowseView = 422;
+    const boxHeightBrowseViewCollapsed = 172;
+
+    const isCollectionView = userId != null;
+    const isBrowseView = userId == null;
+    const isCollapsed = !showCostsToPurchase;
+
+    const determineSkeletonHeight = () => {
+      let calculatedHeight = 0;
+      if (isCollectionView && isCollapsed) {
+        calculatedHeight = boxHeightCollectorViewCollapsed;
+      } else if (isCollectionView && !isCollapsed) {
+        calculatedHeight = boxHeightCollectionView;
+      } else if (isBrowseView && isCollapsed) {
+        calculatedHeight = boxHeightBrowseViewCollapsed;
+      } else if (isBrowseView && !isCollapsed) {
+        calculatedHeight = boxHeightBrowseView;
+      }
+      return calculatedHeight;
+    };
+
+    const skeletonHeight = determineSkeletonHeight();
+
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
     return (
       <>
         <GalleryControls
@@ -45,10 +99,11 @@ const SetGallery: React.FC<SetGalleryProps> = ({
           galleryType="sets"
           isLoading={isLoading}
           isFetching={isFetching}
+          settingGroups={settingGroups}
         />{' '}
-        <SetGalleryWrapper setsPerRow={setsPerRow} galleryWidth={galleryWidth}>
+        <SetGalleryWrapper setsPerRow={setsPerRow} galleryWidth={galleryWidth} isCompact={!showCostsToPurchase}>
           {Array.from({ length: first }, (_, i) => (
-            <Skeleton key={i} variant="rect" height={userId ? 500 : 422} animation="wave" />
+            <Skeleton key={i} variant="rect" height={skeletonHeight} animation="wave" />
           ))}
         </SetGalleryWrapper>
       </>
@@ -70,9 +125,10 @@ const SetGallery: React.FC<SetGalleryProps> = ({
         cardsPerRow={setsPerRow}
         isFetching={isFetching}
         galleryType="sets"
+        settingGroups={settingGroups}
       />
 
-      <SetGalleryWrapper setsPerRow={setsPerRow} galleryWidth={galleryWidth}>
+      <SetGalleryWrapper setsPerRow={setsPerRow} galleryWidth={galleryWidth} isCompact={!showCostsToPurchase}>
         {sets &&
           sets.map((set) => {
             const costsToPurchaseInSet = costsToPurchase?.find((costs) => Number(costs.setId) === Number(set.id));
@@ -83,6 +139,7 @@ const SetGallery: React.FC<SetGalleryProps> = ({
                 costsToPurchaseInSet={costsToPurchaseInSet}
                 priceType={priceType}
                 userId={userId}
+                showCostsToPurchase={showCostsToPurchase}
               />
             );
           })}
@@ -104,6 +161,7 @@ const SetGallery: React.FC<SetGalleryProps> = ({
           isFetching={isFetching}
           galleryType="sets"
           isOnBottom
+          settingGroups={settingGroups}
         />
       </div>
     </>
@@ -119,9 +177,10 @@ const SetGallery: React.FC<SetGalleryProps> = ({
 interface SetGalleryWrapperProps {
   setsPerRow: number;
   galleryWidth: number;
+  isCompact: boolean;
 }
 
-const SetGalleryWrapper = styled.div<SetGalleryWrapperProps>(({ setsPerRow = 4, galleryWidth = 100, theme }) => ({
+const SetGalleryWrapper = styled.div<SetGalleryWrapperProps>(({ setsPerRow = 4, galleryWidth = 100, isCompact = false, theme }) => ({
   display: 'grid',
   [theme.breakpoints.up('xs')]: {
     gridTemplateColumns: `repeat(1, minmax(0, 1fr))`,
@@ -130,13 +189,13 @@ const SetGalleryWrapper = styled.div<SetGalleryWrapperProps>(({ setsPerRow = 4, 
     gridTemplateColumns: `repeat(2, minmax(0, 1fr))`,
   },
   [theme.breakpoints.up('md')]: {
-    gridTemplateColumns: `repeat(2, minmax(0, 1fr))`,
+    gridTemplateColumns: `repeat(${isCompact ? 3 : 2}, minmax(0, 1fr))`,
   },
   [theme.breakpoints.up('lg')]: {
-    gridTemplateColumns: `repeat(3, minmax(0, 1fr))`,
+    gridTemplateColumns: `repeat(${isCompact ? 4 : 3}, minmax(0, 1fr))`,
   },
   [theme.breakpoints.up('xl')]: {
-    gridTemplateColumns: `repeat(${setsPerRow}, minmax(0, 1fr))`,
+    gridTemplateColumns: `repeat(${isCompact ? 5 : 4}, minmax(0, 1fr))`,
   },
 
   gridTemplateRows: 'repeat(1, 1fr)',

@@ -12,7 +12,14 @@ import { PriceTypes } from './browseSlice';
 import { formatter } from './util/formatPrice';
 import titleCase from './util/titleCase';
 
-const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, isComplete = false, userId = null }) => {
+const SetBox: React.FC<SetBoxProps> = ({
+  set,
+  costsToPurchaseInSet,
+  priceType,
+  isComplete = false,
+  userId = null,
+  showCostsToPurchase = true,
+}) => {
   const userAgentString = window?.navigator?.userAgent;
   const parsedUserAgent = userAgentString ? uaParser(userAgentString) : null;
   const isSafari = parsedUserAgent?.browser?.name === 'Safari' || parsedUserAgent?.browser?.name === 'Mobile Safari';
@@ -53,7 +60,7 @@ const SetBox: React.FC<SetBoxProps> = ({ set, costsToPurchaseInSet, priceType, i
         </>
       )}
       {costsToPurchaseInSet && (
-        <div style={{ marginTop: '10px' }}>
+        <div style={{ marginTop: '10px', display: showCostsToPurchase ? 'block' : 'none' }}>
           <Typography variant="body2" color="textSecondary" component="div">
             {userId ? 'Costs to complete:' : 'Costs to purchase:'}
           </Typography>
@@ -254,6 +261,7 @@ interface SetBoxProps {
   priceType: PriceTypes;
   isComplete?: boolean;
   userId?: string;
+  showCostsToPurchase: boolean;
 }
 
 export interface SetSummary {
