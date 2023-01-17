@@ -39,7 +39,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
   const [page, setPage] = useState(1);
 
   const [expansionsSkip, setExpansionsSkip] = useState(0);
-  const [expansionsFirst, setExpansionsFirst] = useLocalStorage('numberOfExpansionsPerPage', 16);
+  const [expansionsFirst, setExpansionsFirst] = useLocalStorage('numberOfExpansionsPerPage', 20);
   const [expansionsPage, setExpansionsPage] = useState(1);
 
   const [previousTotalResults, setPreviousTotalResults] = useState(null);
