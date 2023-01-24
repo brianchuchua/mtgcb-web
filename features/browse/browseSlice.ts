@@ -23,8 +23,8 @@ import { getValueFromLocalStorage, setValueToLocalStorage } from '../../util/use
 const viewSubjectFromLocalStorage = getValueFromLocalStorage('viewSubject', 'sets');
 const viewModeFromLocalStorage = getValueFromLocalStorage('viewMode', 'grid');
 const priceTypeFromLocalStorage = getValueFromLocalStorage('priceType', 'market');
-const includeSubsetsBrowseFromLocalStorage = getValueFromLocalStorage('includeSubsetsBrowse', '0');
-const includeSubsetGroupsBrowseFromLocalStorage = getValueFromLocalStorage('includeSubsetGroupsBrowse', '1');
+const includeSubsetsBrowseFromLocalStorage = getValueFromLocalStorage('includeSubsetsBrowse', false);
+const includeSubsetGroupsBrowseFromLocalStorage = getValueFromLocalStorage('includeSubsetGroupsBrowse', true);
 
 const initialState: BrowseState = {
   searchQuery: queryFromUrl.card || '',
