@@ -22,6 +22,7 @@ const SetGallery: React.FC<SetGalleryProps> = ({
   userId = null,
   isLoading,
   isFetching,
+  includeSubsetsInSets = false,
 }) => {
   const [setsPerRow, setSetsPerRow] = useState(4);
   const [galleryWidth, setGalleryWidth] = useState(100);
@@ -140,6 +141,7 @@ const SetGallery: React.FC<SetGalleryProps> = ({
                 priceType={priceType}
                 userId={userId}
                 showCostsToPurchase={showCostsToPurchase}
+                includeSubsetsInSets={includeSubsetsInSets}
               />
             );
           })}
@@ -218,6 +220,7 @@ interface SetGalleryProps {
   userId?: string;
   isLoading: boolean;
   isFetching: boolean;
+  includeSubsetsInSets?: boolean;
 }
 
 export default SetGallery;

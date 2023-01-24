@@ -42,7 +42,7 @@ const SetSearchForm: React.FC = () => {
   const dispatch = useDispatch();
 
   return (
-    <>
+    <form>
       {isFormVisible && viewSubject === 'cards' && (
         <>
           <ViewModeSelector
@@ -68,13 +68,13 @@ const SetSearchForm: React.FC = () => {
           />
           <SortSelector reduxSlice={reduxSlice} setCardSort={setCardSort} setCardSortDirection={setCardSortDirection} />
           <ButtonWrapper>
-            <Button size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
+            <Button type="reset" size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
               Reset Search
             </Button>
           </ButtonWrapper>
         </>
       )}
-    </>
+    </form>
   );
 };
 

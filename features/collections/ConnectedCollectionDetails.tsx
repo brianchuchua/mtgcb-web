@@ -11,9 +11,17 @@ interface ConnectedCollectionDetailsProps {
 }
 
 export const ConnectedCollectionDetails: React.FC<ConnectedCollectionDetailsProps> = ({ userId, expansionsFirst, expansionsSkip }) => {
-  const { sortExpansionBy, sortExpansionByDirection, priceType, expansionTypes, expansionCategories, expansionSearchQuery } = useSelector(
-    (state: RootState) => state.collection
-  );
+  const {
+    sortExpansionBy,
+    sortExpansionByDirection,
+    priceType,
+    expansionTypes,
+    expansionCategories,
+    expansionSearchQuery,
+    includeSubsets,
+    includeSubsetGroups,
+    includeSubsetsInSets,
+  } = useSelector((state: RootState) => state.collection);
 
   // Tech debt: We should switch to a different query for this component since it can mess with prefetching of other components since it doesn't consume all of the same inputs
   const {
@@ -32,6 +40,9 @@ export const ConnectedCollectionDetails: React.FC<ConnectedCollectionDetailsProp
     whereSetCompletionStatus: ['all'],
     setTypes: expansionTypes,
     setCategories: expansionCategories,
+    includeSubsets,
+    includeSubsetGroups,
+    includeSubsetsInSets,
   });
 
   const collectionDetails = {

@@ -7,9 +7,11 @@ const filteredCollectionSummaryLegacy = `query filteredCollectionSummaryLegacy(
   $orderBy: [SetOrderByInput!] = [{releasedAt: desc}], 
   $additionalSortBy: AdditionalSortSetsBy, 
   $whereSetCompletionStatus: [SetCompletionWhereInput],
-  $where: SetWhereInput = {}) {
+  $where: SetWhereInput = {},
+  $includeSubsetsInSets: Boolean = false) {
   filteredCollectionSummaryLegacy(userId: $userId, priceType: $priceType, take: $take, skip: $skip, 
-    search: $search, orderBy: $orderBy, additionalSortBy: $additionalSortBy, whereSetCompletionStatus: $whereSetCompletionStatus, where: $where) {
+    search: $search, orderBy: $orderBy, additionalSortBy: $additionalSortBy, whereSetCompletionStatus: $whereSetCompletionStatus, where: $where, 
+    includeSubsetsInSets: $includeSubsetsInSets) {
       userId
       username
       totalCardsCollected
@@ -35,6 +37,9 @@ const filteredCollectionSummaryLegacy = `query filteredCollectionSummaryLegacy(
         releasedAt
         sealedProductUrl
         isDraftable
+        subsetGroupId
+        parentSetId
+        isSubsetGroup
         cardsInSet
         totalCardsCollectedInSet
         uniquePrintingsCollectedInSet

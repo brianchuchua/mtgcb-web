@@ -7,6 +7,8 @@ import {
   CardNameSearch,
   CardStatSearch,
   ColorSelector,
+  IncludeSubsetGroupsToggle,
+  IncludeSubsetsToggle,
   OracleTextSearch,
   PriceTypeSelector,
   RaritySelector,
@@ -38,6 +40,8 @@ import {
   setExpansionSort,
   setExpansionSortDirection,
   setExpansionTypes,
+  setIncludeSubsetGroups,
+  setIncludeSubsets,
   setOracleTextQuery,
   setPriceType,
   setSearchAttribute,
@@ -55,7 +59,7 @@ const SearchForm: React.FC = () => {
   return (
     <>
       {isFormVisible && viewSubject === 'cards' && (
-        <>
+        <form>
           <ViewModeSelector reduxSlice={reduxSlice} setViewMode={setViewMode} setViewSubject={setViewSubject} />
           <PriceTypeSelector reduxSlice={reduxSlice} setPriceType={setPriceType} />
           <CardNameSearch reduxSlice={reduxSlice} setSearchQuery={setSearchQuery} />
@@ -75,14 +79,14 @@ const SearchForm: React.FC = () => {
           />
           <SortSelector reduxSlice={reduxSlice} setCardSort={setCardSort} setCardSortDirection={setCardSortDirection} />
           <ButtonWrapper>
-            <Button size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
+            <Button type="reset" size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
               Reset Search
             </Button>
           </ButtonWrapper>
-        </>
+        </form>
       )}
       {isFormVisible && viewSubject === 'sets' && (
-        <>
+        <form>
           <ViewModeSelector reduxSlice={reduxSlice} setViewMode={setViewMode} setViewSubject={setViewSubject} />
           <PriceTypeSelector reduxSlice={reduxSlice} setPriceType={setPriceType} />
           <SetNameSearch reduxSlice={reduxSlice} setExpansionSearchQuery={setExpansionSearchQuery} />
@@ -93,12 +97,14 @@ const SearchForm: React.FC = () => {
             setExpansionSort={setExpansionSort}
             setExpansionSortDirection={setExpansionSortDirection}
           />
+          <IncludeSubsetGroupsToggle reduxSlice={reduxSlice} setIncludeSubsetGroups={setIncludeSubsetGroups} />
+          <IncludeSubsetsToggle reduxSlice={reduxSlice} setIncludeSubsets={setIncludeSubsets} />
           <ButtonWrapper>
-            <Button size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
+            <Button type="reset" size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
               Reset Search
             </Button>
           </ButtonWrapper>
-        </>
+        </form>
       )}
     </>
   );

@@ -7,6 +7,16 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2023-01-23 (v0.52.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Added support for subsets and subset groups.</li>
+        <li>Did a proof-of-concept migration of Tempest Prerelease Promos into their own subset. (Many more migrations yet to do!)</li>
+        <li>Fixed a bug with resetting text form fields.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2023-01-16 (v0.51.0)
     </Typography>
     <Typography paragraph>

@@ -23,6 +23,8 @@ import { getValueFromLocalStorage, setValueToLocalStorage } from '../../util/use
 const viewSubjectFromLocalStorage = getValueFromLocalStorage('viewSubject', 'sets');
 const viewModeFromLocalStorage = getValueFromLocalStorage('viewMode', 'grid');
 const priceTypeFromLocalStorage = getValueFromLocalStorage('priceType', 'market');
+const includeSubsetsBrowseFromLocalStorage = getValueFromLocalStorage('includeSubsetsBrowse', '0');
+const includeSubsetGroupsBrowseFromLocalStorage = getValueFromLocalStorage('includeSubsetGroupsBrowse', '1');
 
 const initialState: BrowseState = {
   searchQuery: queryFromUrl.card || '',
@@ -55,6 +57,8 @@ const initialState: BrowseState = {
   sortExpansionByDirection: queryFromUrl.setOrder || 'desc',
   expansionTypes: convertStringToSetTypes(queryFromUrl.setTypes) || [],
   expansionCategories: convertStringToExpansionCategories(queryFromUrl.setCats) || [],
+  includeSubsets: queryFromUrl.includeSubsetsBrowse === '1' || includeSubsetsBrowseFromLocalStorage,
+  includeSubsetGroups: queryFromUrl.includeSubsetGroupsBrowse === '1' || includeSubsetGroupsBrowseFromLocalStorage,
 };
 
 const emptyState = {
@@ -83,6 +87,8 @@ const emptyState = {
   sortExpansionByDirection: 'desc',
   expansionTypes: [],
   expansionCategories: [],
+  includeSubsets: false,
+  includeSubsetGroups: true,
 };
 
 const browseSlice = createSlice({
@@ -239,6 +245,18 @@ const browseSlice = createSlice({
       state.expansionCategories = setCategories;
       updateSearchInUrl('setCats', convertExpansionCategoriesToString(setCategories));
     },
+    setIncludeSubsets(state, action: PayloadAction<boolean>) {
+      const includeSubsets = action.payload;
+      state.includeSubsets = includeSubsets;
+      updateSearchInUrl('includeSubsetsBrowse', includeSubsets ? '1' : '0');
+      setValueToLocalStorage('includeSubsetsBrowse', includeSubsets);
+    },
+    setIncludeSubsetGroups(state, action: PayloadAction<boolean>) {
+      const includeSubsetGroups = action.payload;
+      state.includeSubsetGroups = includeSubsetGroups;
+      updateSearchInUrl('includeSubsetGroupsBrowse', includeSubsetGroups ? '1' : '0');
+      setValueToLocalStorage('includeSubsetGroupsBrowse', includeSubsetGroups);
+    },
   },
 });
 
@@ -269,6 +287,8 @@ export const {
   setExpansionSortDirection,
   setExpansionTypes,
   setExpansionCategories,
+  setIncludeSubsets,
+  setIncludeSubsetGroups,
 } = browseSlice.actions;
 
 export const searchAttributeOptions = [
@@ -349,6 +369,8 @@ interface BrowseState {
   sortExpansionByDirection: 'asc' | 'desc';
   expansionTypes: SetType[];
   expansionCategories: SetCategory[];
+  includeSubsets: boolean;
+  includeSubsetGroups: boolean;
 }
 
 export type PriceTypes = 'low' | 'average' | 'high' | 'market' | 'foil';

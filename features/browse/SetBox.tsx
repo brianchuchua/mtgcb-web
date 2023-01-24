@@ -19,6 +19,7 @@ const SetBox: React.FC<SetBoxProps> = ({
   isComplete = false,
   userId = null,
   showCostsToPurchase = true,
+  includeSubsetsInSets = false,
 }) => {
   const userAgentString = window?.navigator?.userAgent;
   const parsedUserAgent = userAgentString ? uaParser(userAgentString) : null;
@@ -26,6 +27,13 @@ const SetBox: React.FC<SetBoxProps> = ({
   const formTarget = isSafari ? '_self' : '_blank';
 
   const setUrl = userId ? `/collections/${userId}/sets/${set.slug}` : `/browse/sets/${set.slug}`;
+
+  let setLabel = 'Set';
+  if (set.isSubsetGroup) {
+    setLabel = 'Subset Group';
+  } else if (set.parentSetId != null) {
+    setLabel = 'Subset';
+  }
 
   return (
     <SetBoxWrapper variant="outlined">
@@ -35,7 +43,7 @@ const SetBox: React.FC<SetBoxProps> = ({
         </Link>
       </SetName>
       <Typography variant="body2" color="textSecondary" component="div">
-        {set.category} Set
+        {set.category} {setLabel}
         {set.setType ? ` - ${titleCase(set.setType)}` : ''}
       </Typography>
       <Typography variant="body2" color="textSecondary" component="div">
@@ -74,8 +82,22 @@ const SetBox: React.FC<SetBoxProps> = ({
                   </Typography>
                 </td>
                 <td style={{ minWidth: '145px' }}>
-                  <BuyThisButton setId={set.id} count={1} countType="all" userId={userId} formTarget={formTarget} />
-                  <BuyThisButton setId={set.id} count={4} countType="all" userId={userId} formTarget={formTarget} />
+                  <BuyThisButton
+                    setId={set.id}
+                    count={1}
+                    countType="all"
+                    userId={userId}
+                    formTarget={formTarget}
+                    includeSubsetsInSets={includeSubsetsInSets}
+                  />
+                  <BuyThisButton
+                    setId={set.id}
+                    count={4}
+                    countType="all"
+                    userId={userId}
+                    formTarget={formTarget}
+                    includeSubsetsInSets={includeSubsetsInSets}
+                  />
                 </td>
               </tr>
               <tr>
@@ -85,8 +107,22 @@ const SetBox: React.FC<SetBoxProps> = ({
                   </Typography>
                 </td>
                 <td>
-                  <BuyThisButton setId={set.id} count={1} countType="mythic" userId={userId} formTarget={formTarget} />
-                  <BuyThisButton setId={set.id} count={4} countType="mythic" userId={userId} formTarget={formTarget} />
+                  <BuyThisButton
+                    setId={set.id}
+                    count={1}
+                    countType="mythic"
+                    userId={userId}
+                    formTarget={formTarget}
+                    includeSubsetsInSets={includeSubsetsInSets}
+                  />
+                  <BuyThisButton
+                    setId={set.id}
+                    count={4}
+                    countType="mythic"
+                    userId={userId}
+                    formTarget={formTarget}
+                    includeSubsetsInSets={includeSubsetsInSets}
+                  />
                 </td>
               </tr>
               <tr>
@@ -96,8 +132,22 @@ const SetBox: React.FC<SetBoxProps> = ({
                   </Typography>
                 </td>
                 <td>
-                  <BuyThisButton setId={set.id} count={1} countType="rare" userId={userId} formTarget={formTarget} />
-                  <BuyThisButton setId={set.id} count={4} countType="rare" userId={userId} formTarget={formTarget} />
+                  <BuyThisButton
+                    setId={set.id}
+                    count={1}
+                    countType="rare"
+                    userId={userId}
+                    formTarget={formTarget}
+                    includeSubsetsInSets={includeSubsetsInSets}
+                  />
+                  <BuyThisButton
+                    setId={set.id}
+                    count={4}
+                    countType="rare"
+                    userId={userId}
+                    formTarget={formTarget}
+                    includeSubsetsInSets={includeSubsetsInSets}
+                  />
                 </td>
               </tr>
               <tr>
@@ -107,8 +157,22 @@ const SetBox: React.FC<SetBoxProps> = ({
                   </Typography>
                 </td>
                 <td>
-                  <BuyThisButton setId={set.id} count={1} countType="uncommon" userId={userId} formTarget={formTarget} />
-                  <BuyThisButton setId={set.id} count={4} countType="uncommon" userId={userId} formTarget={formTarget} />
+                  <BuyThisButton
+                    setId={set.id}
+                    count={1}
+                    countType="uncommon"
+                    userId={userId}
+                    formTarget={formTarget}
+                    includeSubsetsInSets={includeSubsetsInSets}
+                  />
+                  <BuyThisButton
+                    setId={set.id}
+                    count={4}
+                    countType="uncommon"
+                    userId={userId}
+                    formTarget={formTarget}
+                    includeSubsetsInSets={includeSubsetsInSets}
+                  />
                 </td>
               </tr>
               <tr>
@@ -118,8 +182,22 @@ const SetBox: React.FC<SetBoxProps> = ({
                   </Typography>
                 </td>
                 <td>
-                  <BuyThisButton setId={set.id} count={1} countType="common" userId={userId} formTarget={formTarget} />
-                  <BuyThisButton setId={set.id} count={4} countType="common" userId={userId} formTarget={formTarget} />
+                  <BuyThisButton
+                    setId={set.id}
+                    count={1}
+                    countType="common"
+                    userId={userId}
+                    formTarget={formTarget}
+                    includeSubsetsInSets={includeSubsetsInSets}
+                  />
+                  <BuyThisButton
+                    setId={set.id}
+                    count={4}
+                    countType="common"
+                    userId={userId}
+                    formTarget={formTarget}
+                    includeSubsetsInSets={includeSubsetsInSets}
+                  />
                 </td>
               </tr>
               {set.sealedProductUrl ? (
@@ -168,9 +246,18 @@ interface BuyThisButtonProps {
   countType: CountType;
   price?: string;
   formTarget?: string;
+  includeSubsetsInSets?: boolean;
 }
 
-const BuyThisButton = ({ setId, count, countType, price, userId = null, formTarget = '_blank' }: BuyThisButtonProps) => {
+const BuyThisButton = ({
+  setId,
+  count,
+  countType,
+  price,
+  userId = null,
+  formTarget = '_blank',
+  includeSubsetsInSets = false,
+}: BuyThisButtonProps) => {
   const [tcgplayerMassImportString, setTcgplayerMassImportString] = useState('');
 
   return (
@@ -179,7 +266,7 @@ const BuyThisButton = ({ setId, count, countType, price, userId = null, formTarg
       action="https://store.tcgplayer.com/massentry?partner=CTNBLDR"
       target={formTarget}
       id={`tcgplayer-mass-import-form-${setId}-${count}-${countType}`}
-      onSubmit={(e) => handleBuyThisSubmit(e, setId, count, countType, setTcgplayerMassImportString, userId)}
+      onSubmit={(e) => handleBuyThisSubmit(e, setId, count, countType, setTcgplayerMassImportString, userId, includeSubsetsInSets)}
       style={{ display: 'inline-block', width: countType === 'draftcube' ? '100%' : 'auto' }}
     >
       <input type="hidden" name="partner" value="CTNBLDR" />
@@ -201,7 +288,15 @@ const BuyThisButton = ({ setId, count, countType, price, userId = null, formTarg
   );
 };
 
-const handleBuyThisSubmit = async (e, setId, count, countType, setTcgplayerMassImportString, userId = null) => {
+const handleBuyThisSubmit = async (
+  e,
+  setId,
+  count,
+  countType,
+  setTcgplayerMassImportString,
+  userId = null,
+  includeSubsetsInSets = false
+) => {
   e.preventDefault();
   const options: any = { setId: parseInt(setId, 10) }; // eslint-disable-line @typescript-eslint/no-explicit-any
 
@@ -222,6 +317,8 @@ const handleBuyThisSubmit = async (e, setId, count, countType, setTcgplayerMassI
   if (userId) {
     options.userId = userId;
   }
+
+  options.includeSubsetsInSets = includeSubsetsInSets;
 
   const tcgplayerMassImportString = userId
     ? (await tcgplayerMassImportForUserLegacy(options))?.data?.data?.tcgplayerMassImportForUserLegacy?.tcgplayerMassImport
@@ -253,6 +350,11 @@ export interface Set {
   isDraftable: boolean;
   slug: string;
   costsToPurchase?: SetSummary;
+  isSubsetGroup: boolean;
+  parentSetId: {
+    id: string;
+    name: string;
+  };
 }
 
 interface SetBoxProps {
@@ -262,6 +364,7 @@ interface SetBoxProps {
   isComplete?: boolean;
   userId?: string;
   showCostsToPurchase: boolean;
+  includeSubsetsInSets?: boolean;
 }
 
 export interface SetSummary {

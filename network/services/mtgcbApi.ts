@@ -14,7 +14,9 @@ import {
   allSetNames,
   allSets,
   allSetsMeta,
+  allSubsets,
   cardAutocomplete,
+  cardsFromSubsets,
   collectionByCardIdLegacy,
   collectionSummaryLegacy,
   costToPurchaseAll,
@@ -34,7 +36,17 @@ export const mtgcbApi = createApi({
   tagTypes: ['Sets', 'Cards', 'Collections', 'CollectionSummary'],
   endpoints: (builder) => ({
     getAllSets: builder.query<AxiosResponse<SetResponse>, AllSetsVariables>({
-      query: ({ first, skip, name, sortBy = 'releasedAt', sortByDirection = 'desc', setTypes, setCategories }) => ({
+      query: ({
+        first,
+        skip,
+        name,
+        sortBy = 'releasedAt',
+        sortByDirection = 'desc',
+        includeSubsets = false,
+        includeSubsetGroups = true,
+        setTypes,
+        setCategories,
+      }) => ({
         url: '',
         method: 'POST',
         body: {
@@ -43,20 +55,28 @@ export const mtgcbApi = createApi({
             take: first,
             skip,
             orderBy: determineSortFilter(sortBy, sortByDirection),
-            where: buildBrowseExpansionFilter({ name, setTypes, setCategories }),
+            where: buildBrowseExpansionFilter({ name, setTypes, setCategories, includeSubsets, includeSubsetGroups }),
           },
         },
       }),
     }),
     // TODO: What do I do about meta calls? Can I just get this data from the base call now? Lots of touch points in the code.
     getAllSetsMeta: builder.query<AxiosResponse<SetsMetaResponse>, AllSetsMetaVariables>({
-      query: ({ name, sortBy = 'releasedAt', sortByDirection = 'desc', setTypes, setCategories }) => ({
+      query: ({
+        name,
+        sortBy = 'releasedAt',
+        sortByDirection = 'desc',
+        includeSubsets = false,
+        includeSubsetGroups = true,
+        setTypes,
+        setCategories,
+      }) => ({
         url: '',
         method: 'POST',
         body: {
           query: allSetsMeta,
           variables: {
-            where: buildBrowseExpansionFilter({ name, setTypes, setCategories }),
+            where: buildBrowseExpansionFilter({ name, setTypes, setCategories, includeSubsets, includeSubsetGroups }),
           },
         },
       }),
@@ -74,10 +94,13 @@ export const mtgcbApi = createApi({
         search = '',
         sortBy = 'releasedAt',
         sortByDirection = 'desc',
+        includeSubsets = false,
+        includeSubsetGroups = true,
         additionalSortBy,
         whereSetCompletionStatus,
         setTypes,
         setCategories,
+        includeSubsetsInSets = false,
       }) => ({
         url: '',
         method: 'POST',
@@ -95,7 +118,10 @@ export const mtgcbApi = createApi({
             where: buildBrowseExpansionFilter({
               setTypes,
               setCategories,
+              includeSubsets,
+              includeSubsetGroups,
             }),
+            includeSubsetsInSets,
           },
         },
       }),
@@ -285,7 +311,7 @@ export const mtgcbApi = createApi({
       AxiosResponse<TcgplayerMassImportForUserLegacyResponse>,
       TcgplayerMassImportForUserLegacyVariables
     >({
-      query: ({ setId, userId }) => ({
+      query: ({ setId, userId, includeSubsetsInSets = false }) => ({
         url: '',
         method: 'POST',
         body: {
@@ -293,6 +319,7 @@ export const mtgcbApi = createApi({
           variables: {
             setId: Number(setId),
             userId: Number(userId),
+            includeSubsetsInSets,
           },
         },
       }),
@@ -354,6 +381,32 @@ export const mtgcbApi = createApi({
         },
       }),
     }),
+    getCardsFromSubsets: builder.query<AxiosResponse<GetCardsFromSubsetsResponse>, GetCardsFromSubsetsVariables>({
+      query: ({ parentSetId }) => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: cardsFromSubsets,
+          variables: {
+            where: { setId: { parentSetId: { id: { equals: parentSetId } } } },
+          },
+        },
+        providesTags: ['Cards'],
+      }),
+    }),
+    getAllSubsets: builder.query<AxiosResponse<GetAllSubsetsResponse>, GetAllSubsetsVariables>({
+      query: ({ parentSetId }) => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: allSubsets,
+          variables: {
+            where: { parentSetId: { id: { equals: parentSetId } } },
+          },
+        },
+        providesTags: ['Sets'],
+      }),
+    }),
   }),
 });
 
@@ -375,6 +428,8 @@ export const {
   useGetFilteredCollectionSummaryLegacyQuery,
   useGetFilteredCardsSummaryLegacyQuery,
   usePrefetch,
+  useGetCardsFromSubsetsQuery,
+  useGetAllSubsetsQuery,
 } = mtgcbApi;
 
 // TODO: Code split these types for readability
@@ -394,6 +449,11 @@ interface Set {
   sealedProductUrl: string;
   isDraftable: boolean;
   slug: string;
+  isSubsetGroup: boolean;
+  parentSetId: {
+    id: string;
+    name: string;
+  };
 }
 
 interface SetResponse {
@@ -408,6 +468,8 @@ interface AllSetsVariables {
   sortByDirection: 'asc' | 'desc';
   setTypes: SetType[];
   setCategories: SetCategory[];
+  includeSubsets: boolean;
+  includeSubsetGroups: boolean;
 }
 
 interface SetBySlugVariables {
@@ -424,6 +486,8 @@ interface AllSetsMetaVariables {
   sortByDirection: 'asc' | 'desc';
   setTypes: SetType[];
   setCategories: SetCategory[];
+  includeSubsets: boolean;
+  includeSubsetGroups: boolean;
 }
 
 interface SetName {
@@ -501,6 +565,7 @@ interface TcgplayerMassImportForUserLegacyResponse {
 interface TcgplayerMassImportForUserLegacyVariables {
   userId: string;
   setId: string;
+  includeSubsetsInSets: boolean;
 }
 
 interface SetSummaryLegacyResponse {
@@ -621,6 +686,11 @@ interface CollectionSummaryFiltered {
   releasedAt: string;
   sealedProductUrl: string;
   isDraftable: boolean;
+  isSubsetGroup: boolean;
+  parentSetId: {
+    id: string;
+    name: string;
+  };
 }
 
 interface FilteredCollectionSummaryLegacyResponse {
@@ -655,6 +725,9 @@ interface FilteredCollectionSummaryLegacyVariables {
   whereSetCompletionStatus?: SetCompletionStatus[];
   setTypes: SetType[];
   setCategories: SetCategory[];
+  includeSubsets: boolean;
+  includeSubsetGroups: boolean;
+  includeSubsetsInSets: boolean;
 }
 
 interface FilteredCardsSummaryLegacyVariables {
@@ -710,4 +783,19 @@ interface FilteredCardsSummaryLegacyResponse {
     }[];
     count: number;
   };
+}
+interface GetCardsFromSubsetsResponse {
+  cards: Card[];
+}
+
+interface GetCardsFromSubsetsVariables {
+  parentSetId: string;
+}
+
+interface GetAllSubsetsResponse {
+  sets: Set[];
+}
+
+interface GetAllSubsetsVariables {
+  parentSetId: string;
 }

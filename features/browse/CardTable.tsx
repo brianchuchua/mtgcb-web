@@ -43,6 +43,7 @@ interface CardTableProps {
   isShowingSingleSet?: boolean;
   isFetching: boolean;
   isLoading: boolean;
+  goToOptions?: { label: string; value: string }[];
 }
 
 const CardTable: React.FC<CardTableProps> = ({
@@ -60,6 +61,7 @@ const CardTable: React.FC<CardTableProps> = ({
   isFetching,
   isLoading,
   isShowingSingleSet = false,
+  goToOptions = [],
 }) => {
   const atLeastOneCardToShow = totalResults > 0;
 
@@ -387,6 +389,7 @@ const CardTable: React.FC<CardTableProps> = ({
         settingGroups={settingGroups}
         galleryType="cards"
         isFetching={isFetching}
+        goToOptions={goToOptions}
       />
       <StyledTableContainer>
         <Table {...getTableProps()} size="small">

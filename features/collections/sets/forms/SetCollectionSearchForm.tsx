@@ -55,7 +55,7 @@ const SetCollectionSearchForm: React.FC = () => {
   return (
     <>
       {isFormVisible && viewSubject === 'cards' && (
-        <>
+        <form>
           <ViewModeSelector
             showSubjectChangeSection={false}
             reduxSlice={reduxSlice}
@@ -108,11 +108,11 @@ const SetCollectionSearchForm: React.FC = () => {
             setCardSortDirection={setCardSortDirection}
           />
           <ButtonWrapper>
-            <Button size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
+            <Button type="reset" size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
               Reset Search
             </Button>
           </ButtonWrapper>
-        </>
+        </form>
       )}
     </>
   );

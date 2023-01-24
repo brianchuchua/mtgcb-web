@@ -1,24 +1,21 @@
-import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { Skeleton } from '@material-ui/lab';
 import { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Element } from 'react-scroll';
 import styled from 'styled-components';
-import { ResponsiveContainer } from '../../components/layout/ResponsiveContainer';
-import { useGetAllCardsMetaQuery, useGetAllCardsQuery, useGetAllSubsetsQuery, useGetSetBySlugQuery } from '../../network/services/mtgcbApi';
+import { useGetAllCardsMetaQuery, useGetAllCardsQuery, useGetSetBySlugQuery } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
 import CardGallery from '../browse/CardGallery';
 import CardTable from '../browse/CardTable';
 import titleCase from '../browse/util/titleCase';
 import { setFormVisibility } from './setSlice';
-import { Subset } from './Subset';
 
-interface SetProps {
+interface SubsetProps {
   setSlug: string;
 }
 
-export const Set: React.FC<SetProps> = ({ setSlug }) => {
+export const Subset: React.FC<SubsetProps> = ({ setSlug }) => {
   const {
     searchQuery,
     oracleTextQuery,
@@ -104,33 +101,6 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
   const cards = cardData?.data?.cards;
   const totalResults = cardMetaData?.data?.count;
 
-  const { data: subsetData, isLoading: isSubsetLoading, isFetching: isSubsetFetching, error: subsetError } = useGetAllSubsetsQuery(
-    {
-      parentSetId: setData?.data?.sets?.[0]?.id,
-    },
-    {
-      skip: !setData?.data?.sets?.[0]?.id,
-    }
-  );
-
-  const subsets = subsetData?.data?.sets;
-  let goToOptions = [];
-  if (subsets?.length > 0) {
-    goToOptions = [
-      {
-        label: set.name,
-        value: set.slug,
-      },
-    ];
-
-    goToOptions = goToOptions.concat(
-      subsets.map((subset) => ({
-        label: subset.name,
-        value: subset.slug,
-      }))
-    );
-  }
-
   const isLoading = isSetLoading || isCardDataLoading || isCardMetaDataLoading;
   const isFetching = isSetFetching || isCardDataFetching || isCardMetaDataFetching;
 
@@ -150,15 +120,8 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
   // TODO: Add buy links here and come up with a good interface, similar to how Scryfall does card pages perhaps
   // TODO: Add charts/analysis/something cool here
 
-  let setLabel = 'Set';
-  if (set?.isSubsetGroup) {
-    setLabel = 'Subset Group';
-  } else if (set?.parentSetId != null) {
-    setLabel = 'Subset';
-  }
-
   return (
-    <ResponsiveContainer maxWidth="xl" id="set-container">
+    <>
       <div>
         {set && (
           <div>
@@ -183,7 +146,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
                     {set.cardCount ? `${set.cardCount} cards` : ''}
                   </Typography>
                   <Typography variant="body2" color="textSecondary" component="div">
-                    {set.category} {setLabel}
+                    {set.category} Set
                     {set.setType ? ` - ${titleCase(set.setType)}` : ''}
                   </Typography>
                 </div>
@@ -192,7 +155,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
             {!isLoading && (
               <div style={{ textAlign: 'center' }}>
                 <Element name={`anchor-link-${set?.slug}`} />
-                <Typography variant="h4" component="div" id={`anchor-link-${set?.slug}`}>
+                <Typography variant="h5" component="div" id={`anchor-link-${set?.slug}`}>
                   {set?.name}
                 </Typography>
                 <i
@@ -210,7 +173,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
                   {set.cardCount ? `${set.cardCount} cards` : ''}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="div">
-                  {set.category} {setLabel}
+                  {set.category} Set
                   {set.setType ? ` - ${titleCase(set.setType)}` : ''}
                 </Typography>
               </div>
@@ -228,18 +191,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
                 priceType={priceType}
                 isLoading={isLoading}
                 isFetching={isFetching}
-                goToOptions={goToOptions}
               />
-            )}
-            {viewSubject === 'cards' && viewMode === 'grid' && subsets?.length > 0 && (
-              <>
-                {subsets.map((subset) => (
-                  <div key={`subset-grid-${subset.id}`}>
-                    <Divider style={{ marginTop: '15px', marginBottom: '15px' }} />
-                    <Subset key={subset.id} setSlug={subset.slug} />
-                  </div>
-                ))}
-              </>
             )}
             {viewSubject === 'cards' && viewMode === 'table' && (
               <MemoizedCardTable
@@ -255,24 +207,13 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
                 isShowingSingleSet
                 isFetching={isFetching}
                 isLoading={isLoading}
-                goToOptions={goToOptions}
               />
-            )}
-            {viewSubject === 'cards' && viewMode === 'table' && subsets?.length > 0 && (
-              <>
-                {subsets.map((subset) => (
-                  <div key={`subset-table-${subset.id}`}>
-                    <Divider style={{ marginTop: '15px', marginBottom: '15px' }} />
-                    <Subset key={subset.id} setSlug={subset.slug} />
-                  </div>
-                ))}
-              </>
             )}
           </div>
         )}
         {((setData?.data?.sets && setData?.data?.sets.length === 0) || setError) && <p>No set found</p>}
       </div>
-    </ResponsiveContainer>
+    </>
   );
 };
 

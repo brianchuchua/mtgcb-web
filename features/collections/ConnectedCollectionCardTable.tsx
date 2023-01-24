@@ -14,6 +14,7 @@ interface ConnectedConnectionCardTableProps {
   setSkip: (skip: number) => void;
   setFirst: (first: number) => void;
   setPage: (page: number) => void;
+  goToOptions?: { label: string; value: string }[];
 }
 
 export const ConnectedCollectionCardTable: React.FC<ConnectedConnectionCardTableProps> = ({
@@ -25,6 +26,7 @@ export const ConnectedCollectionCardTable: React.FC<ConnectedConnectionCardTable
   setSkip,
   setFirst,
   setPage,
+  goToOptions,
 }) => {
   const {
     sortBy,
@@ -111,6 +113,7 @@ export const ConnectedCollectionCardTable: React.FC<ConnectedConnectionCardTable
       collectionByCardId={collectionByCardId}
       isFetching={isFetching}
       isLoading={loadingFilteredCardsSummary}
+      goToOptions={goToOptions}
     />
   );
 };

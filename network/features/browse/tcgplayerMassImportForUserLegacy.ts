@@ -8,7 +8,17 @@ interface TcgplayerMassImportForUserLegacyFunction {
 
 // TODO: Migrate me to redux query
 const tcgplayerMassImportForUserLegacy: TcgplayerMassImportForUserLegacyFunction = async (tcgplayerOptions) => {
-  const { setId, userId, allCount, mythicCount, rareCount, uncommonCount, commonCount, draftCubeCount } = tcgplayerOptions;
+  const {
+    setId,
+    userId,
+    allCount,
+    mythicCount,
+    rareCount,
+    uncommonCount,
+    commonCount,
+    draftCubeCount,
+    includeSubsetsInSets,
+  } = tcgplayerOptions;
 
   try {
     const response = await api.post('', {
@@ -22,6 +32,7 @@ const tcgplayerMassImportForUserLegacy: TcgplayerMassImportForUserLegacyFunction
         uncommonCount,
         commonCount,
         draftCubeCount,
+        includeSubsetsInSets,
       },
     });
     return response;

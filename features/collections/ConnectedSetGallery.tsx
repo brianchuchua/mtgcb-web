@@ -31,6 +31,9 @@ export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
     expansionCategories,
     expansionSearchQuery,
     setCompletionStatuses,
+    includeSubsets,
+    includeSubsetGroups,
+    includeSubsetsInSets,
   } = useSelector((state: RootState) => state.collection);
 
   const {
@@ -50,6 +53,9 @@ export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
     whereSetCompletionStatus: setCompletionStatuses ?? ['all'],
     setTypes: expansionTypes,
     setCategories: expansionCategories,
+    includeSubsets,
+    includeSubsetGroups,
+    includeSubsetsInSets,
   });
 
   const expansions = collectionSummary?.data?.filteredCollectionSummaryLegacy?.collectionSummary;
@@ -72,6 +78,9 @@ export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
         whereSetCompletionStatus: setCompletionStatuses ?? ['all'],
         setTypes: expansionTypes,
         setCategories: expansionCategories,
+        includeSubsets,
+        includeSubsetGroups,
+        includeSubsetsInSets,
       });
     }
   }, [
@@ -109,6 +118,7 @@ export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
       userId={userId}
       isLoading={isFilteredCollectionSummaryLoading}
       isFetching={isFilteredCollectionSummaryFetching}
+      includeSubsetsInSets={includeSubsetsInSets}
     />
   );
 };

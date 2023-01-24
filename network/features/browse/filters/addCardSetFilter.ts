@@ -13,6 +13,7 @@ const addCardSetFilter: AddCardSetFilterFunction = (cardSets, where) => {
         setIdConditions.setId.AND.push({ id: { not: cardSetSelection.value } });
       } else {
         setIdConditions.setId.OR.push({ id: { equals: cardSetSelection.value } });
+        setIdConditions.setId.OR.push({ subsetGroupId: { id: { equals: cardSetSelection.value } } });
       }
     }
     if (setIdConditions.setId.OR.length === 0) {

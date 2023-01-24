@@ -44,7 +44,11 @@ const CardBox: React.FC<CardBoxProps> = ({
 
   const computedHeight = Math.ceil((680 / 488) * width);
   return (
-    <CardWrapper key={card.id} fixedHeight={fixedHeight}>
+    <CardWrapper
+      key={card.id}
+      fixedHeight={fixedHeight}
+      style={{ minHeight: imageLoaded ? '' : fixedHeight || `${computedHeight + 68}px` }}
+    >
       <CardAttributes>
         <div ref={componentRef}>
           <LazyLoad key={`lazy-${card.id}`} once resize style={{ width: '100%' }}>

@@ -1,5 +1,5 @@
-const allCards = `query allCards($take: Int = 50, $skip: Int = 0, $orderBy: [CardOrderByInput!] = [{name: asc},{releasedAt: asc}], $where: CardWhereInput = {}) {
-  cards(take: $take, skip: $skip, orderBy: $orderBy, where: $where) {
+const cardsFromSubsets = `query cardsFromSubsets($where: CardWhereInput = {}, $orderBy: [CardOrderByInput!] = [{releasedAt: asc}]) {
+  cards(where: $where, orderBy: $orderBy) {
     id
     name
     set:setId {
@@ -32,4 +32,4 @@ const allCards = `query allCards($take: Int = 50, $skip: Int = 0, $orderBy: [Car
 }
 `;
 
-export default allCards;
+export default cardsFromSubsets;

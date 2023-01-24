@@ -30,6 +30,7 @@ interface CardGalleryProps {
   userId?: string;
   isLoading?: boolean;
   isFetching: boolean;
+  goToOptions?: { label: string; value: string }[];
 }
 
 const CardGallery: React.FC<CardGalleryProps> = ({
@@ -46,6 +47,7 @@ const CardGallery: React.FC<CardGalleryProps> = ({
   userId,
   isLoading,
   isFetching,
+  goToOptions,
 }) => {
   const isSetPage = window?.location?.href?.includes('/sets/');
   const [cardsPerRow, setCardsPerRow] = useLocalStorage('cardsPerRow', 5);
@@ -132,6 +134,7 @@ const CardGallery: React.FC<CardGalleryProps> = ({
           settingGroups={settingGroups}
           isFetching={isFetching}
           galleryType="cards"
+          goToOptions={goToOptions}
         />
 
         <CardGalleryWrapper cardsPerRow={cardsPerRow} galleryWidth={galleryWidth}>
@@ -169,6 +172,7 @@ const CardGallery: React.FC<CardGalleryProps> = ({
             isFetching={isFetching}
             galleryType="cards"
             isOnBottom
+            goToOptions={goToOptions}
           />
         </div>
       </>

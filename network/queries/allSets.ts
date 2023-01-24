@@ -10,6 +10,15 @@ const allSets = `query allSets($take: Int = 50, $skip: Int = 0, $orderBy: [SetOr
     releasedAt
     sealedProductUrl
     isDraftable
+    subsetGroupId {
+      id
+      name
+    }
+    parentSetId {
+      id
+      name
+    }
+    isSubsetGroup
   }
 }
 `;

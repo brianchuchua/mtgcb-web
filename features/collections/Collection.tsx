@@ -32,6 +32,8 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
     sortExpansionByDirection,
     expansionTypes,
     expansionCategories,
+    includeSubsets,
+    includeSubsetGroups,
   } = useSelector((state: RootState) => state.collection);
 
   const [skip, setSkip] = useState(0);
@@ -86,6 +88,8 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
     sortByDirection: sortExpansionByDirection,
     setTypes: expansionTypes,
     setCategories: expansionCategories,
+    includeSubsets,
+    includeSubsetGroups,
   });
   const allSetsMeta = allSetsMetaResponse?.data;
   const totalExpansionsResults = allSetsMeta?.count || 0;

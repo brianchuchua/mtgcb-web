@@ -14,6 +14,7 @@ interface ConnectedConnectionCardGalleryProps {
   setSkip: (skip: number) => void;
   setFirst: (first: number) => void;
   setPage: (page: number) => void;
+  goToOptions?: { label: string; value: string }[];
 }
 
 export const ConnectedCollectionCardGallery: React.FC<ConnectedConnectionCardGalleryProps> = ({
@@ -25,6 +26,7 @@ export const ConnectedCollectionCardGallery: React.FC<ConnectedConnectionCardGal
   setSkip,
   setFirst,
   setPage,
+  goToOptions,
 }) => {
   const {
     sortBy,
@@ -115,6 +117,7 @@ export const ConnectedCollectionCardGallery: React.FC<ConnectedConnectionCardGal
       collectionByCardId={collectionByCardId}
       isLoading={loadingFilteredCardsSummary}
       isFetching={fetchingFilteredCardsSummary}
+      goToOptions={goToOptions}
     />
   );
 };

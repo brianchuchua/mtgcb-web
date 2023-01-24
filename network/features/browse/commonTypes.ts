@@ -43,6 +43,7 @@ export interface TcgplayerMassImportForUserLegacyOptions {
   uncommonCount?: number;
   commonCount?: number;
   draftCubeCount?: number;
+  includeSubsetsInSets: boolean;
 }
 
 export interface CardAutocompleteOptions {

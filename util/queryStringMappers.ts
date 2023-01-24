@@ -28,6 +28,11 @@ interface QueryParams {
   quantityAll: string;
   quantityNormal: string;
   quantityFoil: string;
+  includeSubsetsCollection: string;
+  includeSubsetGroupsCollection: string;
+  includeSubsetsBrowse: string;
+  includeSubsetGroupsBrowse: string;
+  includeSubsetsInSets: string;
 }
 
 let queryFromUrl: QueryParams | Record<string, never> = {};

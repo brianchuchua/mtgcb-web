@@ -1,4 +1,5 @@
+import JumpToSelect from './JumpToSelect';
 import NumberOfItemsSelect from './NumberOfItemsSelect';
 import SearchForm from './SearchForm';
 
-export { NumberOfItemsSelect, SearchForm };
+export { JumpToSelect, NumberOfItemsSelect, SearchForm };

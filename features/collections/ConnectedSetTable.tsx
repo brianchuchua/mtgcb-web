@@ -31,6 +31,9 @@ export const ConnectedSetTable: React.FC<ConnectedSetTableProps> = ({
     expansionCategories,
     expansionSearchQuery,
     setCompletionStatuses,
+    includeSubsets,
+    includeSubsetGroups,
+    includeSubsetsInSets,
   } = useSelector((state: RootState) => state.collection);
 
   const {
@@ -50,6 +53,9 @@ export const ConnectedSetTable: React.FC<ConnectedSetTableProps> = ({
     whereSetCompletionStatus: setCompletionStatuses ?? ['all'],
     setTypes: expansionTypes,
     setCategories: expansionCategories,
+    includeSubsets,
+    includeSubsetGroups,
+    includeSubsetsInSets,
   });
 
   const expansions = collectionSummary?.data?.filteredCollectionSummaryLegacy?.collectionSummary;

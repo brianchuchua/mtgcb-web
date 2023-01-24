@@ -9,7 +9,7 @@ import Pagination from '../../components/Pagination';
 import SettingsPanel, { SettingGroup } from '../../components/SettingsPanel';
 import breakpoints from '../../themes/breakpoints';
 import { useWindowDimensions } from '../../util';
-import { NumberOfItemsSelect } from './forms';
+import { JumpToSelect, NumberOfItemsSelect } from './forms';
 
 type GalleryTypes = 'cards' | 'sets';
 
@@ -31,6 +31,7 @@ interface GalleryControlsProps {
   isLoading?: boolean;
   isFetching: boolean;
   isOnBottom?: boolean;
+  goToOptions?: { label: string; value: string }[];
 }
 
 const GalleryControls: React.FC<GalleryControlsProps> = ({
@@ -51,6 +52,7 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
   isLoading,
   isFetching,
   isOnBottom = false,
+  goToOptions = [],
 }) => {
   const startOfRange = 1 + skip;
   const numberOfCards = items?.length ?? 0;
@@ -99,6 +101,7 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
           setSkip={setSkip}
           isOnBottom={isOnBottom}
           isFetching={isFetching}
+          goToOptions={goToOptions}
         />
         <GalleryPaginationMobile
           settingGroups={settingGroups}
@@ -114,6 +117,7 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
           setSkip={setSkip}
           isOnBottom={isOnBottom}
           isFetching={isFetching}
+          goToOptions={goToOptions}
         />
         {setGalleryWidth && setCardsPerRow && width >= breakpoints.sm && galleryType === 'cards' && !isOnBottom && (
           <Grid container item sm={12} spacing={2} justify="space-between" alignItems="center">
@@ -196,6 +200,7 @@ interface GalleryPaginationDesktopProps {
   setSkip: Dispatch<SetStateAction<number>>;
   isOnBottom?: boolean;
   isFetching: boolean;
+  goToOptions?: { label: string; value: string }[];
 }
 
 const GalleryPaginationDesktop: React.FC<GalleryPaginationDesktopProps> = ({
@@ -212,6 +217,7 @@ const GalleryPaginationDesktop: React.FC<GalleryPaginationDesktopProps> = ({
   setSkip,
   isOnBottom = false,
   isFetching = true,
+  goToOptions = [],
 }) => {
   const [previousStartOfRange, setPreviousStartOfRange] = useState(startOfRange);
   const [previousEndOfRange, setPreviousEndOfRange] = useState(endOfRange);
@@ -255,12 +261,18 @@ const GalleryPaginationDesktop: React.FC<GalleryPaginationDesktopProps> = ({
       </CenteredGrid>
       <RightAlignedGrid container item lg={3} alignItems="center" justify="flex-end">
         <Grid item>
+          {!isOnBottom && <JumpToSelect label="Go to" goToOptions={goToOptions} />}
           <NumberOfItemsSelect first={first} setFirst={setFirst} label={typeLabel} />
         </Grid>
         <Grid item>{settingGroups.length > 0 && <SettingsPanel panelId="cardGallerySettings" settingGroups={settingGroups} />}</Grid>
       </RightAlignedGrid>
       {isOnBottom && (
-        <Typography variant="body2" color="primary" onClick={() => window?.scrollTo(0, 0)} style={{ cursor: 'pointer', display: 'inline' }}>
+        <Typography
+          variant="body2"
+          color="primary"
+          onClick={() => window?.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}
+          style={{ cursor: 'pointer', display: 'inline' }}
+        >
           (Back to Top)
         </Typography>
       )}
@@ -288,6 +300,7 @@ const GalleryPaginationMobile: React.FC<GalleryPaginationDesktopProps> = ({
   setSkip,
   isOnBottom = false,
   isFetching = true,
+  goToOptions = [],
 }) => {
   const [previousStartOfRange, setPreviousStartOfRange] = useState(startOfRange);
   const [previousEndOfRange, setPreviousEndOfRange] = useState(endOfRange);
@@ -335,11 +348,16 @@ const GalleryPaginationMobile: React.FC<GalleryPaginationDesktopProps> = ({
         </Grid>
         <Grid item>{settingGroups.length > 0 && <SettingsPanel panelId="cardGallerySettings" settingGroups={settingGroups} />}</Grid>
       </RightAlignedGrid>
+      <RightAlignedGrid container item sm={12} xs={12} alignItems="center" justify="center">
+        <Grid item style={{ marginTop: '10px', marginBottom: '10px' }}>
+          {!isOnBottom && <JumpToSelect label="Go to" goToOptions={goToOptions} isMobile />}
+        </Grid>
+      </RightAlignedGrid>
       {isOnBottom && (
         <Typography
           variant="body2"
           color="primary"
-          onClick={() => window?.scrollTo(0, 0)}
+          onClick={() => window?.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}
           style={{ cursor: 'pointer', display: 'inline', marginLeft: '5px' }}
         >
           (Back to Top)

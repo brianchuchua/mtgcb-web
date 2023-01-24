@@ -38,6 +38,8 @@ export const Browse: React.FC = () => {
     sortExpansionByDirection,
     expansionTypes,
     expansionCategories,
+    includeSubsets,
+    includeSubsetGroups,
   } = useSelector((state: RootState) => state.browse);
 
   const [skip, setSkip] = useState(0);
@@ -124,6 +126,8 @@ export const Browse: React.FC = () => {
     sortByDirection: sortExpansionByDirection,
     setTypes: expansionTypes,
     setCategories: expansionCategories,
+    includeSubsets,
+    includeSubsetGroups,
   });
   const expansions = allSetsResponse?.data?.sets;
 
@@ -133,7 +137,10 @@ export const Browse: React.FC = () => {
     sortByDirection: sortExpansionByDirection,
     setTypes: expansionTypes,
     setCategories: expansionCategories,
+    includeSubsets,
+    includeSubsetGroups,
   });
+
   const allSetsMeta = allSetsMetaResponse?.data;
   const totalExpansionsResults = allSetsMeta?.count || 0;
 

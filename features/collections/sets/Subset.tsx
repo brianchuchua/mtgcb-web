@@ -1,4 +1,3 @@
-import Divider from '@material-ui/core/Divider';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -6,9 +5,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Element } from 'react-scroll';
 import styled from 'styled-components';
-import { ResponsiveContainer } from '../../../components/layout/ResponsiveContainer';
 import Link from '../../../components/Link';
-import { useGetAllSubsetsQuery, useGetSetBySlugQuery, useGetSetSummaryLegacyQuery } from '../../../network/services/mtgcbApi';
+import { useGetSetBySlugQuery, useGetSetSummaryLegacyQuery } from '../../../network/services/mtgcbApi';
 import { RootState } from '../../../redux/rootReducer';
 import { useLocalStorage } from '../../../util';
 import { SetIcon } from '../../browse/SetBox';
@@ -16,14 +14,13 @@ import { formatter } from '../../browse/util/formatPrice';
 import { ConnectedCollectionCardGallery } from '../ConnectedCollectionCardGallery';
 import { ConnectedCollectionCardTable } from '../ConnectedCollectionCardTable';
 import { setFormVisibility } from './setCollectionSlice';
-import { Subset } from './Subset';
 
-interface SetProps {
+interface SubsetProps {
   setSlug: string;
   userId?: string;
 }
 
-export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
+export const Subset: React.FC<SubsetProps> = ({ setSlug, userId }) => {
   const { viewSubject, viewMode, priceType } = useSelector((state: RootState) => state.setCollection);
 
   const dispatch = useDispatch();
@@ -62,33 +59,6 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   const setSummary = setSummaryData?.data?.setSummaryLegacy;
   const username = setSummary?.username ?? '';
 
-  const { data: subsetData, isLoading: isSubsetLoading, isFetching: isSubsetFetching, error: subsetError } = useGetAllSubsetsQuery(
-    {
-      parentSetId: setData?.data?.sets?.[0]?.id,
-    },
-    {
-      skip: !setData?.data?.sets?.[0]?.id,
-    }
-  );
-
-  const subsets = subsetData?.data?.sets;
-  let goToOptions = [];
-  if (subsets?.length > 0) {
-    goToOptions = [
-      {
-        label: set.name,
-        value: set.slug,
-      },
-    ];
-
-    goToOptions = goToOptions.concat(
-      subsets.map((subset) => ({
-        label: subset.name,
-        value: subset.slug,
-      }))
-    );
-  }
-
   const isLoading = isSetLoading || isSetSummaryLoading;
   const isFetching = isSetFetching || isSetSummaryFetching;
 
@@ -107,7 +77,7 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   // TODO: Add buy links here and come up with a good interface, similar to how Scryfall does card pages perhaps
 
   return (
-    <ResponsiveContainer maxWidth="xl" id="set-container">
+    <>
       <>
         {set && (
           <>
@@ -128,18 +98,7 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
                 setSkip={setSkip}
                 setFirst={setFirst}
                 setPage={setPage}
-                goToOptions={goToOptions}
               />
-            )}
-            {viewSubject === 'cards' && viewMode === 'grid' && subsets?.length > 0 && (
-              <>
-                {subsets.map((subset) => (
-                  <div key={`subset-grid-${subset.id}`}>
-                    <Divider style={{ marginTop: '15px', marginBottom: '15px' }} />
-                    <Subset key={subset.id} setSlug={subset.slug} userId={userId} />
-                  </div>
-                ))}
-              </>
             )}
             {viewSubject === 'cards' && viewMode === 'table' && (
               <ConnectedCollectionCardTable
@@ -151,24 +110,13 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
                 setSkip={setSkip}
                 setFirst={setFirst}
                 setPage={setPage}
-                goToOptions={goToOptions}
               />
-            )}
-            {viewSubject === 'cards' && viewMode === 'table' && subsets?.length > 0 && (
-              <>
-                {subsets.map((subset) => (
-                  <div key={`subset-table-${subset.id}`}>
-                    <Divider style={{ marginTop: '15px', marginBottom: '15px' }} />
-                    <Subset key={subset.id} setSlug={subset.slug} userId={userId} />
-                  </div>
-                ))}
-              </>
             )}
           </>
         )}
         {((setData?.data?.sets && setData?.data?.sets.length === 0) || setSummaryError) && <p>No set found</p>}
       </>
-    </ResponsiveContainer>
+    </>
   );
 };
 
@@ -199,7 +147,7 @@ const SetCollectionDetails: React.FC<SetCollectionDetails> = ({ collectionDetail
     return (
       <CenteredSkeleton variant="rect" width="100%">
         <CollectionDetailsWrapper>
-          <StyledCollectionDetailsTitleDesktop variant="h3">{collectionDetails.setName}</StyledCollectionDetailsTitleDesktop>
+          <StyledCollectionDetailsTitleDesktop variant="h4">{collectionDetails.setName}</StyledCollectionDetailsTitleDesktop>
           <StyledCollectionDetailsTitleMobile variant="h5">{collectionDetails.setName}</StyledCollectionDetailsTitleMobile>
           <CollectionDetailsSubtitle variant="body1" color="textSecondary">
             <em>
@@ -235,7 +183,7 @@ const SetCollectionDetails: React.FC<SetCollectionDetails> = ({ collectionDetail
 
   return (
     <CollectionDetailsWrapper>
-      <StyledCollectionDetailsTitleDesktop variant="h3">{collectionDetails.setName}</StyledCollectionDetailsTitleDesktop>
+      <StyledCollectionDetailsTitleDesktop variant="h4">{collectionDetails.setName}</StyledCollectionDetailsTitleDesktop>
       <StyledCollectionDetailsTitleMobile variant="h5">{collectionDetails.setName}</StyledCollectionDetailsTitleMobile>
       <CollectionDetailsSubtitle variant="body1" color="textSecondary">
         <em>

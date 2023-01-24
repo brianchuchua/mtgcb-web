@@ -25,6 +25,9 @@ import { getValueFromLocalStorage, setValueToLocalStorage } from '../../util/use
 const viewSubjectFromLocalStorage = getValueFromLocalStorage('viewSubject', 'sets');
 const viewModeFromLocalStorage = getValueFromLocalStorage('viewMode', 'grid');
 const priceTypeFromLocalStorage = getValueFromLocalStorage('priceType', 'market');
+const includeSubsetsCollectionFromLocalStorage = getValueFromLocalStorage('includeSubsetsCollection', '0');
+const includeSubsetGroupsCollectionFromLocalStorage = getValueFromLocalStorage('includeSubsetGroupsCollection', '1');
+const includeSubsetsInSetsFromLocalStorage = getValueFromLocalStorage('includeSubsetsInSets', '0');
 
 const initialState: CollectionState = {
   searchQuery: queryFromUrl.card || '',
@@ -61,6 +64,9 @@ const initialState: CollectionState = {
   expansionTypes: convertStringToSetTypes(queryFromUrl.setTypes) || [],
   expansionCategories: convertStringToExpansionCategories(queryFromUrl.setCats) || [],
   setCompletionStatuses: convertStringToSetCompletionStatuses(queryFromUrl.status) || ['all'],
+  includeSubsets: queryFromUrl.includeSubsetsCollection === '1' || includeSubsetsCollectionFromLocalStorage,
+  includeSubsetGroups: queryFromUrl.includeSubsetGroupsCollection === '1' || includeSubsetGroupsCollectionFromLocalStorage,
+  includeSubsetsInSets: queryFromUrl.includeSubsetsInSets === '1' || includeSubsetsInSetsFromLocalStorage,
 };
 
 const emptyState = {
@@ -93,6 +99,9 @@ const emptyState = {
   expansionTypes: [],
   expansionCategories: [],
   setCompletionStatuses: ['all'],
+  includeSubsets: false,
+  includeSubsetGroups: true,
+  includeSubsetsInSets: false,
 };
 
 const collectionSlice = createSlice({
@@ -338,6 +347,24 @@ const collectionSlice = createSlice({
       state.setCompletionStatuses = setCompletionStatuses;
       updateSearchInUrl('status', convertSetCompletionStatusesToString(setCompletionStatuses));
     },
+    setIncludeSubsets(state, action: PayloadAction<boolean>) {
+      const includeSubsets = action.payload;
+      state.includeSubsets = includeSubsets;
+      updateSearchInUrl('includeSubsetsCollection', includeSubsets ? '1' : '0');
+      setValueToLocalStorage('includeSubsetsCollection', includeSubsets);
+    },
+    setIncludeSubsetGroups(state, action: PayloadAction<boolean>) {
+      const includeSubsetGroups = action.payload;
+      state.includeSubsetGroups = includeSubsetGroups;
+      updateSearchInUrl('includeSubsetGroupsCollection', includeSubsetGroups ? '1' : '0');
+      setValueToLocalStorage('includeSubsetGroupsCollection', includeSubsetGroups);
+    },
+    setIncludeSubsetsInSets(state, action: PayloadAction<boolean>) {
+      const includeSubsetsInSets = action.payload;
+      state.includeSubsetsInSets = includeSubsetsInSets;
+      updateSearchInUrl('includeSubsetsInSets', includeSubsetsInSets ? '1' : '0');
+      setValueToLocalStorage('includeSubsetsInSets', includeSubsetsInSets);
+    },
   },
 });
 
@@ -372,6 +399,9 @@ export const {
   setQuantityAll,
   setQuantityNormal,
   setQuantityFoil,
+  setIncludeSubsets,
+  setIncludeSubsetGroups,
+  setIncludeSubsetsInSets,
 } = collectionSlice.actions;
 
 export const searchAttributeOptions = [
@@ -456,6 +486,9 @@ interface CollectionState {
   expansionTypes: SetType[];
   expansionCategories: SetCategory[];
   setCompletionStatuses: SetCompletionStatus[];
+  includeSubsets: boolean;
+  includeSubsetGroups: boolean;
+  includeSubsetsInSets: boolean;
 }
 
 export type SetCompletionStatus = 'all' | 'complete' | 'partial' | 'empty';

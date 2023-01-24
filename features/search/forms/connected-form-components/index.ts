@@ -3,6 +3,9 @@ import ConnectedCardEditingModeSelector from './ConnectedCardEditingModeSelector
 import ConnectedCardNameSearch from './ConnectedCardNameSearch';
 import ConnectedCardStatSearch from './ConnectedCardStatSearch';
 import ConnectedColorSelector from './ConnectedColorSelector';
+import ConnectedIncludeSubsetGroupsToggle from './ConnectedIncludeSubsetGroupsToggle';
+import ConnectedIncludeSubsetsInSetsToggle from './ConnectedIncludeSubsetsInSetsToggle';
+import ConnectedIncludeSubsetsToggle from './ConnectedIncludeSubsetsToggle';
 import ConnectedOracleTextSearch from './ConnectedOracleTextSearch';
 import ConnectedPriceTypeSelector from './ConnectedPriceTypeSelector';
 import ConnectedQuantitySelector from './ConnectedQuantitySelector';
@@ -38,4 +41,7 @@ export {
   ConnectedPriceTypeSelector as PriceTypeSelector,
   ConnectedSetCompletionStatusSelector as SetCompletionStatusSelector,
   ConnectedQuantitySelector as QuantitySelector,
+  ConnectedIncludeSubsetsToggle as IncludeSubsetsToggle,
+  ConnectedIncludeSubsetGroupsToggle as IncludeSubsetGroupsToggle,
+  ConnectedIncludeSubsetsInSetsToggle as IncludeSubsetsInSetsToggle,
 };
