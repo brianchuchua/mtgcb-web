@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2023-01-26 (v0.52.1)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Fixed a bug with set card counts in set table views.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2023-01-23 (v0.52.0)
     </Typography>
     <Typography paragraph>
