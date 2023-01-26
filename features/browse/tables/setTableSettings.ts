@@ -39,7 +39,7 @@ export const collectionSettingGroups = (allColumns, priceType) => [
         getToggleHiddenProps: allColumns[6].getToggleHiddenProps,
       },
       {
-        key: 'cardCount',
+        key: 'cardsInSet',
         label: 'Cards In Set',
         getToggleHiddenProps: allColumns[7].getToggleHiddenProps,
       },

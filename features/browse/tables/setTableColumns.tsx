@@ -32,7 +32,7 @@ export const collectionTableColumns = (priceType, userId) => [
     Header: 'Progress',
     Cell: ({ cell: { value, row } }) => {
       const uniqueCardsCollected = row?.values?.['costsToPurchaseInSet.uniquePrintingsCollectedInSet'];
-      const totalCards = row?.values?.cardCount;
+      const totalCards = row?.values?.cardsInSet;
       return (
         // TODO: Make this color orange once the set is complete
         <div style={{ position: 'relative' }}>
@@ -70,7 +70,7 @@ export const collectionTableColumns = (priceType, userId) => [
     Header: 'Total Cards Collected',
   },
   {
-    accessor: 'cardCount',
+    accessor: 'cardsInSet',
     Header: 'Cards In Set',
   },
   {
