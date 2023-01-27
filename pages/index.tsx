@@ -5,7 +5,7 @@ import Link from '../components/Link';
 const HomePage: React.FC = () => (
   <ResponsiveContainer maxWidth="xl">
     <Typography variant="h3" component="h1" align="center">
-      MTG CB Limited Edition Beta - Build v0.53.0 👷‍♂️
+      MTG CB Limited Edition Beta - Build v0.53.1 👷‍♂️
     </Typography>
     <Typography paragraph align="center">
       <em>Last updated: 2023-01-26</em>

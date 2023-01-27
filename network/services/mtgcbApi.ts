@@ -55,7 +55,13 @@ export const mtgcbApi = createApi({
             take: first,
             skip,
             orderBy: determineSortFilter(sortBy, sortByDirection),
-            where: buildBrowseExpansionFilter({ name, setTypes, setCategories, includeSubsets, includeSubsetGroups }),
+            where: buildBrowseExpansionFilter({
+              name,
+              setTypes,
+              setCategories,
+              includeSubsets: convertToBoolean(includeSubsets),
+              includeSubsetGroups: convertToBoolean(includeSubsetGroups),
+            }),
           },
         },
       }),
@@ -76,7 +82,13 @@ export const mtgcbApi = createApi({
         body: {
           query: allSetsMeta,
           variables: {
-            where: buildBrowseExpansionFilter({ name, setTypes, setCategories, includeSubsets, includeSubsetGroups }),
+            where: buildBrowseExpansionFilter({
+              name,
+              setTypes,
+              setCategories,
+              includeSubsets: convertToBoolean(includeSubsets),
+              includeSubsetGroups: convertToBoolean(includeSubsetGroups),
+            }),
           },
         },
       }),
@@ -118,10 +130,10 @@ export const mtgcbApi = createApi({
             where: buildBrowseExpansionFilter({
               setTypes,
               setCategories,
-              includeSubsets,
-              includeSubsetGroups,
+              includeSubsets: convertToBoolean(includeSubsets),
+              includeSubsetGroups: convertToBoolean(includeSubsetGroups),
             }),
-            includeSubsetsInSets,
+            includeSubsetsInSets: convertToBoolean(includeSubsetsInSets),
           },
         },
       }),
@@ -319,7 +331,7 @@ export const mtgcbApi = createApi({
           variables: {
             setId: Number(setId),
             userId: Number(userId),
-            includeSubsetsInSets,
+            includeSubsetsInSets: convertToBoolean(includeSubsetsInSets),
           },
         },
       }),
@@ -799,3 +811,10 @@ interface GetAllSubsetsResponse {
 interface GetAllSubsetsVariables {
   parentSetId: string;
 }
+
+const convertToBoolean = (value: string | boolean) => {
+  if (value === '1' || value === '0') {
+    return value === '1';
+  }
+  return value as boolean;
+};
