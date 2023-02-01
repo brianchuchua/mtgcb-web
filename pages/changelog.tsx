@@ -7,14 +7,6 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
-      2023-01-31 (v0.53.2)
-    </Typography>
-    <Typography paragraph>
-      <ul>
-        <li>Fixed a bug where cards would be ignored if they were missing some metadata.</li>
-      </ul>
-    </Typography>
-    <Typography variant="h5" component="h2">
       2023-01-26 (v0.53.1)
     </Typography>
     <Typography paragraph>

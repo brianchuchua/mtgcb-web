@@ -79,16 +79,15 @@ const buildBrowseFilter: BuildBrowseFilterFunction = ({
     'foil',
   ];
 
-  // TODO: Replace this will `NULLS LAST` or `NULLS FIRST` at the PostgreSQL layer since Keystone and possibly Prisma don't support it yet.
-  // if (orderBy) {
-  //   if (orderByOptionsThatMayBeNull.includes(orderBy)) {
-  //     where.AND.push({
-  //       [orderBy]: {
-  //         not: null,
-  //       },
-  //     });
-  //   }
-  // }
+  if (orderBy) {
+    if (orderByOptionsThatMayBeNull.includes(orderBy)) {
+      where.AND.push({
+        [orderBy]: {
+          not: null,
+        },
+      });
+    }
+  }
 
   return where;
 };
