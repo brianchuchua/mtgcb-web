@@ -115,7 +115,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
 
   const subsets = subsetData?.data?.sets;
   let goToOptions = [];
-  if (subsets?.length > 0) {
+  if (subsets?.length > 0 && !set?.isSubsetGroup) {
     goToOptions = [
       {
         label: set.name,
@@ -231,7 +231,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
                 goToOptions={goToOptions}
               />
             )}
-            {viewSubject === 'cards' && viewMode === 'grid' && subsets?.length > 0 && (
+            {viewSubject === 'cards' && viewMode === 'grid' && subsets?.length > 0 && !set?.isSubsetGroup && (
               <>
                 {subsets.map((subset) => (
                   <div key={`subset-grid-${subset.id}`}>
@@ -258,7 +258,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
                 goToOptions={goToOptions}
               />
             )}
-            {viewSubject === 'cards' && viewMode === 'table' && subsets?.length > 0 && (
+            {viewSubject === 'cards' && viewMode === 'table' && subsets?.length > 0 && !set?.isSubsetGroup && (
               <>
                 {subsets.map((subset) => (
                   <div key={`subset-table-${subset.id}`}>

@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2023-02-01 (v0.53.2)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Ensured that subset groups render the proper number of cards if a subset is a child of it.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2023-01-26 (v0.53.1)
     </Typography>
     <Typography paragraph>

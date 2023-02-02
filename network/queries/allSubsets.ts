@@ -4,6 +4,7 @@ const allSubsets = `query allSubsets($where: SetWhereInput = {}, $orderBy: [SetO
     name
     releasedAt
     slug
+    isSubsetGroup
   }
 }
 `;
