@@ -7,6 +7,22 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2023-02-01 (v0.53.2)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Ensured that subset groups render the proper number of cards if a subset is a child of it.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
+      2023-01-26 (v0.53.1)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Fixed a rare bug where server calls would sometimes fail due to bad subset values.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2023-01-26 (v0.53.0)
     </Typography>
     <Typography paragraph>

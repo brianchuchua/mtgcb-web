@@ -32,7 +32,7 @@ const tcgplayerMassImportForUserLegacy: TcgplayerMassImportForUserLegacyFunction
         uncommonCount,
         commonCount,
         draftCubeCount,
-        includeSubsetsInSets,
+        includeSubsetsInSets: convertToBoolean(includeSubsetsInSets),
       },
     });
     return response;
@@ -42,3 +42,10 @@ const tcgplayerMassImportForUserLegacy: TcgplayerMassImportForUserLegacyFunction
 };
 
 export default tcgplayerMassImportForUserLegacy;
+
+const convertToBoolean = (value: string | boolean) => {
+  if (value === '1' || value === '0') {
+    return value === '1';
+  }
+  return value as boolean;
+};
