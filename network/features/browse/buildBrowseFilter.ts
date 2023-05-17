@@ -79,15 +79,16 @@ const buildBrowseFilter: BuildBrowseFilterFunction = ({
     'foil',
   ];
 
-  if (orderBy) {
-    if (orderByOptionsThatMayBeNull.includes(orderBy)) {
-      where.AND.push({
-        [orderBy]: {
-          not: null,
-        },
-      });
-    }
-  }
+  // HACK: This hack was pretty terrible to get around the lack of nulls first/last in prisma
+  // if (orderBy) {
+  //   if (orderByOptionsThatMayBeNull.includes(orderBy)) {
+  //     where.AND.push({
+  //       [orderBy]: {
+  //         not: null,
+  //       },
+  //     });
+  //   }
+  // }
 
   return where;
 };
