@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2023-05-17 (v0.53.3)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Fixed a bug that excluded cards from search results when they were being sorted by properties they lacked.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2023-02-01 (v0.53.2)
     </Typography>
     <Typography paragraph>
