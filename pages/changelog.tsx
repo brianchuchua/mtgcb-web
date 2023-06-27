@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2023-06-26 (v0.54.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Added 12 and 24 as options for number of cards per page.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2023-05-17 (v0.53.3)
     </Typography>
     <Typography paragraph>
