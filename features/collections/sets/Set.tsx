@@ -63,12 +63,14 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   const setSummary = setSummaryData?.data?.setSummaryLegacy;
   const username = setSummary?.username ?? '';
 
-  const [confettiTriggered, setConfettiTriggered] = useState(false);
+  const [confettiTriggered, setConfettiTriggered] = useState(true);
   const [prevPercentageCollected, setPrevPercentageCollected] = useState(setSummary?.percentageCollected ?? 0);
 
   useEffect(() => {
     if (setSummary?.percentageCollected === 100 && prevPercentageCollected !== 100) {
       setConfettiTriggered(true);
+    } else {
+      setConfettiTriggered(false);
     }
     setPrevPercentageCollected(setSummary?.percentageCollected ?? 0);
   }, [setSummary?.percentageCollected]);
@@ -120,7 +122,7 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   return (
     <ResponsiveContainer maxWidth="xl" id="set-container">
       <>
-        {confettiTriggered && <Confetti gravity={0.02} recycle={false} />}
+        {confettiTriggered && <Confetti gravity={0.02} recycle run={confettiTriggered} numberOfPieces={400} />}
         {set && (
           <>
             <Element name={`anchor-link-${set?.slug}`} />
