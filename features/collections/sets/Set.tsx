@@ -64,10 +64,10 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   const username = setSummary?.username ?? '';
 
   const [confettiTriggered, setConfettiTriggered] = useState(true);
-  const [prevPercentageCollected, setPrevPercentageCollected] = useState(setSummary?.percentageCollected ?? 0);
+  const [prevPercentageCollected, setPrevPercentageCollected] = useState(setSummary?.percentageCollected ?? undefined);
 
   useEffect(() => {
-    if (setSummary?.percentageCollected === 100 && prevPercentageCollected !== 100) {
+    if (setSummary?.percentageCollected === 100 && prevPercentageCollected !== 100 && prevPercentageCollected !== undefined) {
       setConfettiTriggered(true);
     } else {
       setConfettiTriggered(false);
