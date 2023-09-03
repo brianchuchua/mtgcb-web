@@ -127,7 +127,7 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   return (
     <ResponsiveContainer maxWidth="xl" id="set-container">
       <>
-        {confettiTriggered && <Confetti gravity={0.02} recycle run={confettiTriggered} numberOfPieces={400} />}
+        {confettiTriggered && <Confetti gravity={0.02} recycle={!confettiTriggered} run={confettiTriggered} numberOfPieces={400} />}
         {set && (
           <>
             <Element name={`anchor-link-${set?.slug}`} />
