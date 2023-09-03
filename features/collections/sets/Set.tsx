@@ -63,16 +63,21 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   const setSummary = setSummaryData?.data?.setSummaryLegacy;
   const username = setSummary?.username ?? '';
 
+  const [setSummaryCount, setSetSummaryCount] = useState(0);
+  useEffect(() => {
+    if (isSetSummaryFetching) {
+      setSetSummaryCount(setSummaryCount + 1);
+    }
+  }, [isSetSummaryFetching]);
+
   const [confettiTriggered, setConfettiTriggered] = useState(true);
-  const [prevPercentageCollected, setPrevPercentageCollected] = useState(setSummary?.percentageCollected ?? undefined);
 
   useEffect(() => {
-    if (setSummary?.percentageCollected === 100 && prevPercentageCollected !== 100 && prevPercentageCollected !== undefined) {
+    if (setSummary?.percentageCollected === 100 && setSummaryCount > 1) {
       setConfettiTriggered(true);
     } else {
       setConfettiTriggered(false);
     }
-    setPrevPercentageCollected(setSummary?.percentageCollected ?? 0);
   }, [setSummary?.percentageCollected]);
 
   const { data: subsetData, isLoading: isSubsetLoading, isFetching: isSubsetFetching, error: subsetError } = useGetAllSubsetsQuery(
