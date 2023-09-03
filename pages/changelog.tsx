@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2023-09-02 (v0.55.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Aside from lots of database work, added confetti when hitting 100% completion in a set.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2023-06-26 (v0.54.0)
     </Typography>
     <Typography paragraph>
