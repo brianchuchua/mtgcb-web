@@ -70,7 +70,7 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
     }
   }, [isSetSummaryFetching]);
 
-  const [confettiTriggered, setConfettiTriggered] = useState(true);
+  const [confettiTriggered, setConfettiTriggered] = useState(false);
 
   useEffect(() => {
     if (setSummary?.percentageCollected === 100 && setSummaryCount > 1) {
@@ -127,7 +127,15 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   return (
     <ResponsiveContainer maxWidth="xl" id="set-container">
       <>
-        {confettiTriggered && <Confetti gravity={0.02} recycle={!confettiTriggered} run={confettiTriggered} numberOfPieces={400} />}
+        {confettiTriggered && (
+          <Confetti
+            style={{ position: 'fixed', height: '100vh', width: '100vw' }}
+            gravity={0.02}
+            recycle={!confettiTriggered}
+            run={confettiTriggered}
+            numberOfPieces={400}
+          />
+        )}
         {set && (
           <>
             <Element name={`anchor-link-${set?.slug}`} />
