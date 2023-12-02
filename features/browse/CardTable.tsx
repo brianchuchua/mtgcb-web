@@ -439,11 +439,7 @@ const CardTable: React.FC<CardTableProps> = ({
                           }
                         >
                           <div>
-                            <Link
-                              href={generateCardUrl(row.values.tcgplayerId, row.values.name, row.values)}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
+                            <Link href={generateCardUrl(row.values.tcgplayerId, row.values.name)} target="_blank" rel="noreferrer">
                               {cell.render('Cell')}
                             </Link>
                           </div>
@@ -493,10 +489,14 @@ const TooltipWrapper = styled.div({
   minWidth: '270px',
 });
 
-const generateCardUrl = (cardId: string | number, cardName: string, card: any) =>
-  cardId
-    ? `https://shop.tcgplayer.com/magic/product/productsearch?id=${cardId}&utm_campaign=affiliate&utm_medium=CTNBLDR&utm_source=CTNBLDR`
-    : `https://www.tcgplayer.com/search/magic/product?productLineName=magic&q=${cardName}&utm_campaign=affiliate&utm_medium=CTNBLDR&utm_source=CTNBLDR`;
+const generateCardUrl = (cardId: string | number, cardName) => {
+  const targetUrl = cardId
+    ? `https://shop.tcgplayer.com/magic/product/productsearch?id=${cardId}`
+    : `https://www.tcgplayer.com/search/magic/product?productLineName=magic&q=${cardName}`;
+  const affiliateLink = `https://tcgplayer.pxf.io/c/4944197/1830156/21018?u=${encodeURIComponent(targetUrl)}`;
+  return affiliateLink;
+};
+
 export default CardTable;
 
 const fadeIn = keyframes`

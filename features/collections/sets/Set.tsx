@@ -3,6 +3,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useEffect, useState } from 'react';
+import Confetti from 'react-confetti';
 import { useDispatch, useSelector } from 'react-redux';
 import { Element } from 'react-scroll';
 import styled from 'styled-components';
@@ -62,6 +63,23 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   const setSummary = setSummaryData?.data?.setSummaryLegacy;
   const username = setSummary?.username ?? '';
 
+  const [setSummaryCount, setSetSummaryCount] = useState(0);
+  useEffect(() => {
+    if (isSetSummaryFetching) {
+      setSetSummaryCount(setSummaryCount + 1);
+    }
+  }, [isSetSummaryFetching]);
+
+  const [confettiTriggered, setConfettiTriggered] = useState(false);
+
+  useEffect(() => {
+    if (setSummary?.percentageCollected === 100 && setSummaryCount > 1) {
+      setConfettiTriggered(true);
+    } else {
+      setConfettiTriggered(false);
+    }
+  }, [setSummary?.percentageCollected]);
+
   const { data: subsetData, isLoading: isSubsetLoading, isFetching: isSubsetFetching, error: subsetError } = useGetAllSubsetsQuery(
     {
       parentSetId: setData?.data?.sets?.[0]?.id,
@@ -109,6 +127,15 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
   return (
     <ResponsiveContainer maxWidth="xl" id="set-container">
       <>
+        {confettiTriggered && (
+          <Confetti
+            style={{ position: 'fixed', height: '100vh', width: '100vw' }}
+            gravity={0.02}
+            recycle={!confettiTriggered}
+            run={confettiTriggered}
+            numberOfPieces={400}
+          />
+        )}
         {set && (
           <>
             <Element name={`anchor-link-${set?.slug}`} />
