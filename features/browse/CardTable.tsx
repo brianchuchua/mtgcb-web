@@ -439,11 +439,7 @@ const CardTable: React.FC<CardTableProps> = ({
                           }
                         >
                           <div>
-                            <Link
-                              href={generateCardUrl(row.values.tcgplayerId, row.values.name, row.values)}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
+                            <Link href={generateCardUrl(row.values.tcgplayerId, row.values.name)} target="_blank" rel="noreferrer">
                               {cell.render('Cell')}
                             </Link>
                           </div>
