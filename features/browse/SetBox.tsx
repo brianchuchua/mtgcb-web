@@ -35,6 +35,10 @@ const SetBox: React.FC<SetBoxProps> = ({
     setLabel = 'Subset';
   }
 
+  const setSealedUrl = set.sealedProductUrl
+    ? `https://tcgplayer.pxf.io/c/4944197/1830156/21018?u=${encodeURIComponent(`${set.sealedProductUrl}&ProductTypeName=Sealed`)}`
+    : null;
+
   return (
     <SetBoxWrapper variant="outlined">
       <SetName>
@@ -207,7 +211,7 @@ const SetBox: React.FC<SetBoxProps> = ({
                       style={{ textTransform: 'capitalize', marginTop: '3px' }}
                       variant="outlined"
                       size="small"
-                      href={`${set.sealedProductUrl}&partner=CTNBLDR&utm_campaign=affiliate&utm_medium=CTNBLDR&utm_source=CTNBLDR&ProductTypeName=Sealed`}
+                      href={setSealedUrl}
                       target="_blank"
                       fullWidth
                     >

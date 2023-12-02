@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2023-12-01 (v0.56.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Updated to TCGPlayer's new linking structure.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2023-09-02 (v0.55.0)
     </Typography>
     <Typography paragraph>
