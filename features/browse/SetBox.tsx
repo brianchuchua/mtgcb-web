@@ -275,6 +275,7 @@ const BuyThisButton = ({
     >
       <input type="hidden" name="partner" value="CTNBLDR" />
       <input type="hidden" name="c" value={tcgplayerMassImportString} />
+      <input type="hidden" name="affiliateurl" value="https://tcgplayer.pxf.io/c/4944197/1830156/21018" />
       <Button
         style={{
           textTransform: 'capitalize',
