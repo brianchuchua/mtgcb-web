@@ -44,6 +44,10 @@ interface CardTableProps {
   isFetching: boolean;
   isLoading: boolean;
   goToOptions?: { label: string; value: string }[];
+  subsetOptions?: { label: string; value: string }[];
+  showSubsetFilter?: boolean;
+  reduxSlice?: string;
+  setSubsets?: Dispatch<SetStateAction<string[]>>;
 }
 
 const CardTable: React.FC<CardTableProps> = ({
@@ -62,6 +66,10 @@ const CardTable: React.FC<CardTableProps> = ({
   isLoading,
   isShowingSingleSet = false,
   goToOptions = [],
+  subsetOptions,
+  showSubsetFilter = false,
+  reduxSlice,
+  setSubsets,
 }) => {
   const atLeastOneCardToShow = totalResults > 0;
 
@@ -368,6 +376,10 @@ const CardTable: React.FC<CardTableProps> = ({
           galleryType="cards"
           isFetching={isFetching}
           isLoading={isLoading}
+          subsetOptions={subsetOptions}
+          showSubsetFilter={showSubsetFilter}
+          setSubsets={setSubsets}
+          reduxSlice={reduxSlice}
         />
         <FadeIn style={{ marginTop: '100px' }}>
           <Wubrg />
@@ -390,6 +402,10 @@ const CardTable: React.FC<CardTableProps> = ({
         galleryType="cards"
         isFetching={isFetching}
         goToOptions={goToOptions}
+        subsetOptions={subsetOptions}
+        showSubsetFilter={showSubsetFilter}
+        setSubsets={setSubsets}
+        reduxSlice={reduxSlice}
       />
       <StyledTableContainer>
         <Table {...getTableProps()} size="small">
@@ -469,6 +485,10 @@ const CardTable: React.FC<CardTableProps> = ({
           galleryType="cards"
           isOnBottom
           isFetching={isFetching}
+          subsetOptions={subsetOptions}
+          showSubsetFilter={showSubsetFilter}
+          setSubsets={setSubsets}
+          reduxSlice={reduxSlice}
         />
       </div>
     </>

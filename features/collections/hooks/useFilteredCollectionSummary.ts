@@ -1,28 +1,9 @@
-import React, { memo, useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useGetFilteredCollectionSummaryLegacyQuery, usePrefetch } from '../../network/services/mtgcbApi';
-import { RootState } from '../../redux/rootReducer';
-import SetGallery from '../browse/SetGallery';
+import { useGetFilteredCollectionSummaryLegacyQuery, usePrefetch } from '../../../network/services/mtgcbApi';
+import { RootState } from '../../../redux/rootReducer';
 
-interface ConnectedSetGalleryProps {
-  userId: string;
-  expansionsFirst: number;
-  expansionsSkip: number;
-  expansionsPage: number;
-  setExpansionsSkip: (skip: number) => void;
-  setExpansionsFirst: (first: number) => void;
-  setExpansionsPage: (page: number) => void;
-}
-
-export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
-  userId,
-  expansionsFirst,
-  expansionsSkip,
-  expansionsPage,
-  setExpansionsSkip,
-  setExpansionsFirst,
-  setExpansionsPage,
-}) => {
+export const useFilteredCollectionSummary = (userId: string, reduxSlice: string, expansionsFirst: number, expansionsSkip: number) => {
   const {
     sortExpansionBy,
     sortExpansionByDirection,
@@ -34,7 +15,7 @@ export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
     includeSubsets,
     includeSubsetGroups,
     includeSubsetsInSets,
-  } = useSelector((state: RootState) => state.collection);
+  } = useSelector((state: RootState) => state[reduxSlice]);
 
   const {
     data: collectionSummary,
@@ -103,24 +84,12 @@ export const ConnectedSetGallery: React.FC<ConnectedSetGalleryProps> = ({
     }
   }, [expansionsSkip, expansionsFirst, totalExpansionsResults, prefetchNext]);
 
-  return (
-    <MemoizedSetGallery
-      sets={expansions}
-      costsToPurchase={costsToPurchase}
-      totalResults={totalExpansionsResults}
-      first={expansionsFirst}
-      skip={expansionsSkip}
-      page={expansionsPage}
-      setSkip={setExpansionsSkip}
-      setFirst={setExpansionsFirst}
-      setPage={setExpansionsPage}
-      priceType={priceType}
-      userId={userId}
-      isLoading={isFilteredCollectionSummaryLoading}
-      isFetching={isFilteredCollectionSummaryFetching}
-      includeSubsetsInSets={includeSubsetsInSets}
-    />
-  );
+  return {
+    expansions,
+    costsToPurchase,
+    totalExpansionsResults,
+    isFilteredCollectionSummaryLoading,
+    isFilteredCollectionSummaryFetching,
+    prefetchNext,
+  };
 };
-
-const MemoizedSetGallery = memo(SetGallery);

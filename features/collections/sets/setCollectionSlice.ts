@@ -22,6 +22,7 @@ const initialState: SetState = {
   oracleTextQuery: queryFromUrl.oracle || '',
   artistQuery: queryFromUrl.artist || '',
   cardTypes: convertStringToCardTypes(queryFromUrl.types) || [],
+  cardSets: [],
   cardRarities: convertStringToRarities(queryFromUrl.rarities) || [],
   cardColors: (convertStringToColors(queryFromUrl.colors) as CardColors) || {
     white: false,
@@ -45,6 +46,7 @@ const initialState: SetState = {
   viewSubject: 'cards',
   viewMode: queryFromUrl.mode || viewModeFromLocalStorage || 'grid',
   priceType: queryFromUrl.price || priceTypeFromLocalStorage || 'market',
+  subsets: queryFromUrl.subsets ? queryFromUrl.subsets?.split(',') : ['All'],
 };
 
 const emptyState = {
@@ -71,6 +73,7 @@ const emptyState = {
   sortBy: 'collectorNumber',
   sortByDirection: 'asc',
   isFormVisible: true,
+  subsets: ['All'],
 };
 
 const setCollectionSlice = createSlice({
@@ -279,6 +282,15 @@ const setCollectionSlice = createSlice({
       updateSearchInUrl('price', priceType);
       setValueToLocalStorage('priceType', priceType);
     },
+    setSubsets(state, action: PayloadAction<string[]>) {
+      const subsets = action.payload;
+      state.subsets = subsets;
+      updateSearchInUrl('subsets', subsets.join(','));
+    },
+    setCardSets(state, action: PayloadAction<CardSet[]>) {
+      const cardSets = action.payload;
+      state.cardSets = cardSets;
+    },
   },
 });
 
@@ -306,6 +318,8 @@ export const {
   setQuantityAll,
   setQuantityNormal,
   setQuantityFoil,
+  setSubsets,
+  setCardSets,
 } = setCollectionSlice.actions;
 
 export const searchAttributeOptions = [
@@ -370,6 +384,7 @@ interface SetState {
   oracleTextQuery: string;
   artistQuery: string;
   cardTypes: CardType[];
+  cardSets: CardSet[];
   cardRarities: CardRarity[];
   cardColors: CardColors;
   showAllPrintings: boolean;
@@ -383,6 +398,7 @@ interface SetState {
   viewSubject: 'cards' | 'sets';
   viewMode: 'grid' | 'table';
   priceType: PriceTypes;
+  subsets: string[];
 }
 
 export type PriceTypes = 'low' | 'average' | 'high' | 'market' | 'foil';

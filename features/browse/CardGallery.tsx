@@ -31,6 +31,10 @@ interface CardGalleryProps {
   isLoading?: boolean;
   isFetching: boolean;
   goToOptions?: { label: string; value: string }[];
+  subsetOptions?: { label: string; value: string }[];
+  showSubsetFilter?: boolean;
+  reduxSlice?: string;
+  setSubsets?: Dispatch<SetStateAction<string[]>>;
 }
 
 const CardGallery: React.FC<CardGalleryProps> = ({
@@ -48,6 +52,10 @@ const CardGallery: React.FC<CardGalleryProps> = ({
   isLoading,
   isFetching,
   goToOptions,
+  subsetOptions,
+  showSubsetFilter = false,
+  reduxSlice,
+  setSubsets,
 }) => {
   const isSetPage = window?.location?.href?.includes('/sets/');
   const [cardsPerRow, setCardsPerRow] = useLocalStorage('cardsPerRow', 5);
@@ -107,6 +115,10 @@ const CardGallery: React.FC<CardGalleryProps> = ({
           galleryType="cards"
           isLoading={isLoading}
           isFetching={isFetching}
+          subsetOptions={subsetOptions}
+          showSubsetFilter={showSubsetFilter}
+          setSubsets={setSubsets}
+          reduxSlice={reduxSlice}
         />
         <FadeIn style={{ marginTop: '100px' }}>
           <Wubrg />
@@ -135,6 +147,10 @@ const CardGallery: React.FC<CardGalleryProps> = ({
           isFetching={isFetching}
           galleryType="cards"
           goToOptions={goToOptions}
+          subsetOptions={subsetOptions}
+          showSubsetFilter={showSubsetFilter}
+          setSubsets={setSubsets}
+          reduxSlice={reduxSlice}
         />
 
         <CardGalleryWrapper cardsPerRow={cardsPerRow} galleryWidth={galleryWidth}>
@@ -173,6 +189,10 @@ const CardGallery: React.FC<CardGalleryProps> = ({
             galleryType="cards"
             isOnBottom
             goToOptions={goToOptions}
+            subsetOptions={subsetOptions}
+            showSubsetFilter={showSubsetFilter}
+            setSubsets={setSubsets}
+            reduxSlice={reduxSlice}
           />
         </div>
       </>

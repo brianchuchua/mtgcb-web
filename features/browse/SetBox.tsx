@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import uaParser from 'ua-parser-js';
 import Link from '../../components/Link';
 import { tcgplayerMassImport, tcgplayerMassImportForUserLegacy } from '../../network/features/browse';
+import { determineSetLabel } from '../../util';
 import { PriceTypes } from './browseSlice';
 import { formatter } from './util/formatPrice';
 import titleCase from './util/titleCase';
@@ -28,12 +29,7 @@ const SetBox: React.FC<SetBoxProps> = ({
 
   const setUrl = userId ? `/collections/${userId}/sets/${set.slug}` : `/browse/sets/${set.slug}`;
 
-  let setLabel = 'Set';
-  if (set.isSubsetGroup) {
-    setLabel = 'Subset Group';
-  } else if (set.parentSetId != null) {
-    setLabel = 'Subset';
-  }
+  const setLabel = determineSetLabel(set);
 
   const setSealedUrl = set.sealedProductUrl
     ? `https://tcgplayer.pxf.io/c/4944197/1830156/21018?u=${encodeURIComponent(`${set.sealedProductUrl}&ProductTypeName=Sealed`)}`
@@ -360,6 +356,7 @@ export interface Set {
     id: string;
     name: string;
   };
+  subsetGroupId?: string;
 }
 
 interface SetBoxProps {
