@@ -15,6 +15,10 @@ interface ConnectedConnectionCardTableProps {
   setFirst: (first: number) => void;
   setPage: (page: number) => void;
   goToOptions?: { label: string; value: string }[];
+  subsetOptions?: { label: string; value: string }[];
+  showSubsetFilter?: boolean;
+  reduxSlice?: string;
+  setSubsets?: any;
 }
 
 export const ConnectedCollectionCardTable: React.FC<ConnectedConnectionCardTableProps> = ({
@@ -27,6 +31,10 @@ export const ConnectedCollectionCardTable: React.FC<ConnectedConnectionCardTable
   setFirst,
   setPage,
   goToOptions,
+  subsetOptions = [],
+  showSubsetFilter = false,
+  reduxSlice,
+  setSubsets,
 }) => {
   const {
     sortBy,
@@ -40,6 +48,7 @@ export const ConnectedCollectionCardTable: React.FC<ConnectedConnectionCardTable
     cardColors,
     showAllPrintings,
     cardStatSearches,
+    subsets,
   } = useSelector((state: RootState) => state.setCollection);
 
   const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
@@ -72,6 +81,7 @@ export const ConnectedCollectionCardTable: React.FC<ConnectedConnectionCardTable
     cardStatSearches,
     additionalWhere: null,
     additionalSortBy: null,
+    subsets,
   });
 
   const cards = filteredCardsSummary?.data?.filteredCardsSummaryLegacy?.cards;
@@ -114,6 +124,10 @@ export const ConnectedCollectionCardTable: React.FC<ConnectedConnectionCardTable
       isFetching={isFetching}
       isLoading={loadingFilteredCardsSummary}
       goToOptions={goToOptions}
+      subsetOptions={subsetOptions}
+      showSubsetFilter={showSubsetFilter}
+      reduxSlice={reduxSlice}
+      setSubsets={setSubsets}
     />
   );
 };

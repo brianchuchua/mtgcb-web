@@ -43,7 +43,7 @@ const buildBrowseExpansionFilter: BuildBrowseExpansionFilterFunction = ({
 
   if (!includeSubsets) {
     where.AND.push({
-      parentSetId: null,
+      AND: [{ parentSetId: null }, { subsetGroupId: null }],
     });
   }
 

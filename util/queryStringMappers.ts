@@ -33,6 +33,7 @@ interface QueryParams {
   includeSubsetsBrowse: string;
   includeSubsetGroupsBrowse: string;
   includeSubsetsInSets: string;
+  subsets: string;
 }
 
 let queryFromUrl: QueryParams | Record<string, never> = {};

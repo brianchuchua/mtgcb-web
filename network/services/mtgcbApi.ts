@@ -15,6 +15,7 @@ import {
   allSets,
   allSetsMeta,
   allSubsets,
+  allSubsetsByGroupId,
   cardAutocomplete,
   cardsFromSubsets,
   collectionByCardIdLegacy,
@@ -159,6 +160,7 @@ export const mtgcbApi = createApi({
         cardStatSearches,
         additionalSortBy,
         additionalWhere,
+        subsets,
       }) => ({
         url: '',
         method: 'POST',
@@ -176,6 +178,7 @@ export const mtgcbApi = createApi({
               artistQuery: artistQuery ? artistQuery.trim() : '',
               cardStatSearches,
               orderBy: sortBy,
+              subsets,
             }),
             search: name ? name.trim() : '',
             orderBy: determineSortFilter(sortBy, sortByDirection),
@@ -235,6 +238,7 @@ export const mtgcbApi = createApi({
         showAllPrintings,
         cardStatSearches,
         sortByDirection,
+        subsets,
       }) => ({
         url: '',
         method: 'POST',
@@ -254,6 +258,7 @@ export const mtgcbApi = createApi({
               artistQuery: artistQuery ? artistQuery.trim() : '',
               cardStatSearches,
               orderBy: sortBy,
+              subsets,
             }),
             distinct: determineDistinctClause(showAllPrintings, sortBy),
           },
@@ -275,6 +280,7 @@ export const mtgcbApi = createApi({
         showAllPrintings,
         cardStatSearches,
         sortByDirection,
+        subsets,
       }) => ({
         url: '',
         method: 'POST',
@@ -291,6 +297,7 @@ export const mtgcbApi = createApi({
               artistQuery: artistQuery ? artistQuery.trim() : '',
               cardStatSearches,
               orderBy: sortBy,
+              subsets,
             }),
           },
         },
@@ -419,6 +426,19 @@ export const mtgcbApi = createApi({
         providesTags: ['Sets'],
       }),
     }),
+    getAllSubsetsWithGroupId: builder.query<AxiosResponse<GetAllSubsetsByGroupIdResponse>, GetAllSubsetsByGroupIdVariables>({
+      query: ({ subsetGroupId }) => ({
+        url: '',
+        method: 'POST',
+        body: {
+          query: allSubsetsByGroupId,
+          variables: {
+            where: { subsetGroupId: { id: { equals: subsetGroupId } } },
+          },
+        },
+        providesTags: ['Sets'],
+      }),
+    }),
   }),
 });
 
@@ -442,6 +462,7 @@ export const {
   usePrefetch,
   useGetCardsFromSubsetsQuery,
   useGetAllSubsetsQuery,
+  useGetAllSubsetsWithGroupIdQuery,
 } = mtgcbApi;
 
 // TODO: Code split these types for readability
@@ -766,6 +787,7 @@ interface FilteredCardsSummaryLegacyVariables {
     | 'percentageCollected_asc'
     | 'percentageCollected_desc';
   additionalWhere: string;
+  subsets?: string[];
 }
 
 interface FilteredCardsSummaryLegacyResponse {
@@ -810,6 +832,14 @@ interface GetAllSubsetsResponse {
 
 interface GetAllSubsetsVariables {
   parentSetId: string;
+}
+
+interface GetAllSubsetsByGroupIdResponse {
+  sets: Set[];
+}
+
+interface GetAllSubsetsByGroupIdVariables {
+  subsetGroupId: string;
 }
 
 const convertToBoolean = (value: string | boolean) => {

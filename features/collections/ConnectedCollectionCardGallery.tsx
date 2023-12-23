@@ -15,6 +15,10 @@ interface ConnectedConnectionCardGalleryProps {
   setFirst: (first: number) => void;
   setPage: (page: number) => void;
   goToOptions?: { label: string; value: string }[];
+  subsetOptions?: { label: string; value: string }[];
+  showSubsetFilter?: boolean;
+  reduxSlice?: string;
+  setSubsets?: any;
 }
 
 export const ConnectedCollectionCardGallery: React.FC<ConnectedConnectionCardGalleryProps> = ({
@@ -27,6 +31,10 @@ export const ConnectedCollectionCardGallery: React.FC<ConnectedConnectionCardGal
   setFirst,
   setPage,
   goToOptions,
+  subsetOptions = [],
+  showSubsetFilter = false,
+  reduxSlice,
+  setSubsets,
 }) => {
   const {
     sortBy,
@@ -40,6 +48,7 @@ export const ConnectedCollectionCardGallery: React.FC<ConnectedConnectionCardGal
     cardColors,
     showAllPrintings,
     cardStatSearches,
+    subsets,
   } = useSelector((state: RootState) => state.setCollection);
 
   const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
@@ -76,6 +85,7 @@ export const ConnectedCollectionCardGallery: React.FC<ConnectedConnectionCardGal
     cardStatSearches,
     additionalWhere: null,
     additionalSortBy: null,
+    subsets,
   });
 
   const cards = filteredCardsSummary?.data?.filteredCardsSummaryLegacy?.cards;
@@ -118,6 +128,10 @@ export const ConnectedCollectionCardGallery: React.FC<ConnectedConnectionCardGal
       isLoading={loadingFilteredCardsSummary}
       isFetching={fetchingFilteredCardsSummary}
       goToOptions={goToOptions}
+      subsetOptions={subsetOptions}
+      showSubsetFilter={showSubsetFilter}
+      reduxSlice={reduxSlice}
+      setSubsets={setSubsets}
     />
   );
 };

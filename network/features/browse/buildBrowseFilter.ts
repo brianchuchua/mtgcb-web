@@ -8,6 +8,7 @@ import {
   addCardStatFilter,
   addCardTypeFilter,
   addOracleTextFilter,
+  addSubsetFilter,
 } from './filters';
 
 interface BuildBrowseFilterSettings {
@@ -20,6 +21,7 @@ interface BuildBrowseFilterSettings {
   artistQuery?: string;
   cardStatSearches?: CardStatSearch[];
   orderBy: string;
+  subsets: string[];
 }
 
 interface BuildAdditionalWhereFilterFunctionSettings {
@@ -46,6 +48,7 @@ const buildBrowseFilter: BuildBrowseFilterFunction = ({
   artistQuery,
   cardStatSearches,
   orderBy,
+  subsets,
 }) => {
   const where = { AND: [] };
   if (name) {
@@ -63,6 +66,7 @@ const buildBrowseFilter: BuildBrowseFilterFunction = ({
   addOracleTextFilter(oracleTextQuery, where);
   addArtistFilter(artistQuery, where);
   addCardStatFilter(cardStatSearches, where);
+  addSubsetFilter(subsets, where);
 
   const orderByOptionsThatMayBeNull = [
     'releasedAt',

@@ -4,6 +4,7 @@ import allSetNames from './allSetNames';
 import allSets from './allSets';
 import allSetsMeta from './allSetsMeta';
 import allSubsets from './allSubsets';
+import allSubsetsByGroupId from './allSubsetsByGroupId';
 import cardAutocomplete from './cardAutocomplete';
 import cardsFromSubsets from './cardsFromSubsets';
 import cardTypes from './cardTypes';
@@ -38,4 +39,5 @@ export {
   filteredCardsSummaryLegacy,
   cardsFromSubsets,
   allSubsets,
+  allSubsetsByGroupId,
 };

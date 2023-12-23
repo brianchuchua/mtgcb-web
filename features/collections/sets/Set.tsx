@@ -2,21 +2,25 @@ import Divider from '@material-ui/core/Divider';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { useEffect, useState } from 'react';
 import Confetti from 'react-confetti';
 import { useDispatch, useSelector } from 'react-redux';
 import { Element } from 'react-scroll';
 import styled from 'styled-components';
 import { ResponsiveContainer } from '../../../components/layout/ResponsiveContainer';
 import Link from '../../../components/Link';
-import { useGetAllSubsetsQuery, useGetSetBySlugQuery, useGetSetSummaryLegacyQuery } from '../../../network/services/mtgcbApi';
+import { useGetSetBySlugQuery } from '../../../network/services/mtgcbApi';
 import { RootState } from '../../../redux/rootReducer';
-import { useLocalStorage } from '../../../util';
+import { useFormVisibility } from '../../../util/useFormVisibility';
+import { usePagination } from '../../../util/usePagination';
 import { SetIcon } from '../../browse/SetBox';
 import { formatter } from '../../browse/util/formatPrice';
+import { useGetSubsetsByGroupId } from '../../sets/hooks/useGetSubsetsByGroupId';
+import { useGetSubsetsByParentSetId } from '../../sets/hooks/useGetSubsetsByParentSetId';
 import { ConnectedCollectionCardGallery } from '../ConnectedCollectionCardGallery';
 import { ConnectedCollectionCardTable } from '../ConnectedCollectionCardTable';
-import { setFormVisibility } from './setCollectionSlice';
+import { useCollectionDetails } from '../hooks/useCollectionDetails';
+import { useConfetti } from '../hooks/useConfetti';
+import { setFormVisibility, setSubsets } from './setCollectionSlice';
 import { Subset } from './Subset';
 
 interface SetProps {
@@ -25,102 +29,34 @@ interface SetProps {
 }
 
 export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
-  const { viewSubject, viewMode, priceType } = useSelector((state: RootState) => state.setCollection);
+  const reduxSlice = 'setCollection';
+  const { viewSubject, viewMode, priceType } = useSelector((state: RootState) => state[reduxSlice]);
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(setFormVisibility({ isFormVisibile: true }));
-    return function cleanUpForm() {
-      dispatch(setFormVisibility({ isFormVisibile: false }));
-    };
-  }, []);
-
-  const [skip, setSkip] = useState(0);
-  const [first, setFirst] = useLocalStorage('numberOfCardsPerPage', 50);
-  const [page, setPage] = useState(1);
 
   const { data: setData, isLoading: isSetLoading, isFetching: isSetFetching, error: setError } = useGetSetBySlugQuery(
     { slug: setSlug },
     { skip: setSlug == null }
   );
-
-  const setId = setData?.data?.sets?.[0]?.id;
-  const {
-    data: setSummaryData,
-    isLoading: isSetSummaryLoading,
-    isFetching: isSetSummaryFetching,
-    error: setSummaryError,
-  } = useGetSetSummaryLegacyQuery(
-    {
-      setId: setData?.data?.sets?.[0]?.id,
-      userId,
-    },
-    { skip: setId == null || userId == null }
-  );
-
   const set = setData?.data?.sets?.[0];
-  const setSummary = setSummaryData?.data?.setSummaryLegacy;
-  const username = setSummary?.username ?? '';
 
-  const [setSummaryCount, setSetSummaryCount] = useState(0);
-  useEffect(() => {
-    if (isSetSummaryFetching) {
-      setSetSummaryCount(setSummaryCount + 1);
-    }
-  }, [isSetSummaryFetching]);
+  const { skip, setSkip, first, setFirst, page, setPage, handleTotalResultsChange } = usePagination({
+    initialPage: 1,
+    initialPageSize: 50,
+    localStorageKey: 'numberOfCardsPerPage',
+  });
 
-  const [confettiTriggered, setConfettiTriggered] = useState(false);
+  useFormVisibility(setFormVisibility);
 
-  useEffect(() => {
-    if (setSummary?.percentageCollected === 100 && setSummaryCount > 1) {
-      setConfettiTriggered(true);
-    } else {
-      setConfettiTriggered(false);
-    }
-  }, [setSummary?.percentageCollected]);
+  const { collectionDetails, isSetSummaryLoading, isSetSummaryFetching, setSummaryError } = useCollectionDetails(setData, userId);
 
-  const { data: subsetData, isLoading: isSubsetLoading, isFetching: isSubsetFetching, error: subsetError } = useGetAllSubsetsQuery(
-    {
-      parentSetId: setData?.data?.sets?.[0]?.id,
-    },
-    {
-      skip: !setData?.data?.sets?.[0]?.id,
-    }
-  );
+  const confettiTriggered = useConfetti(isSetSummaryFetching, collectionDetails?.percentageCollected);
 
-  const subsets = subsetData?.data?.sets;
-  let goToOptions = [];
-  if (subsets?.length > 0 && !set?.isSubsetGroup) {
-    goToOptions = [
-      {
-        label: set.name,
-        value: set.slug,
-      },
-    ];
-
-    goToOptions = goToOptions.concat(
-      subsets.map((subset) => ({
-        label: subset.name,
-        value: subset.slug,
-      }))
-    );
-  }
+  const { subsetByGroupIdOptions } = useGetSubsetsByGroupId(set?.id);
+  const { subsets, goToOptions } = useGetSubsetsByParentSetId(set?.id, set?.isSubsetGroup);
 
   const isLoading = isSetLoading || isSetSummaryLoading;
   const isFetching = isSetFetching || isSetSummaryFetching;
-
-  const collectionDetails = {
-    setName: set?.name,
-    setCode: set?.code,
-    username,
-    userId,
-    cardsInSet: setSummary?.cardsInSet,
-    totalCardsCollectedInSet: setSummary?.totalCardsCollectedInSet,
-    uniquePrintingsCollectedInSet: setSummary?.uniquePrintingsCollectedInSet,
-    percentageCollected: setSummary?.percentageCollected,
-    totalValue: setSummary?.totalValue,
-  };
 
   // TODO: Add buy links here and come up with a good interface, similar to how Scryfall does card pages perhaps
 
@@ -156,6 +92,10 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
                 setFirst={setFirst}
                 setPage={setPage}
                 goToOptions={goToOptions}
+                subsetOptions={subsetByGroupIdOptions}
+                showSubsetFilter={set?.isSubsetGroup}
+                setSubsets={setSubsets}
+                reduxSlice={reduxSlice}
               />
             )}
             {viewSubject === 'cards' && viewMode === 'grid' && subsets?.length > 0 && !set?.isSubsetGroup && (
@@ -179,6 +119,10 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
                 setFirst={setFirst}
                 setPage={setPage}
                 goToOptions={goToOptions}
+                subsetOptions={subsetByGroupIdOptions}
+                showSubsetFilter={set?.isSubsetGroup}
+                setSubsets={setSubsets}
+                reduxSlice={reduxSlice}
               />
             )}
             {viewSubject === 'cards' && viewMode === 'table' && subsets?.length > 0 && !set?.isSubsetGroup && (

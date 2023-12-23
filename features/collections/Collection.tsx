@@ -1,30 +1,32 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { ResponsiveContainer } from '../../components/layout/ResponsiveContainer';
-import { useGetAllCardsMetaQuery, useGetAllSetsMetaQuery } from '../../network/services/mtgcbApi';
+import { useGetAllSetsMetaQuery } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
-import { useLocalStorage } from '../../util';
+import { includesQuantityFilters } from '../../util/includesQuantityFilters';
+import useDebounce, { searchFieldDebounceTimeMs } from '../../util/useDebounce';
+import { usePagination } from '../../util/usePagination';
+import CardGallery from '../browse/CardGallery';
+import CardTable from '../browse/CardTable';
+import { useCardSearch } from '../browse/hooks/useCardSearch';
+import SetGallery from '../browse/SetGallery';
+import SetTable from '../browse/SetTable';
 import { setFormVisibility } from './collectionSlice';
-import { ConnectedCardGallery } from './ConnectedCardGallery';
-import { ConnectedCardTable } from './ConnectedCardTable';
 import { ConnectedCollectionDetails } from './ConnectedCollectionDetails';
-import { ConnectedSetGallery } from './ConnectedSetGallery';
-import { ConnectedSetTable } from './ConnectedSetTable';
+import { useCollectionByCardId } from './hooks/useCollectionByCardId';
+import { useFilteredCardsSummary } from './hooks/useFilteredCardsSummary';
+import { useFilteredCollectionSummary } from './hooks/useFilteredCollectionSummary';
 
 export const Collection: React.FC<CollectionProps> = ({ userId }) => {
+  const reduxSlice = 'collection';
+
   const {
     searchQuery,
     oracleTextQuery,
     artistQuery,
-    cardTypes,
-    cardSets,
-    cardRarities,
-    cardColors,
-    showAllPrintings,
     cardStatSearches,
     sortBy,
-    sortByDirection,
     viewSubject,
     viewMode,
     expansionSearchQuery,
@@ -34,17 +36,23 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
     expansionCategories,
     includeSubsets,
     includeSubsetGroups,
-  } = useSelector((state: RootState) => state.collection);
+    priceType,
+    includeSubsetsInSets,
+  } = useSelector((state: RootState) => state[reduxSlice]);
 
-  const [skip, setSkip] = useState(0);
-  const [first, setFirst] = useLocalStorage('numberOfCardsPerPage', 50);
-  const [page, setPage] = useState(1);
-
-  const [expansionsSkip, setExpansionsSkip] = useState(0);
-  const [expansionsFirst, setExpansionsFirst] = useLocalStorage('numberOfExpansionsPerPage', 20);
-  const [expansionsPage, setExpansionsPage] = useState(1);
-
-  const [previousTotalResults, setPreviousTotalResults] = useState(null);
+  const {
+    skip: expansionsSkip,
+    setSkip: setExpansionsSkip,
+    first: expansionsFirst,
+    setFirst: setExpansionsFirst,
+    page: expansionsPage,
+    setPage: setExpansionsPage,
+    handleTotalResultsChange: handleTotalResultsChangeExpansions,
+  } = usePagination({
+    initialPage: 1,
+    initialPageSize: 20,
+    localStorageKey: 'numberOfExpansionsPerPage',
+  });
 
   const dispatch = useDispatch();
 
@@ -54,33 +62,6 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
       dispatch(setFormVisibility({ isFormVisibile: false }));
     };
   }, []);
-
-  const { data: cardMetaData, isLoading: isCardMetaDataLoading, error: cardMetaError } = useGetAllCardsMetaQuery({
-    sortBy,
-    name: searchQuery,
-    oracleTextQuery,
-    artistQuery,
-    cardSets,
-    cardRarities,
-    cardTypes,
-    cardColors,
-    showAllPrintings,
-    cardStatSearches,
-    sortByDirection,
-  });
-  const totalResults = cardMetaData?.data?.count;
-
-  useEffect(() => {
-    if (totalResults !== previousTotalResults) {
-      setSkip(0);
-      setPage(1);
-      setPreviousTotalResults(totalResults);
-    }
-    if (skip > totalResults) {
-      setSkip(0);
-      setPage(1);
-    }
-  }, [skip, totalResults, previousTotalResults]);
 
   const { data: allSetsMetaResponse } = useGetAllSetsMetaQuery({
     name: expansionSearchQuery,
@@ -95,58 +76,132 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
   const totalExpansionsResults = allSetsMeta?.count || 0;
 
   useEffect(() => {
-    if (expansionsSkip > totalExpansionsResults) {
-      setExpansionsSkip(0);
-      setExpansionsPage(1);
-    }
+    handleTotalResultsChangeExpansions(totalExpansionsResults);
   }, [expansionsSkip, totalExpansionsResults]);
+
+  const debouncedSearchQuery = useDebounce(searchQuery, searchFieldDebounceTimeMs);
+  const debouncedOracleTextQuery = useDebounce(oracleTextQuery, searchFieldDebounceTimeMs);
+  const debouncedArtistQuery = useDebounce(artistQuery, searchFieldDebounceTimeMs);
+
+  // Tech debt: If a user is trying to search or sort by quantity, we have to involve an external legacy database and do a manual remote join
+  const hasQuantityFilters = useMemo(() => includesQuantityFilters(cardStatSearches, sortBy), [cardStatSearches, sortBy]);
+
+  const {
+    cards,
+    isCardDataLoading,
+    isCardDataFetching,
+    isCardMetaDataLoading,
+    isCardMetaDataFetching,
+    skip,
+    setSkip,
+    page,
+    setPage,
+    first,
+    setFirst,
+    totalResults,
+  } = useCardSearch(reduxSlice, null, hasQuantityFilters /* TODO: temporary */);
+  const cardIds = cards?.map((card) => card.id);
+
+  const { collectionByCardIdWithDefaults, isCollectionByCardIdLoading } = useCollectionByCardId(userId, cardIds, hasQuantityFilters);
+
+  const {
+    cardsFromHeavyQuery,
+    collectionByCardIdWithDefaultsFromHeavyQuery,
+    loadingFilteredCardsSummary,
+    fetchingFilteredCardsSummary,
+    totalResultsFromHeavyQuery,
+  } = useFilteredCardsSummary(
+    userId,
+    reduxSlice,
+    hasQuantityFilters,
+    debouncedSearchQuery,
+    debouncedOracleTextQuery,
+    debouncedArtistQuery,
+    first,
+    skip
+  );
+
+  const {
+    expansions,
+    costsToPurchase,
+    isFilteredCollectionSummaryLoading,
+    isFilteredCollectionSummaryFetching,
+  } = useFilteredCollectionSummary(userId, reduxSlice, expansionsFirst, expansionsSkip);
+
+  const isLoading = isCardDataLoading || isCardMetaDataLoading || isCollectionByCardIdLoading || loadingFilteredCardsSummary;
+  const isFetching = isCardDataFetching || isCardMetaDataFetching || fetchingFilteredCardsSummary;
 
   return (
     <ResponsiveContainer maxWidth="xl">
       <ConnectedCollectionDetails userId={userId} expansionsFirst={expansionsFirst} expansionsSkip={expansionsSkip} />
       <ContentWrapper>
         {viewSubject === 'cards' && viewMode === 'grid' && (
-          <ConnectedCardGallery
+          <MemoizedCardGallery
+            cards={hasQuantityFilters ? cardsFromHeavyQuery : cards}
+            totalResults={hasQuantityFilters ? totalResultsFromHeavyQuery : totalResults}
             first={first}
             skip={skip}
             page={page}
             setSkip={setSkip}
             setFirst={setFirst}
             setPage={setPage}
+            priceType={priceType}
             userId={userId}
+            collectionByCardId={hasQuantityFilters ? collectionByCardIdWithDefaultsFromHeavyQuery : collectionByCardIdWithDefaults}
+            isLoading={isLoading}
+            isFetching={isFetching}
           />
         )}
         {viewSubject === 'cards' && viewMode === 'table' && (
-          <ConnectedCardTable
+          <MemoizedCardTable
+            cards={hasQuantityFilters ? cardsFromHeavyQuery : cards}
+            totalResults={hasQuantityFilters ? totalResultsFromHeavyQuery : totalResults}
             first={first}
             skip={skip}
             page={page}
             setSkip={setSkip}
             setFirst={setFirst}
             setPage={setPage}
+            priceType={priceType}
             userId={userId}
+            collectionByCardId={hasQuantityFilters ? collectionByCardIdWithDefaultsFromHeavyQuery : collectionByCardIdWithDefaults}
+            isLoading={isLoading}
+            isFetching={isFetching}
           />
         )}
         {viewSubject === 'sets' && viewMode === 'grid' && (
-          <ConnectedSetGallery
-            expansionsFirst={expansionsFirst}
-            expansionsSkip={expansionsSkip}
-            expansionsPage={expansionsPage}
-            setExpansionsSkip={setExpansionsSkip}
-            setExpansionsFirst={setExpansionsFirst}
-            setExpansionsPage={setExpansionsPage}
+          <MemoizedSetGallery
+            sets={expansions}
+            costsToPurchase={costsToPurchase}
+            totalResults={totalExpansionsResults}
+            first={expansionsFirst}
+            skip={expansionsSkip}
+            page={expansionsPage}
+            setSkip={setExpansionsSkip}
+            setFirst={setExpansionsFirst}
+            setPage={setExpansionsPage}
+            priceType={priceType}
             userId={userId}
+            isLoading={isFilteredCollectionSummaryLoading}
+            isFetching={isFilteredCollectionSummaryFetching}
+            includeSubsetsInSets={includeSubsetsInSets}
           />
         )}
         {viewSubject === 'sets' && viewMode === 'table' && (
-          <ConnectedSetTable
-            expansionsFirst={expansionsFirst}
-            expansionsSkip={expansionsSkip}
-            expansionsPage={expansionsPage}
-            setExpansionsSkip={setExpansionsSkip}
-            setExpansionsFirst={setExpansionsFirst}
-            setExpansionsPage={setExpansionsPage}
+          <MemoizedSetTable
+            sets={expansions}
+            costsToPurchase={costsToPurchase}
+            totalResults={totalExpansionsResults}
+            first={expansionsFirst}
+            skip={expansionsSkip}
+            page={expansionsPage}
+            setSkip={setExpansionsSkip}
+            setFirst={setExpansionsFirst}
+            setPage={setExpansionsPage}
+            priceType={priceType}
             userId={userId}
+            isCollectorMode
+            isFetching={isFetching}
           />
         )}
       </ContentWrapper>
@@ -161,3 +216,8 @@ const ContentWrapper = styled.div(({ theme }) => ({
 interface CollectionProps {
   userId: string;
 }
+
+const MemoizedCardGallery = memo(CardGallery);
+const MemoizedCardTable = memo(CardTable);
+const MemoizedSetGallery = memo(SetGallery);
+const MemoizedSetTable = memo(SetTable);
