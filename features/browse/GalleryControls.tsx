@@ -10,6 +10,7 @@ import SettingsPanel, { SettingGroup } from '../../components/SettingsPanel';
 import breakpoints from '../../themes/breakpoints';
 import { useWindowDimensions } from '../../util';
 import { JumpToSelect, NumberOfItemsSelect } from './forms';
+import SubsetFilter from './forms/SubsetFilter';
 
 type GalleryTypes = 'cards' | 'sets';
 
@@ -32,6 +33,10 @@ interface GalleryControlsProps {
   isFetching: boolean;
   isOnBottom?: boolean;
   goToOptions?: { label: string; value: string }[];
+  subsetOptions?: { label: string; value: string }[];
+  showSubsetFilter?: boolean;
+  reduxSlice?: string;
+  setSubsets?: Dispatch<SetStateAction<string[]>>;
 }
 
 const GalleryControls: React.FC<GalleryControlsProps> = ({
@@ -53,6 +58,10 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
   isFetching,
   isOnBottom = false,
   goToOptions = [],
+  subsetOptions = [],
+  showSubsetFilter = false,
+  reduxSlice,
+  setSubsets,
 }) => {
   const startOfRange = 1 + skip;
   const numberOfCards = items?.length ?? 0;
@@ -102,6 +111,10 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
           isOnBottom={isOnBottom}
           isFetching={isFetching}
           goToOptions={goToOptions}
+          subsetOptions={subsetOptions}
+          showSubsetFilter={showSubsetFilter}
+          reduxSlice={reduxSlice}
+          setSubsets={setSubsets}
         />
         <GalleryPaginationMobile
           settingGroups={settingGroups}
@@ -118,6 +131,10 @@ const GalleryControls: React.FC<GalleryControlsProps> = ({
           isOnBottom={isOnBottom}
           isFetching={isFetching}
           goToOptions={goToOptions}
+          subsetOptions={subsetOptions}
+          showSubsetFilter={showSubsetFilter}
+          reduxSlice={reduxSlice}
+          setSubsets={setSubsets}
         />
         {setGalleryWidth && setCardsPerRow && width >= breakpoints.sm && galleryType === 'cards' && !isOnBottom && (
           <Grid container item sm={12} spacing={2} justify="space-between" alignItems="center">
@@ -201,6 +218,10 @@ interface GalleryPaginationDesktopProps {
   isOnBottom?: boolean;
   isFetching: boolean;
   goToOptions?: { label: string; value: string }[];
+  subsetOptions?: { label: string; value: string }[];
+  showSubsetFilter?: boolean;
+  reduxSlice?: string;
+  setSubsets?: Dispatch<SetStateAction<string[]>>;
 }
 
 const GalleryPaginationDesktop: React.FC<GalleryPaginationDesktopProps> = ({
@@ -218,6 +239,10 @@ const GalleryPaginationDesktop: React.FC<GalleryPaginationDesktopProps> = ({
   isOnBottom = false,
   isFetching = true,
   goToOptions = [],
+  subsetOptions = [{ label: 'All', value: 'All' }],
+  showSubsetFilter = false,
+  reduxSlice,
+  setSubsets,
 }) => {
   const [previousStartOfRange, setPreviousStartOfRange] = useState(startOfRange);
   const [previousEndOfRange, setPreviousEndOfRange] = useState(endOfRange);
@@ -262,6 +287,9 @@ const GalleryPaginationDesktop: React.FC<GalleryPaginationDesktopProps> = ({
       <RightAlignedGrid container item lg={3} alignItems="center" justify="flex-end">
         <Grid item>
           {!isOnBottom && <JumpToSelect label="Go to" goToOptions={goToOptions} />}
+          {!isOnBottom && showSubsetFilter && subsetOptions?.length > 0 && (
+            <SubsetFilter label="Subsets" subsetOptions={subsetOptions} reduxSlice={reduxSlice} setSubsets={setSubsets} />
+          )}
           <NumberOfItemsSelect first={first} setFirst={setFirst} label={typeLabel} />
         </Grid>
         <Grid item>{settingGroups.length > 0 && <SettingsPanel panelId="cardGallerySettings" settingGroups={settingGroups} />}</Grid>
@@ -301,6 +329,10 @@ const GalleryPaginationMobile: React.FC<GalleryPaginationDesktopProps> = ({
   isOnBottom = false,
   isFetching = true,
   goToOptions = [],
+  subsetOptions = [{ label: 'All', value: 'All' }],
+  showSubsetFilter = false,
+  reduxSlice,
+  setSubsets,
 }) => {
   const [previousStartOfRange, setPreviousStartOfRange] = useState(startOfRange);
   const [previousEndOfRange, setPreviousEndOfRange] = useState(endOfRange);
@@ -351,6 +383,9 @@ const GalleryPaginationMobile: React.FC<GalleryPaginationDesktopProps> = ({
       <RightAlignedGrid container item sm={12} xs={12} alignItems="center" justify="center">
         <Grid item style={{ marginTop: '10px', marginBottom: '10px' }}>
           {!isOnBottom && <JumpToSelect label="Go to" goToOptions={goToOptions} isMobile />}
+          {!isOnBottom && showSubsetFilter && subsetOptions?.length > 0 && (
+            <SubsetFilter label="Subsets" subsetOptions={subsetOptions} reduxSlice={reduxSlice} setSubsets={setSubsets} />
+          )}
         </Grid>
       </RightAlignedGrid>
       {isOnBottom && (

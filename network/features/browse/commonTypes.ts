@@ -14,6 +14,7 @@ export interface SearchOptions {
   cardColors: CardColors;
   showAllPrintings: boolean;
   cardStatSearches: CardStatSearch[];
+  subsets?: string[];
 }
 
 export interface SetSearchOptions {

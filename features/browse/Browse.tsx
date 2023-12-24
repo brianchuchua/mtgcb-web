@@ -1,159 +1,61 @@
-import { memo, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { memo } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { ResponsiveContainer } from '../../components/layout/ResponsiveContainer';
-import {
-  useGetAllCardsMetaQuery,
-  useGetAllCardsQuery,
-  useGetAllSetsMetaQuery,
-  useGetAllSetsQuery,
-  useGetCostToPurchaseAllQuery,
-} from '../../network/services/mtgcbApi';
+import { useGetCostToPurchaseAllQuery } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
-import { useLocalStorage } from '../../util';
 import { setFormVisibility } from './browseSlice';
 import CardGallery from './CardGallery';
 import CardTable from './CardTable';
+import { useCardSearch } from './hooks/useCardSearch';
+import { useExpansionSearch } from './hooks/useExpansionSearch';
 import SetGallery from './SetGallery';
 import SetTable from './SetTable';
 
 export const Browse: React.FC = () => {
+  const reduxSlice = 'browse';
+  const { viewSubject, viewMode, priceType } = useSelector((state: RootState) => state[reduxSlice]);
+
   const {
-    searchQuery,
-    oracleTextQuery,
-    artistQuery,
-    cardTypes,
-    cardSets,
-    cardRarities,
-    cardColors,
-    showAllPrintings,
-    cardStatSearches,
-    sortBy,
-    sortByDirection,
-    viewSubject,
-    viewMode,
-    priceType,
-    expansionSearchQuery,
-    sortExpansionBy,
-    sortExpansionByDirection,
-    expansionTypes,
-    expansionCategories,
-    includeSubsets,
-    includeSubsetGroups,
-  } = useSelector((state: RootState) => state.browse);
-
-  const [skip, setSkip] = useState(0);
-  const [first, setFirst] = useLocalStorage('numberOfCardsPerPage', 50);
-  const [page, setPage] = useState(1);
-
-  const [expansionsSkip, setExpansionsSkip] = useState(0);
-  const [expansionsFirst, setExpansionsFirst] = useLocalStorage('numberOfExpansionsPerPage', 20);
-  const [expansionsPage, setExpansionsPage] = useState(1);
-
-  const [previousTotalResults, setPreviousTotalResults] = useState(null);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(setFormVisibility({ isFormVisibile: true }));
-    return function cleanUpForm() {
-      dispatch(setFormVisibility({ isFormVisibile: false }));
-    };
-  }, []);
-
-  const { data: cardData, isLoading: isCardDataLoading, isFetching: isCardDataFetching, error: cardError } = useGetAllCardsQuery({
-    first,
+    cards,
+    isCardDataLoading,
+    isCardDataFetching,
+    isCardMetaDataLoading,
+    isCardMetaDataFetching,
     skip,
-    sortBy,
-    name: searchQuery,
-    oracleTextQuery,
-    artistQuery,
-    cardSets,
-    cardRarities,
-    cardTypes,
-    cardColors,
-    showAllPrintings,
-    cardStatSearches,
-    sortByDirection,
-  });
+    setSkip,
+    page,
+    setPage,
+    first,
+    setFirst,
+    totalResults,
+  } = useCardSearch(reduxSlice, setFormVisibility);
 
   const {
-    data: cardMetaData,
-    isLoading: isCardMetaDataLoading,
-    isFetching: isCardMetaDataFetching,
-    error: cardMetaError,
-  } = useGetAllCardsMetaQuery({
-    sortBy,
-    name: searchQuery,
-    oracleTextQuery,
-    artistQuery,
-    cardSets,
-    cardRarities,
-    cardTypes,
-    cardColors,
-    showAllPrintings,
-    cardStatSearches,
-    sortByDirection,
-  });
+    expansions,
+    isGetAllSetsLoading,
+    isGetAllSetsFetching,
+    isAllSetsMetaLoading,
+    isAllSetsMetaFetching,
+    expansionsSkip,
+    setExpansionsSkip,
+    expansionsFirst,
+    setExpansionsFirst,
+    expansionsPage,
+    setExpansionsPage,
+    totalExpansionsResults,
+  } = useExpansionSearch();
 
   const {
     data: costToPurchaseAll,
     isLoading: isCostsToPurchaseLoading,
     isFetching: isCostsToPurchaseFetching,
-    error: costsToPurchaseError,
   } = useGetCostToPurchaseAllQuery();
   const costsToPurchase = costToPurchaseAll?.data?.costToPurchaseAll?.costToPurchaseAll;
-  const cards = cardData?.data?.cards;
-  const totalResults = cardMetaData?.data?.count;
-
-  useEffect(() => {
-    if (totalResults !== previousTotalResults) {
-      setSkip(0);
-      setPage(1);
-      setPreviousTotalResults(totalResults);
-    }
-    if (skip > totalResults) {
-      setSkip(0);
-      setPage(1);
-    }
-  }, [skip, totalResults, previousTotalResults]);
-
-  const { data: allSetsResponse, isLoading: isGetAllSetsLoading, isFetching: isGetAllSetsFetching } = useGetAllSetsQuery({
-    first: expansionsFirst,
-    skip: expansionsSkip,
-    name: expansionSearchQuery,
-    sortBy: sortExpansionBy,
-    sortByDirection: sortExpansionByDirection,
-    setTypes: expansionTypes,
-    setCategories: expansionCategories,
-    includeSubsets,
-    includeSubsetGroups,
-  });
-  const expansions = allSetsResponse?.data?.sets;
-
-  const { data: allSetsMetaResponse, isLoading: isAllSetsMetaLoading, isFetching: isAllSetsMetaFetching } = useGetAllSetsMetaQuery({
-    name: expansionSearchQuery,
-    sortBy: sortExpansionBy,
-    sortByDirection: sortExpansionByDirection,
-    setTypes: expansionTypes,
-    setCategories: expansionCategories,
-    includeSubsets,
-    includeSubsetGroups,
-  });
-
-  const allSetsMeta = allSetsMetaResponse?.data;
-  const totalExpansionsResults = allSetsMeta?.count || 0;
 
   const isLoading = isCardDataLoading || isCardMetaDataLoading || isCostsToPurchaseLoading || isGetAllSetsLoading || isAllSetsMetaLoading;
   const isFetching =
     isCardDataFetching || isCardMetaDataFetching || isCostsToPurchaseFetching || isGetAllSetsFetching || isAllSetsMetaFetching;
-
-  useEffect(() => {
-    if (expansionsSkip > totalExpansionsResults) {
-      setExpansionsSkip(0);
-      setExpansionsPage(1);
-    }
-  }, [expansionsSkip, totalExpansionsResults]);
 
   return (
     <ResponsiveContainer maxWidth="xl">

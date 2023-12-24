@@ -7,6 +7,15 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2023-12-23 (v0.57.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Added new subset dropdown for subset groups.</li>
+        <li>Split Secret Lair Drop Series into hundreds of subsets.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2023-12-01 (v0.56.0)
     </Typography>
     <Typography paragraph>
