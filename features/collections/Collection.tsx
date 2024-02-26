@@ -38,6 +38,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
     includeSubsetGroups,
     priceType,
     includeSubsetsInSets,
+    cardSets,
   } = useSelector((state: RootState) => state[reduxSlice]);
 
   const {
@@ -118,7 +119,8 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
     debouncedOracleTextQuery,
     debouncedArtistQuery,
     first,
-    skip
+    skip,
+    cardSets
   );
 
   const {

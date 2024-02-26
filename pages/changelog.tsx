@@ -7,6 +7,16 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2024-02-26 (v0.57.2)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>
+          Fixed a major bug that was preventing multiple sets from filtering in the collection view. (Thanks Gluthoric for the report!)
+        </li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2024-02-25 (v0.57.1)
     </Typography>
     <Typography paragraph>
