@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useGetFilteredCardsSummaryLegacyQuery } from '../../../network/services/mtgcbApi';
 import { RootState } from '../../../redux/rootReducer';
+import { CardSet } from '../collectionSlice';
 
 export const useFilteredCardsSummary = (
   userId: string,
@@ -11,7 +12,8 @@ export const useFilteredCardsSummary = (
   oracleTextQuery: string,
   artistQuery: string,
   first: number,
-  skip: number
+  skip: number,
+  cardSets?: CardSet[]
 ) => {
   const { sortBy, sortByDirection, cardRarities, cardTypes, cardColors, showAllPrintings, cardStatSearches } = useSelector(
     (state: RootState) => state[reduxSlice]
@@ -38,6 +40,7 @@ export const useFilteredCardsSummary = (
       cardStatSearches,
       additionalWhere: null,
       additionalSortBy: null,
+      cardSets,
     },
     { skip: !hasQuantityFilters }
   );
