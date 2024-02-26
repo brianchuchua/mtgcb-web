@@ -15,6 +15,7 @@ const addCardTypeFilter: AddCardTypeFilterFunction = (cardTypes, where) => {
           { oracleTypeLine: { not: { startsWith: `${cardTypeSelection.value} `, mode: 'insensitive' } } },
           { oracleTypeLine: { not: { contains: ` ${cardTypeSelection.value} `, mode: 'insensitive' } } },
           { oracleTypeLine: { not: { endsWith: ` ${cardTypeSelection.value}`, mode: 'insensitive' } } },
+          { oracleTypeLine: { not: { equals: cardTypeSelection.value, mode: 'insensitive' } } },
         ],
       });
     } else {
@@ -24,6 +25,7 @@ const addCardTypeFilter: AddCardTypeFilterFunction = (cardTypes, where) => {
           { oracleTypeLine: { startsWith: `${cardTypeSelection.value} `, mode: 'insensitive' } },
           { oracleTypeLine: { contains: ` ${cardTypeSelection.value} `, mode: 'insensitive' } },
           { oracleTypeLine: { endsWith: ` ${cardTypeSelection.value}`, mode: 'insensitive' } },
+          { oracleTypeLine: { equals: cardTypeSelection.value, mode: 'insensitive' } },
         ],
       });
     }
