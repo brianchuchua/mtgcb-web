@@ -7,6 +7,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2024-02-26 (v0.57.3)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Fixed a bug with filtering cards by "at most these colors".</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2024-02-26 (v0.57.2)
     </Typography>
     <Typography paragraph>

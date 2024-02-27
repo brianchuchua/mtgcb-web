@@ -86,6 +86,22 @@ const addCardColorFilter: AddCardColorFilterFunction = (cardColors: CardColors, 
       if (cardColors.green) {
         atMostTheseColors.OR.push({ colors: { contains: `G` } });
       }
+      atMostTheseColors.AND = [];
+      if (!cardColors.white) {
+        atMostTheseColors.AND.push({ colors: { not: { contains: `W` } } });
+      }
+      if (!cardColors.blue) {
+        atMostTheseColors.AND.push({ colors: { not: { contains: `U` } } });
+      }
+      if (!cardColors.black) {
+        atMostTheseColors.AND.push({ colors: { not: { contains: `B` } } });
+      }
+      if (!cardColors.red) {
+        atMostTheseColors.AND.push({ colors: { not: { contains: `R` } } });
+      }
+      if (!cardColors.green) {
+        atMostTheseColors.AND.push({ colors: { not: { contains: `G` } } });
+      }
     }
     where.AND.push(atMostTheseColors);
   }
