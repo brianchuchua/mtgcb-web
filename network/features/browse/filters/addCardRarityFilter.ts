@@ -12,7 +12,7 @@ const addCardRarityFilter: AddCardSetFilterFunction = (cardRarities, where) => {
     for (const cardRarity of cardRarities) {
       const rarity = cardRarity.value === 'none' ? null : cardRarity.value;
       if (cardRarity.exclude) {
-        cardRarityConditions.AND.push({ rarity: { not: rarity, mode: 'insensitive' } });
+        cardRarityConditions.AND.push({ rarity: { not: { equals: rarity }, mode: 'insensitive' } });
       } else {
         cardRarityConditions.OR.push({ rarity: { equals: rarity, mode: 'insensitive' } });
       }
