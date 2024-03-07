@@ -31,6 +31,7 @@ export const useCollectionDetails = (setData, userId) => {
   };
 
   return {
+    username,
     collectionDetails,
     isSetSummaryLoading,
     isSetSummaryFetching,

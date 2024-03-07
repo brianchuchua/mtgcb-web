@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAuthentication } from '../../auth/AuthenticationProvider';
+import Breadcrumbs from '../../components/layout/Breadcrumbs';
 import { ResponsiveContainer } from '../../components/layout/ResponsiveContainer';
 import {
   useGetCardAutocompleteQuery,
@@ -122,8 +123,27 @@ const EditCards: React.FC = () => {
     router.push('/login');
     return <></>;
   }
+
+  const { username } = user;
   return (
     <ResponsiveContainer maxWidth="xl">
+      <Breadcrumbs
+        links={
+          username
+            ? [
+                {
+                  title: username ? `${username}'s Collection` : '',
+                  url: `/collections/${user?.id}`,
+                },
+                {
+                  title: 'Edit Cards',
+                  url: `/collections/edit-cards`,
+                },
+              ]
+            : []
+        }
+      />
+
       <Typography variant="h4" component="h1" align="center">
         Edit Cards
       </Typography>

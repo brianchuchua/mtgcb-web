@@ -1,10 +1,27 @@
 import Typography from '@material-ui/core/Typography';
+import Breadcrumbs from '../components/layout/Breadcrumbs';
 import { ResponsiveContainer } from '../components/layout/ResponsiveContainer';
 
 const ChangelogPage: React.FC = () => (
   <ResponsiveContainer maxWidth="xl">
+    <Breadcrumbs
+      links={[
+        {
+          title: 'Changelog',
+          url: '/changelog',
+        },
+      ]}
+    />
     <Typography variant="h3" component="h1" align="center">
       Changelog
+    </Typography>
+    <Typography variant="h5" component="h2">
+      2024-03-07 (v0.58.0)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Added breadcrumbs navigation for both desktop and mobile views.</li>
+      </ul>
     </Typography>
     <Typography variant="h5" component="h2">
       2024-02-29 (v0.57.4)

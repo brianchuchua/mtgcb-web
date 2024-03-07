@@ -1,6 +1,7 @@
 import { memo, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import Breadcrumbs from '../../components/layout/Breadcrumbs';
 import { ResponsiveContainer } from '../../components/layout/ResponsiveContainer';
 import { useGetAllSetsMetaQuery } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
@@ -128,6 +129,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
     costsToPurchase,
     isFilteredCollectionSummaryLoading,
     isFilteredCollectionSummaryFetching,
+    username,
   } = useFilteredCollectionSummary(userId, reduxSlice, expansionsFirst, expansionsSkip);
 
   const isLoading = isCardDataLoading || isCardMetaDataLoading || isCollectionByCardIdLoading || loadingFilteredCardsSummary;
@@ -135,6 +137,14 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
 
   return (
     <ResponsiveContainer maxWidth="xl">
+      <Breadcrumbs
+        links={[
+          {
+            title: username ? `${username}'s Collection` : '',
+            url: `/collections/${userId}`,
+          },
+        ]}
+      />
       <ConnectedCollectionDetails userId={userId} expansionsFirst={expansionsFirst} expansionsSkip={expansionsSkip} />
       <ContentWrapper>
         {viewSubject === 'cards' && viewMode === 'grid' && (

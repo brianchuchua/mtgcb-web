@@ -42,6 +42,7 @@ export const useFilteredCollectionSummary = (userId: string, reduxSlice: string,
   const expansions = collectionSummary?.data?.filteredCollectionSummaryLegacy?.collectionSummary;
   const costsToPurchase = collectionSummary?.data?.filteredCollectionSummaryLegacy?.collectionSummary;
   const totalExpansionsResults = collectionSummary?.data?.filteredCollectionSummaryLegacy?.count ?? 0;
+  const username = collectionSummary?.data?.filteredCollectionSummaryLegacy?.username;
 
   const prefetchPage = usePrefetch('getFilteredCollectionSummaryLegacy');
 
@@ -85,6 +86,7 @@ export const useFilteredCollectionSummary = (userId: string, reduxSlice: string,
   }, [expansionsSkip, expansionsFirst, totalExpansionsResults, prefetchNext]);
 
   return {
+    username,
     expansions,
     costsToPurchase,
     totalExpansionsResults,

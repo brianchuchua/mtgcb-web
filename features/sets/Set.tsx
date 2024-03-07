@@ -5,6 +5,7 @@ import { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Element } from 'react-scroll';
 import styled from 'styled-components';
+import Breadcrumbs from '../../components/layout/Breadcrumbs';
 import { ResponsiveContainer } from '../../components/layout/ResponsiveContainer';
 import { useGetSetBySlugQuery } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
@@ -106,6 +107,18 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
             )}
             {!isLoading && (
               <div style={{ textAlign: 'center' }}>
+                <Breadcrumbs
+                  links={[
+                    {
+                      title: 'Browse',
+                      url: '/browse',
+                    },
+                    {
+                      title: set?.name,
+                      url: `/browse/sets/${set?.slug}`,
+                    },
+                  ]}
+                />
                 <Element name={`anchor-link-${set?.slug}`} />
                 <Typography variant="h4" component="div" id={`anchor-link-${set?.slug}`}>
                   {set?.name}
