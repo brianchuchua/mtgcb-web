@@ -6,6 +6,7 @@ import Confetti from 'react-confetti';
 import { useDispatch, useSelector } from 'react-redux';
 import { Element } from 'react-scroll';
 import styled from 'styled-components';
+import Breadcrumbs from '../../../components/layout/Breadcrumbs';
 import { ResponsiveContainer } from '../../../components/layout/ResponsiveContainer';
 import Link from '../../../components/Link';
 import { useGetSetBySlugQuery } from '../../../network/services/mtgcbApi';
@@ -48,7 +49,7 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
 
   useFormVisibility(setFormVisibility);
 
-  const { collectionDetails, isSetSummaryLoading, isSetSummaryFetching, setSummaryError } = useCollectionDetails(setData, userId);
+  const { username, collectionDetails, isSetSummaryLoading, isSetSummaryFetching, setSummaryError } = useCollectionDetails(setData, userId);
 
   const confettiTriggered = useConfetti(isSetSummaryFetching, collectionDetails?.percentageCollected);
 
@@ -62,6 +63,22 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
 
   return (
     <ResponsiveContainer maxWidth="xl" id="set-container">
+      <Breadcrumbs
+        links={
+          username
+            ? [
+                {
+                  title: username ? `${username}'s Collection` : '',
+                  url: `/collections/${userId}`,
+                },
+                {
+                  title: set?.name,
+                  url: `/collections/${userId}/${set?.slug}`,
+                },
+              ]
+            : []
+        }
+      />
       <>
         {confettiTriggered && (
           <Confetti

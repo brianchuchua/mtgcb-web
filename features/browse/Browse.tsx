@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import Breadcrumbs from '../../components/layout/Breadcrumbs';
 import { ResponsiveContainer } from '../../components/layout/ResponsiveContainer';
 import { useGetCostToPurchaseAllQuery } from '../../network/services/mtgcbApi';
 import { RootState } from '../../redux/rootReducer';
@@ -60,6 +61,14 @@ export const Browse: React.FC = () => {
   return (
     <ResponsiveContainer maxWidth="xl">
       <ContentWrapper>
+        <Breadcrumbs
+          links={[
+            {
+              title: 'Browse',
+              url: '/browse',
+            },
+          ]}
+        />
         {viewSubject === 'cards' && viewMode === 'grid' && (
           <MemoizedCardGallery
             cards={cards}
