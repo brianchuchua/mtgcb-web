@@ -3,6 +3,7 @@ import Select from '@material-ui/core/Select';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { RootState } from '../../../../redux/rootReducer';
+import { useQueryParameter } from '../../../../util/useQueryParameter';
 import { expansionSortByOptions, expansionSortByOptionsForCollectors } from '../../../browse/browseSlice';
 import { ConnectedSearchFormComponentProps } from './types';
 
@@ -14,13 +15,16 @@ interface ConnectedSetSortSelectorProps extends ConnectedSearchFormComponentProp
 const ConnectedSetSortSelector: React.FC<ConnectedSetSortSelectorProps> = ({ reduxSlice, setExpansionSort, setExpansionSortDirection }) => {
   const dispatch = useDispatch();
   const { sortExpansionBy, sortExpansionByDirection } = useSelector((state: RootState) => state[reduxSlice]);
+  const setQueryParameter = useQueryParameter();
 
   const handleSortByChange = (event: React.ChangeEvent<{ value: string }>) => {
     dispatch(setExpansionSort(event.target.value));
+    setQueryParameter('setSort', event.target.value);
   };
 
   const handleSortByDirectionChange = (event: React.ChangeEvent<{ value: 'asc' | 'desc' }>) => {
     dispatch(setExpansionSortDirection(event.target.value));
+    setQueryParameter('setOrder', event.target.value);
   };
 
   const isCollectorMode = reduxSlice === 'collection' || reduxSlice === 'setCollection';

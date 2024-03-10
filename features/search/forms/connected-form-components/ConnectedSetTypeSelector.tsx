@@ -5,6 +5,8 @@ import AutocompleteWithNegation from '../../../../components/AutocompleteWithNeg
 import NativeMultiselect from '../../../../components/NativeMultiselect';
 import { useGetSetTypesQuery } from '../../../../network/services/mtgcbApi';
 import { RootState } from '../../../../redux/rootReducer';
+import { convertSetTypesToString } from '../../../../util/queryStringMappers';
+import { useQueryParameter } from '../../../../util/useQueryParameter';
 import { SetType } from '../../../browse/browseSlice';
 import { ConnectedSearchFormComponentProps } from './types';
 
@@ -14,9 +16,11 @@ interface ConnectedSetTypeSelectorProps extends ConnectedSearchFormComponentProp
 
 const ConnectedSetTypeSelector: React.FC<ConnectedSetTypeSelectorProps> = ({ reduxSlice, setExpansionTypes }) => {
   const dispatch = useDispatch();
+  const setQueryParameter = useQueryParameter();
 
   const updateSetTypes = (newSetTypes: SetType[]) => {
     dispatch(setExpansionTypes({ setTypes: newSetTypes }));
+    setQueryParameter('setTypes', convertSetTypesToString(newSetTypes));
   };
 
   const { expansionTypes } = useSelector((state: RootState) => state[reduxSlice]);

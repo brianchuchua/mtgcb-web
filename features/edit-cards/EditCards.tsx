@@ -133,7 +133,7 @@ const EditCards: React.FC = () => {
             ? [
                 {
                   title: username ? `${username}'s Collection` : '',
-                  url: `/collections/${user?.id}`,
+                  url: user?.id ? `/collections/${user?.id}` : '',
                 },
                 {
                   title: 'Edit Cards',

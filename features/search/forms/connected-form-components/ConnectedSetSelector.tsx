@@ -5,6 +5,8 @@ import AutocompleteWithNegation from '../../../../components/AutocompleteWithNeg
 import NativeMultiselect from '../../../../components/NativeMultiselect';
 import { useGetAllSetNamesQuery } from '../../../../network/services/mtgcbApi';
 import { RootState } from '../../../../redux/rootReducer';
+import { convertSetsToString } from '../../../../util/queryStringMappers';
+import { useQueryParameter } from '../../../../util/useQueryParameter';
 import { CardSet } from '../../../browse/browseSlice';
 import { mapCardSets } from '../../../browse/forms/mappers';
 import { ConnectedSearchFormComponentProps } from './types';
@@ -15,9 +17,11 @@ interface ConnectedSetSelectorProps extends ConnectedSearchFormComponentProps {
 
 const ConnectedSetSelector: React.FC<ConnectedSetSelectorProps> = ({ reduxSlice, setCardSets }) => {
   const dispatch = useDispatch();
+  const setQueryParameter = useQueryParameter();
 
   const updateSets = (newSets: CardSet[]) => {
     dispatch(setCardSets({ cardSets: newSets }));
+    setQueryParameter('sets', convertSetsToString(newSets));
   };
 
   const { cardSets } = useSelector((state: RootState) => state[reduxSlice]);

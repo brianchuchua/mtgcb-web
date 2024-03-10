@@ -16,6 +16,14 @@ const ChangelogPage: React.FC = () => (
       Changelog
     </Typography>
     <Typography variant="h5" component="h2">
+      2024-03-10 (v0.58.1)
+    </Typography>
+    <Typography paragraph>
+      <ul>
+        <li>Fixed numerous bugs with the back and forward browser buttons not behaving as expected.</li>
+      </ul>
+    </Typography>
+    <Typography variant="h5" component="h2">
       2024-03-07 (v0.58.0)
     </Typography>
     <Typography paragraph>

@@ -115,7 +115,7 @@ export const Set: React.FC<SetProps> = ({ setSlug }) => {
                     },
                     {
                       title: set?.name,
-                      url: `/browse/sets/${set?.slug}`,
+                      url: set?.slug ? `/browse/sets/${set?.slug}` : '',
                     },
                   ]}
                 />

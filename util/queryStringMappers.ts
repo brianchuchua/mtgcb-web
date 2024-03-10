@@ -1,5 +1,4 @@
 /* eslint-disable import/no-cycle */
-import debounce from 'lodash.debounce';
 import qs from 'qs';
 import { CardColors, CardRarity, CardSet, CardType, PriceTypes, SetCategory, SetType } from '../features/browse/browseSlice';
 import { SetCompletionStatus } from '../features/collections/collectionSlice';
@@ -43,23 +42,6 @@ if (typeof window !== 'undefined') {
 }
 
 export const computedQueryFromUrl = queryFromUrl;
-
-type QueryLabel = keyof QueryParams;
-
-export const updateSearchInUrlQuery = (queryLabel: QueryLabel, newValue: string | string[] | boolean): void => {
-  if (typeof window !== 'undefined') {
-    const query = qs.parse(window?.location?.search || '', { ignoreQueryPrefix: true });
-    query[queryLabel] = newValue;
-    if (newValue === null || newValue === '' || (Array.isArray(newValue) && newValue?.length === 0) || typeof newValue === 'undefined') {
-      delete query[queryLabel];
-    }
-    const queryString = qs.stringify(query, { addQueryPrefix: true });
-
-    window.history.replaceState(null, null, queryString?.length ? queryString : window.location.href.split('?')[0]);
-  }
-};
-
-export const updateSearchInUrl = debounce(updateSearchInUrlQuery, 500);
 
 export const convertCardTypesToString = (cardTypes: CardType[]): string =>
   cardTypes.map((cardType) => `${cardType.value}:${cardType.exclude ? 0 : 1}`).join(',');

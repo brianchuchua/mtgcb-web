@@ -141,7 +141,7 @@ export const Collection: React.FC<CollectionProps> = ({ userId }) => {
         links={[
           {
             title: username ? `${username}'s Collection` : '',
-            url: `/collections/${userId}`,
+            url: userId ? `/collections/${userId}` : '',
           },
         ]}
       />

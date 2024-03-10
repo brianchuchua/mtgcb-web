@@ -6,6 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useQueryParameter } from '../../../util/useQueryParameter';
 
 interface SubsetFilterProps {
   label: string;
@@ -17,6 +18,7 @@ interface SubsetFilterProps {
 const SubsetFilter: React.FC<SubsetFilterProps> = ({ label, subsetOptions, setSubsets, reduxSlice }) => {
   const dispatch = useDispatch();
   const { subsets } = useSelector((state) => state[reduxSlice]);
+  const setQueryParameter = useQueryParameter();
 
   const [selected, setSelected] = useState<string[]>(['All']);
   const [previous, setPrevious] = useState<string[]>(['All']);
@@ -24,6 +26,7 @@ const SubsetFilter: React.FC<SubsetFilterProps> = ({ label, subsetOptions, setSu
   useEffect(
     () => () => {
       dispatch(setSubsets(['All']));
+      setQueryParameter('subsets', ['All'].join(','));
     },
     []
   );
@@ -62,6 +65,7 @@ const SubsetFilter: React.FC<SubsetFilterProps> = ({ label, subsetOptions, setSu
             setPrevious(currentValues);
           }
           dispatch(setSubsets(newValue));
+          setQueryParameter('subsets', newValue.join(','));
         }}
         style={{ marginRight: '10px' }}
       >

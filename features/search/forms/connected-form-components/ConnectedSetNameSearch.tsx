@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { RootState } from '../../../../redux/rootReducer';
 import { searchFieldDebounceTimeMs } from '../../../../util/useDebounce';
+import { useQueryParameter } from '../../../../util/useQueryParameter';
 import { ConnectedSearchFormComponentProps } from './types';
 
 interface ConnectedSetNameSearchProps extends ConnectedSearchFormComponentProps {
@@ -20,9 +21,11 @@ const debouncedCallback = debounce((callback, query) => callback(query), searchF
 const ConnectedSetNameSearch: React.FC<ConnectedSetNameSearchProps> = ({ reduxSlice, setExpansionSearchQuery }) => {
   const dispatch = useDispatch();
   const { expansionSearchQuery } = useSelector((state: RootState) => state[reduxSlice]);
+  const setQueryParameter = useQueryParameter();
 
   const updateSearchQuery = (newSearchQuery: string) => {
     dispatch(setExpansionSearchQuery({ expansionSearchQuery: newSearchQuery }));
+    setQueryParameter('set', newSearchQuery);
   };
 
   return (
