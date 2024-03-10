@@ -2,6 +2,7 @@ import Button from '@material-ui/core/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { RootState } from '../../../redux/rootReducer';
+import { useResetQueryParameters } from '../../../util/useResetQueryParameters';
 import {
   ArtistSearch,
   CardNameSearch,
@@ -40,6 +41,7 @@ const SetSearchForm: React.FC = () => {
   const { isFormVisible, viewSubject } = useSelector((state: RootState) => state.set);
   const reduxSlice = 'set';
   const dispatch = useDispatch();
+  const resetQueryParameters = useResetQueryParameters();
 
   return (
     <form>
@@ -68,7 +70,17 @@ const SetSearchForm: React.FC = () => {
           />
           <SortSelector reduxSlice={reduxSlice} setCardSort={setCardSort} setCardSortDirection={setCardSortDirection} />
           <ButtonWrapper>
-            <Button type="reset" size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
+            <Button
+              type="reset"
+              size="small"
+              fullWidth
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                dispatch(reset());
+                resetQueryParameters();
+              }}
+            >
               Reset Search
             </Button>
           </ButtonWrapper>

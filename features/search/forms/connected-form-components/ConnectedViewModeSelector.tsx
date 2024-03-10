@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import ViewModeSelector from '../../../../components/search-form-components/ViewModeSelector';
 import { RootState } from '../../../../redux/rootReducer';
+import { useQueryParameter } from '../../../../util/useQueryParameter';
 
 interface ConnectedViewModeSelectorProps {
   showSubjectChangeSection?: boolean;
@@ -17,13 +18,16 @@ const ConnectedViewModeSelector: React.FC<ConnectedViewModeSelectorProps> = ({
 }) => {
   const dispatch = useDispatch();
   const { viewMode, viewSubject } = useSelector((state: RootState) => state[reduxSlice]);
+  const setQueryParameter = useQueryParameter();
 
   const updateViewSubject = (viewSubjectValue) => {
     dispatch(setViewSubject(viewSubjectValue));
+    setQueryParameter('view', viewSubjectValue);
   };
 
   const updateViewMode = (viewModeValue) => {
     dispatch(setViewMode(viewModeValue));
+    setQueryParameter('mode', viewModeValue);
   };
 
   return (

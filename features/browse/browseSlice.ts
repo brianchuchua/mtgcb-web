@@ -2,13 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import {
   computedQueryFromUrl as queryFromUrl,
-  convertCardStatSearchesToString,
-  convertCardTypesToString,
-  convertColorsToString,
-  convertExpansionCategoriesToString,
-  convertRaritiesToString,
-  convertSetsToString,
-  convertSetTypesToString,
   convertStringToCardStatSearches,
   convertStringToCardTypes,
   convertStringToColors,
@@ -16,7 +9,6 @@ import {
   convertStringToRarities,
   convertStringToSets,
   convertStringToSetTypes,
-  updateSearchInUrl,
 } from '../../util/queryStringMappers';
 import { getValueFromLocalStorage, setValueToLocalStorage } from '../../util/useLocalStorage';
 
@@ -95,55 +87,38 @@ const browseSlice = createSlice({
   name: 'browse',
   initialState,
   reducers: {
-    reset: (state) => {
-      if (typeof window !== 'undefined') {
-        window.history.replaceState(null, null, window.location.href.split('?')[0]);
-        window.scrollTo(0, 0);
-      }
-      return { ...state, ...emptyState } as BrowseState;
-    },
+    reset: (state) => ({ ...state, ...emptyState } as BrowseState),
     setSearchQuery(state, action: PayloadAction<SearchQuery>) {
       const { searchQuery } = action.payload;
       state.searchQuery = searchQuery;
-      updateSearchInUrl('card', searchQuery);
     },
     setOracleTextQuery(state, action: PayloadAction<OracleTextQuery>) {
       const { oracleTextQuery } = action.payload;
       state.oracleTextQuery = oracleTextQuery;
-      updateSearchInUrl('oracle', oracleTextQuery);
     },
     setArtistQuery(state, action: PayloadAction<ArtistQuery>) {
       const { artistQuery } = action.payload;
       state.artistQuery = artistQuery;
-      updateSearchInUrl('artist', artistQuery);
     },
     setCardTypes(state, action: PayloadAction<CardTypes>) {
       const { cardTypes } = action.payload;
       state.cardTypes = cardTypes;
-      updateSearchInUrl('types', convertCardTypesToString(cardTypes));
     },
     setCardSets(state, action: PayloadAction<CardSets>) {
       const { cardSets } = action.payload;
       state.cardSets = cardSets;
-      updateSearchInUrl('sets', convertSetsToString(cardSets));
     },
     setCardRarities(state, action: PayloadAction<CardRarities>) {
       const { cardRarities } = action.payload;
       state.cardRarities = cardRarities;
-      updateSearchInUrl('rarities', convertRaritiesToString(cardRarities));
     },
     setCardColors(state, action: PayloadAction<string>) {
       const color = action.payload;
       state.cardColors[color] = !state.cardColors[color];
-      const newCardColors = { ...state.cardColors };
-      updateSearchInUrl('colors', convertColorsToString(newCardColors));
     },
     setColorType(state, action: PayloadAction<ColorTypes>) {
       const type = action.payload;
       state.cardColors.type = type;
-      const newCardColors = { ...state.cardColors };
-      newCardColors.type = type;
-      updateSearchInUrl('colors', convertColorsToString(newCardColors));
     },
     setShowAllPrintings(state, action: PayloadAction<boolean>) {
       const showAllPrintings = action.payload;
@@ -152,51 +127,30 @@ const browseSlice = createSlice({
     setSearchAttribute(state, action: PayloadAction<SearchAttributeChangePayload>) {
       const { searchAttribute, index } = action.payload;
       state.cardStatSearches[index].searchAttribute = searchAttribute;
-      const newCardStatSearches = [...state.cardStatSearches];
-      newCardStatSearches[index].searchAttribute = searchAttribute;
-      updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
     },
     setComparator(state, action: PayloadAction<SearchComparatorPayload>) {
       const { comparator, index } = action.payload;
       state.cardStatSearches[index].comparator = comparator;
-      const newCardStatSearches = [...state.cardStatSearches];
-      newCardStatSearches[index].comparator = comparator;
-      updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
     },
     setCardStatSearches(state, action: PayloadAction<SearchValuePayload>) {
       const { value, index } = action.payload;
       state.cardStatSearches[index].value = value;
-      const newCardStatSearches = [...state.cardStatSearches];
-      newCardStatSearches[index].value = value;
-      updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
     },
     addCardStatSearch(state) {
       state.cardStatSearches.push({ searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' });
-      const newCardStatSearches = [...state.cardStatSearches];
-      newCardStatSearches.push({
-        searchAttribute: 'convertedManaCost',
-        comparator: 'gt',
-        value: '',
-      });
-      updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
     },
     removeCardStatSearch(state) {
       if (state.cardStatSearches.length > 1) {
         state.cardStatSearches.pop();
-        const newCardStatSearches = [...state.cardStatSearches];
-        newCardStatSearches.pop();
-        updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
       }
     },
     setCardSort(state, action: PayloadAction<string>) {
       const sortBy = action.payload;
       state.sortBy = sortBy;
-      updateSearchInUrl('sort', sortBy);
     },
     setCardSortDirection(state, action: PayloadAction<'asc' | 'desc'>) {
       const sortByDirection = action.payload;
       state.sortByDirection = sortByDirection;
-      updateSearchInUrl('order', sortByDirection);
     },
     setFormVisibility(state, action: PayloadAction<FormVisibility>) {
       const { isFormVisibile } = action.payload;
@@ -205,56 +159,46 @@ const browseSlice = createSlice({
     setViewSubject(state, action: PayloadAction<'cards' | 'sets'>) {
       const viewSubject = action.payload;
       state.viewSubject = viewSubject;
-      updateSearchInUrl('view', viewSubject);
       setValueToLocalStorage('viewSubject', viewSubject);
     },
     setViewMode(state, action: PayloadAction<'grid' | 'table'>) {
       const viewMode = action.payload;
       state.viewMode = viewMode;
-      updateSearchInUrl('mode', viewMode);
       setValueToLocalStorage('viewMode', viewMode);
     },
     setPriceType(state, action: PayloadAction<PriceTypes>) {
       const priceType = action.payload;
       state.priceType = priceType;
-      updateSearchInUrl('price', priceType);
       setValueToLocalStorage('priceType', priceType);
     },
     setExpansionSearchQuery(state, action: PayloadAction<ExpansionSearchQuery>) {
       const { expansionSearchQuery } = action.payload;
       state.expansionSearchQuery = expansionSearchQuery;
-      updateSearchInUrl('set', expansionSearchQuery);
     },
     setExpansionSort(state, action: PayloadAction<string>) {
       const sortExpansionBy = action.payload;
       state.sortExpansionBy = sortExpansionBy;
-      updateSearchInUrl('setSort', sortExpansionBy);
     },
     setExpansionSortDirection(state, action: PayloadAction<'asc' | 'desc'>) {
       const sortExpansionByDirection = action.payload;
       state.sortExpansionByDirection = sortExpansionByDirection;
-      updateSearchInUrl('setOrder', sortExpansionByDirection);
     },
     setExpansionTypes(state, action: PayloadAction<SetTypes>) {
       const { setTypes } = action.payload;
       state.expansionTypes = setTypes;
-      updateSearchInUrl('setTypes', convertSetTypesToString(setTypes));
     },
     setExpansionCategories(state, action: PayloadAction<SetCategories>) {
       const { setCategories } = action.payload;
       state.expansionCategories = setCategories;
-      updateSearchInUrl('setCats', convertExpansionCategoriesToString(setCategories));
     },
     setIncludeSubsets(state, action: PayloadAction<boolean>) {
       const includeSubsets = action.payload;
       state.includeSubsets = includeSubsets;
-      updateSearchInUrl('includeSubsetsBrowse', includeSubsets ? '1' : '0');
       setValueToLocalStorage('includeSubsetsBrowse', includeSubsets);
     },
     setIncludeSubsetGroups(state, action: PayloadAction<boolean>) {
       const includeSubsetGroups = action.payload;
       state.includeSubsetGroups = includeSubsetGroups;
-      updateSearchInUrl('includeSubsetGroupsBrowse', includeSubsetGroups ? '1' : '0');
       setValueToLocalStorage('includeSubsetGroupsBrowse', includeSubsetGroups);
     },
   },

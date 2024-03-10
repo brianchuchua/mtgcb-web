@@ -69,11 +69,11 @@ export const Set: React.FC<SetProps> = ({ setSlug, userId }) => {
             ? [
                 {
                   title: username ? `${username}'s Collection` : '',
-                  url: `/collections/${userId}`,
+                  url: userId ? `/collections/${userId}` : '',
                 },
                 {
                   title: set?.name,
-                  url: `/collections/${userId}/${set?.slug}`,
+                  url: userId && set?.slug ? `/collections/${userId}/${set?.slug}` : '',
                 },
               ]
             : []

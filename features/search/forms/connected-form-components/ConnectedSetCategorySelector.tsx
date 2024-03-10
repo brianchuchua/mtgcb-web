@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import AutocompleteWithNegation from '../../../../components/AutocompleteWithNegation';
 import NativeMultiselect from '../../../../components/NativeMultiselect';
 import { RootState } from '../../../../redux/rootReducer';
+import { convertExpansionCategoriesToString } from '../../../../util/queryStringMappers';
+import { useQueryParameter } from '../../../../util/useQueryParameter';
 import { expansionCategoryOptions, SetCategory } from '../../../browse/browseSlice';
 import { ConnectedSearchFormComponentProps } from './types';
 
@@ -13,9 +15,11 @@ interface ConnectedSetCategorySelectorProps extends ConnectedSearchFormComponent
 
 const ConnectedSetCategorySelector: React.FC<ConnectedSetCategorySelectorProps> = ({ reduxSlice, setExpansionCategories }) => {
   const dispatch = useDispatch();
+  const setQueryParameter = useQueryParameter();
 
   const updateSetCategories = (selectedExpansionCategories: SetCategory[]) => {
     dispatch(setExpansionCategories({ setCategories: selectedExpansionCategories }));
+    setQueryParameter('setCats', convertExpansionCategoriesToString(selectedExpansionCategories));
   };
 
   const { expansionCategories } = useSelector((state: RootState) => state[reduxSlice]);

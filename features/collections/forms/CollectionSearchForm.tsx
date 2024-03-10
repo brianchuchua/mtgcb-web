@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { RootState } from '../../../redux/rootReducer';
+import { useResetQueryParameters } from '../../../util/useResetQueryParameters';
 import {
   ArtistSearch,
   CardNameSearch,
@@ -68,7 +69,7 @@ const CollectionSearchForm: React.FC = () => {
   const { isFormVisible, viewSubject } = useSelector((state: RootState) => state.collection);
   const reduxSlice = 'collection';
   const dispatch = useDispatch();
-
+  const resetQueryParameters = useResetQueryParameters();
   const [showAdvancedQuantityOptions, setShowAdvancedQuantityOptions] = useState(false);
 
   return (
@@ -123,7 +124,17 @@ const CollectionSearchForm: React.FC = () => {
             setCardSortDirection={setCardSortDirection}
           />
           <ButtonWrapper>
-            <Button type="reset" size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
+            <Button
+              type="reset"
+              size="small"
+              fullWidth
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                dispatch(reset());
+                resetQueryParameters();
+              }}
+            >
               Reset Search
             </Button>
           </ButtonWrapper>
@@ -146,7 +157,17 @@ const CollectionSearchForm: React.FC = () => {
           <IncludeSubsetsToggle reduxSlice={reduxSlice} setIncludeSubsets={setIncludeSubsets} />
           <IncludeSubsetsInSetsToggle reduxSlice={reduxSlice} setIncludeSubsetsInSets={setIncludeSubsetsInSets} />
           <ButtonWrapper>
-            <Button type="reset" size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
+            <Button
+              type="reset"
+              size="small"
+              fullWidth
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                dispatch(reset());
+                resetQueryParameters();
+              }}
+            >
               Reset Search
             </Button>
           </ButtonWrapper>

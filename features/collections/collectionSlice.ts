@@ -2,14 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import {
   computedQueryFromUrl as queryFromUrl,
-  convertCardStatSearchesToString,
-  convertCardTypesToString,
-  convertColorsToString,
-  convertExpansionCategoriesToString,
-  convertRaritiesToString,
-  convertSetCompletionStatusesToString,
-  convertSetsToString,
-  convertSetTypesToString,
   convertStringToCardStatSearches,
   convertStringToCardTypes,
   convertStringToColors,
@@ -18,7 +10,6 @@ import {
   convertStringToSetCompletionStatuses,
   convertStringToSets,
   convertStringToSetTypes,
-  updateSearchInUrl,
 } from '../../util/queryStringMappers';
 import { getValueFromLocalStorage, setValueToLocalStorage } from '../../util/useLocalStorage';
 
@@ -108,55 +99,38 @@ const collectionSlice = createSlice({
   name: 'collection',
   initialState,
   reducers: {
-    reset: (state) => {
-      if (typeof window !== 'undefined') {
-        window.history.replaceState(null, null, window.location.href.split('?')[0]);
-        window.scrollTo(0, 0);
-      }
-      return { ...state, ...emptyState } as CollectionState;
-    },
+    reset: (state) => ({ ...state, ...emptyState } as CollectionState),
     setSearchQuery(state, action: PayloadAction<SearchQuery>) {
       const { searchQuery } = action.payload;
       state.searchQuery = searchQuery;
-      updateSearchInUrl('card', searchQuery);
     },
     setOracleTextQuery(state, action: PayloadAction<OracleTextQuery>) {
       const { oracleTextQuery } = action.payload;
       state.oracleTextQuery = oracleTextQuery;
-      updateSearchInUrl('oracle', oracleTextQuery);
     },
     setArtistQuery(state, action: PayloadAction<ArtistQuery>) {
       const { artistQuery } = action.payload;
       state.artistQuery = artistQuery;
-      updateSearchInUrl('artist', artistQuery);
     },
     setCardTypes(state, action: PayloadAction<CardTypes>) {
       const { cardTypes } = action.payload;
       state.cardTypes = cardTypes;
-      updateSearchInUrl('types', convertCardTypesToString(cardTypes));
     },
     setCardSets(state, action: PayloadAction<CardSets>) {
       const { cardSets } = action.payload;
       state.cardSets = cardSets;
-      updateSearchInUrl('sets', convertSetsToString(cardSets));
     },
     setCardRarities(state, action: PayloadAction<CardRarities>) {
       const { cardRarities } = action.payload;
       state.cardRarities = cardRarities;
-      updateSearchInUrl('rarities', convertRaritiesToString(cardRarities));
     },
     setCardColors(state, action: PayloadAction<string>) {
       const color = action.payload;
       state.cardColors[color] = !state.cardColors[color];
-      const newCardColors = { ...state.cardColors };
-      updateSearchInUrl('colors', convertColorsToString(newCardColors));
     },
     setColorType(state, action: PayloadAction<ColorTypes>) {
       const type = action.payload;
       state.cardColors.type = type;
-      const newCardColors = { ...state.cardColors };
-      newCardColors.type = type;
-      updateSearchInUrl('colors', convertColorsToString(newCardColors));
     },
     setShowAllPrintings(state, action: PayloadAction<boolean>) {
       const showAllPrintings = action.payload;
@@ -165,40 +139,21 @@ const collectionSlice = createSlice({
     setSearchAttribute(state, action: PayloadAction<SearchAttributeChangePayload>) {
       const { searchAttribute, index } = action.payload;
       state.cardStatSearches[index].searchAttribute = searchAttribute;
-      const newCardStatSearches = [...state.cardStatSearches];
-      newCardStatSearches[index].searchAttribute = searchAttribute;
-      updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
     },
     setComparator(state, action: PayloadAction<SearchComparatorPayload>) {
       const { comparator, index } = action.payload;
       state.cardStatSearches[index].comparator = comparator;
-      const newCardStatSearches = [...state.cardStatSearches];
-      newCardStatSearches[index].comparator = comparator;
-      updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
     },
     setCardStatSearches(state, action: PayloadAction<SearchValuePayload>) {
       const { value, index } = action.payload;
       state.cardStatSearches[index].value = value;
-      const newCardStatSearches = [...state.cardStatSearches];
-      newCardStatSearches[index].value = value;
-      updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
     },
     addCardStatSearch(state) {
       state.cardStatSearches.push({ searchAttribute: 'convertedManaCost', comparator: 'gt', value: '' });
-      const newCardStatSearches = [...state.cardStatSearches];
-      newCardStatSearches.push({
-        searchAttribute: 'convertedManaCost',
-        comparator: 'gt',
-        value: '',
-      });
-      updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
     },
     removeCardStatSearch(state) {
       if (state.cardStatSearches.length > 1) {
         state.cardStatSearches.pop();
-        const newCardStatSearches = [...state.cardStatSearches];
-        newCardStatSearches.pop();
-        updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
       }
     },
     setQuantityAll(state, action: PayloadAction<string>) {
@@ -207,9 +162,6 @@ const collectionSlice = createSlice({
       const updatedSearchAttribute: CardStatSearch = { searchAttribute: 'cardsAll', comparator: 'eq', value: '' };
       if (quantityAll === 'all') {
         state.cardStatSearches = state.cardStatSearches.filter((search) => search.searchAttribute !== 'cardsAll');
-        const newCardStatSearches = [...state.cardStatSearches];
-        updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
-        setTimeout(() => updateSearchInUrl('quantityAll', quantityAll), 500);
       } else {
         const quantityAllNumber = quantityAll.replace('x', '').replace('+', ''); // 5x+ --> 5
         updatedSearchAttribute.value = quantityAllNumber;
@@ -223,10 +175,6 @@ const collectionSlice = createSlice({
           const quantityAllIndex = state.cardStatSearches.findIndex((search) => search.searchAttribute === 'cardsAll');
           state.cardStatSearches[quantityAllIndex] = updatedSearchAttribute;
         }
-
-        const newCardStatSearches = [...state.cardStatSearches];
-        updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
-        setTimeout(() => updateSearchInUrl('quantityAll', quantityAll), 500);
       }
     },
     setQuantityNormal(state, action: PayloadAction<string>) {
@@ -235,9 +183,6 @@ const collectionSlice = createSlice({
       const updatedSearchAttribute: CardStatSearch = { searchAttribute: 'cardsNormal', comparator: 'eq', value: '' };
       if (quantityNormal === 'all') {
         state.cardStatSearches = state.cardStatSearches.filter((search) => search.searchAttribute !== 'cardsNormal');
-        const newCardStatSearches = [...state.cardStatSearches];
-        updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
-        setTimeout(() => updateSearchInUrl('quantityNormal', quantityNormal), 500);
       } else {
         const quantityNormalNumber = quantityNormal.replace('x', '').replace('+', ''); // 5x+ --> 5
         updatedSearchAttribute.value = quantityNormalNumber;
@@ -251,10 +196,6 @@ const collectionSlice = createSlice({
           const quantityNormalIndex = state.cardStatSearches.findIndex((search) => search.searchAttribute === 'cardsNormal');
           state.cardStatSearches[quantityNormalIndex] = updatedSearchAttribute;
         }
-
-        const newCardStatSearches = [...state.cardStatSearches];
-        updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
-        setTimeout(() => updateSearchInUrl('quantityNormal', quantityNormal), 500);
       }
     },
     setQuantityFoil(state, action: PayloadAction<string>) {
@@ -263,9 +204,6 @@ const collectionSlice = createSlice({
       const updatedSearchAttribute: CardStatSearch = { searchAttribute: 'cardsFoil', comparator: 'eq', value: '' };
       if (quantityFoil === 'all') {
         state.cardStatSearches = state.cardStatSearches.filter((search) => search.searchAttribute !== 'cardsFoil');
-        const newCardStatSearches = [...state.cardStatSearches];
-        updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
-        setTimeout(() => updateSearchInUrl('quantityFoil', quantityFoil), 500);
       } else {
         const quantityFoilNumber = quantityFoil.replace('x', '').replace('+', ''); // 5x+ --> 5
         updatedSearchAttribute.value = quantityFoilNumber;
@@ -279,21 +217,15 @@ const collectionSlice = createSlice({
           const quantityFoilIndex = state.cardStatSearches.findIndex((search) => search.searchAttribute === 'cardsFoil');
           state.cardStatSearches[quantityFoilIndex] = updatedSearchAttribute;
         }
-
-        const newCardStatSearches = [...state.cardStatSearches];
-        updateSearchInUrl('stats', convertCardStatSearchesToString(newCardStatSearches));
-        setTimeout(() => updateSearchInUrl('quantityFoil', quantityFoil), 500);
       }
     },
     setCardSort(state, action: PayloadAction<string>) {
       const sortBy = action.payload;
       state.sortBy = sortBy;
-      updateSearchInUrl('sort', sortBy);
     },
     setCardSortDirection(state, action: PayloadAction<'asc' | 'desc'>) {
       const sortByDirection = action.payload;
       state.sortByDirection = sortByDirection;
-      updateSearchInUrl('order', sortByDirection);
     },
     setFormVisibility(state, action: PayloadAction<FormVisibility>) {
       const { isFormVisibile } = action.payload;
@@ -302,67 +234,55 @@ const collectionSlice = createSlice({
     setViewSubject(state, action: PayloadAction<'cards' | 'sets'>) {
       const viewSubject = action.payload;
       state.viewSubject = viewSubject;
-      updateSearchInUrl('view', viewSubject);
       setValueToLocalStorage('viewSubject', viewSubject);
     },
     setViewMode(state, action: PayloadAction<'grid' | 'table'>) {
       const viewMode = action.payload;
       state.viewMode = viewMode;
-      updateSearchInUrl('mode', viewMode);
       setValueToLocalStorage('viewMode', viewMode);
     },
     setPriceType(state, action: PayloadAction<PriceTypes>) {
       const priceType = action.payload;
       state.priceType = priceType;
-      updateSearchInUrl('price', priceType);
       setValueToLocalStorage('priceType', priceType);
     },
     setExpansionSearchQuery(state, action: PayloadAction<ExpansionSearchQuery>) {
       const { expansionSearchQuery } = action.payload;
       state.expansionSearchQuery = expansionSearchQuery;
-      updateSearchInUrl('set', expansionSearchQuery);
     },
     setExpansionSort(state, action: PayloadAction<string>) {
       const sortExpansionBy = action.payload;
       state.sortExpansionBy = sortExpansionBy;
-      updateSearchInUrl('setSort', sortExpansionBy);
     },
     setExpansionSortDirection(state, action: PayloadAction<'asc' | 'desc'>) {
       const sortExpansionByDirection = action.payload;
       state.sortExpansionByDirection = sortExpansionByDirection;
-      updateSearchInUrl('setOrder', sortExpansionByDirection);
     },
     setExpansionTypes(state, action: PayloadAction<SetTypes>) {
       const { setTypes } = action.payload;
       state.expansionTypes = setTypes;
-      updateSearchInUrl('setTypes', convertSetTypesToString(setTypes));
     },
     setExpansionCategories(state, action: PayloadAction<SetCategories>) {
       const { setCategories } = action.payload;
       state.expansionCategories = setCategories;
-      updateSearchInUrl('setCats', convertExpansionCategoriesToString(setCategories));
     },
     setSetCompletionStatuses(state, action: PayloadAction<SetCompletionStatuses>) {
       const { setCompletionStatuses } = action.payload;
       state.setCompletionStatuses = setCompletionStatuses;
-      updateSearchInUrl('status', convertSetCompletionStatusesToString(setCompletionStatuses));
     },
     setIncludeSubsets(state, action: PayloadAction<boolean>) {
       const includeSubsets = action.payload;
       state.includeSubsets = includeSubsets;
-      updateSearchInUrl('includeSubsetsCollection', includeSubsets ? '1' : '0');
       setValueToLocalStorage('includeSubsetsCollection', includeSubsets);
     },
     setIncludeSubsetGroups(state, action: PayloadAction<boolean>) {
       const includeSubsetGroups = action.payload;
       state.includeSubsetGroups = includeSubsetGroups;
-      updateSearchInUrl('includeSubsetGroupsCollection', includeSubsetGroups ? '1' : '0');
       setValueToLocalStorage('includeSubsetGroupsCollection', includeSubsetGroups);
     },
     setIncludeSubsetsInSets(state, action: PayloadAction<boolean>) {
       const includeSubsetsInSets = action.payload;
       state.includeSubsetsInSets = includeSubsetsInSets;
-      updateSearchInUrl('includeSubsetsInSets', includeSubsetsInSets ? '1' : '0');
       setValueToLocalStorage('includeSubsetsInSets', includeSubsetsInSets);
     },
   },

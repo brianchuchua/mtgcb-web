@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { RootState } from '../../../../redux/rootReducer';
+import { useResetQueryParameters } from '../../../../util/useResetQueryParameters';
 import {
   ArtistSearch,
   CardNameSearch,
@@ -49,6 +50,7 @@ const SetCollectionSearchForm: React.FC = () => {
   const { isFormVisible, viewSubject } = useSelector((state: RootState) => state.setCollection);
   const reduxSlice = 'setCollection';
   const dispatch = useDispatch();
+  const resetQueryParameters = useResetQueryParameters();
 
   const [showAdvancedQuantityOptions, setShowAdvancedQuantityOptions] = useState(false);
 
@@ -108,7 +110,17 @@ const SetCollectionSearchForm: React.FC = () => {
             setCardSortDirection={setCardSortDirection}
           />
           <ButtonWrapper>
-            <Button type="reset" size="small" fullWidth variant="contained" color="secondary" onClick={() => dispatch(reset())}>
+            <Button
+              type="reset"
+              size="small"
+              fullWidth
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                dispatch(reset());
+                resetQueryParameters();
+              }}
+            >
               Reset Search
             </Button>
           </ButtonWrapper>
