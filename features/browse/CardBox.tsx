@@ -120,7 +120,7 @@ const CardBox: React.FC<CardBoxProps> = ({
 
 const generateCardUrl = (cardId: string | number, cardName) => {
   const targetUrl = cardId
-    ? `https://shop.tcgplayer.com/magic/product/productsearch?id=${cardId}`
+    ? `https://www.tcgplayer.com/product/${cardId}`
     : `https://www.tcgplayer.com/search/magic/product?productLineName=magic&q=${cardName}`;
   const affiliateLink = `https://tcgplayer.pxf.io/c/4944197/1830156/21018?u=${encodeURIComponent(targetUrl)}`;
   return affiliateLink;
