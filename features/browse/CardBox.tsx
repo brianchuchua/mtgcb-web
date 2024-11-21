@@ -36,7 +36,7 @@ const CardBox: React.FC<CardBoxProps> = ({
   quantityFoil = null,
   fixedHeight = null,
 }) => {
-  const imageUrl = `https://mtgcb-images.s3.amazonaws.com/cards/images/normal/${card.id}.jpg`;
+  const imageUrl = `https://mtgcb-images.s3.amazonaws.com/cards/images/normal/${card.id}.jpg?v=${process.env.IMAGE_CACHE_DATE || ''}`;
 
   const [imageLoaded, setImageLoaded] = useState(false);
   const componentRef = useRef();
