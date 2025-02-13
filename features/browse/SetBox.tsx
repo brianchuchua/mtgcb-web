@@ -263,13 +263,12 @@ const BuyThisButton = ({
   return (
     <form
       method="post"
-      action="https://store.tcgplayer.com/massentry?partner=CTNBLDR"
+      action="https://store.tcgplayer.com/massentry"
       target={formTarget}
       id={`tcgplayer-mass-import-form-${setId}-${count}-${countType}`}
       onSubmit={(e) => handleBuyThisSubmit(e, setId, count, countType, setTcgplayerMassImportString, userId, includeSubsetsInSets)}
       style={{ display: 'inline-block', width: countType === 'draftcube' ? '100%' : 'auto' }}
     >
-      <input type="hidden" name="partner" value="CTNBLDR" />
       <input type="hidden" name="c" value={tcgplayerMassImportString} />
       <input type="hidden" name="affiliateurl" value="https://tcgplayer.pxf.io/c/4944197/1830156/21018" />
       <Button
